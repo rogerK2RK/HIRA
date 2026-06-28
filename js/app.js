@@ -411,49 +411,69 @@ views.editproject = function(id){
 };
 
 /* ---- Détail projet ---- */
+let projPhaseIdx = 0;
+let projPhaseProjId = null;
+
 views.project = function(id){
   const proj = getProject(id);
   if(!proj){ navigate("projects"); return; }
   const phases = phasesFor(proj.type);
   const pct = projectProgress(proj);
+  const phaseDone = p => { const c=(proj.checks&&proj.checks[p.id])||[]; return p.checklist.every((_,k)=>c[k]); };
 
-  // Phase à ouvrir d'office : la 1ère non terminée (sinon aucune si tout est fait)
-  let openPhaseId = null;
-  for(const ph of phases){
-    const c = (proj.checks && proj.checks[ph.id]) || [];
-    if(!ph.checklist.every((_,i)=>c[i])){ openPhaseId = ph.id; break; }
+  // À l'entrée d'un NOUVEAU projet : se placer sur la 1ère phase non terminée
+  if(projPhaseProjId !== id){
+    projPhaseProjId = id;
+    projPhaseIdx = phases.length - 1;
+    for(let i=0;i<phases.length;i++){ if(!phaseDone(phases[i])){ projPhaseIdx = i; break; } }
   }
+  projPhaseIdx = Math.max(0, Math.min(projPhaseIdx, phases.length-1));
 
-  const phasesHtml = phases.map(ph => {
-    const checks = (proj.checks && proj.checks[ph.id]) || [];
-    const doneCount = ph.checklist.filter((_,i)=>checks[i]).length;
-    const tips = ph.tips.length ? `<ul class="tips">${ph.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>` : "";
-    const checklist = ph.checklist.map((item, idx) => `
+  const ph = phases[projPhaseIdx];
+  const checks = (proj.checks && proj.checks[ph.id]) || [];
+  const doneCount = ph.checklist.filter((_,i)=>checks[i]).length;
+  const allDone = doneCount === ph.checklist.length;
+  const isFirst = projPhaseIdx === 0;
+  const isLast = projPhaseIdx === phases.length - 1;
+
+  const stepper = phases.map((p,i) => {
+    const cls = i===projPhaseIdx ? "cur" : (phaseDone(p) ? "done" : "");
+    const ic = (phaseDone(p) && i!==projPhaseIdx) ? icon("check",15) : icon(p.icon,15);
+    return `<button class="pstep ${cls}" title="${esc(p.nom)}" onclick="projPhase(${i})">${ic}</button>`;
+  }).join("");
+
+  const checklist = ph.checklist.map((item, idx) => {
+    const t = (typeof item === "string") ? item : item.t;
+    const d = (typeof item === "object" && item.d) ? item.d : "";
+    return `
       <div class="check ${checks[idx]?'done':''}">
         <input type="checkbox" ${checks[idx]?'checked':''}
           onchange="toggleCheck('${proj.id}','${ph.id}',${idx},this.checked)" id="${ph.id}-${idx}">
-        <label for="${ph.id}-${idx}">${esc(item)}</label>
-      </div>`).join("");
-    const plugs = ph.plugins.length ? `
-      <div class="plug-tags">${ph.plugins.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}</div>
-      <p style="font-size:11px;color:var(--muted);margin-top:8px">→ détail des plugins dans l'onglet « Mes plugins »</p>` : "";
-    return `
-      <div class="phase">
-        <div class="phase-head" onclick="this.nextElementSibling.classList.toggle('open')">
-          <span class="phase-icon">${icon(ph.icon,20)}</span>
-          <div class="phase-title"><h3>${esc(ph.nom)}</h3><div class="pdesc">${esc(ph.desc)}</div></div>
-          <span class="phase-mini">${doneCount}/${ph.checklist.length}${doneCount===ph.checklist.length?" "+icon("check",14):""}</span>
-        </div>
-        <div class="phase-body${ph.id===openPhaseId?' open':''}">
-          ${tips}
-          ${checklist}
-          ${plugs}
-        </div>
+        <label for="${ph.id}-${idx}">
+          <span class="ck-t">${esc(t)}</span>
+          ${d?`<span class="ck-d">${esc(d)}</span>`:""}
+        </label>
       </div>`;
   }).join("");
 
+  const tips = ph.tips.length ? `
+    <details class="tips-acc">
+      <summary>${icon("lightbulb",14)} Conseils${ph.plugins.length?" & plugins":""}</summary>
+      <ul class="tips">${ph.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
+      ${ph.plugins.length?`<div class="plug-tags">${ph.plugins.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}</div>
+      <p style="font-size:11px;color:var(--muted);margin-top:8px">→ détail dans l'onglet « Mes plugins »</p>`:""}
+    </details>` : "";
+
+  const nav = `
+    <div class="wnav" style="margin-top:18px">
+      ${!isFirst ? `<button class="btn secondary" onclick="projPhase(${projPhaseIdx-1})">${icon("arrow",15)} Précédent</button>` : `<span></span>`}
+      ${!isLast
+        ? `<button class="btn ${allDone?'':'secondary'}" onclick="projPhase(${projPhaseIdx+1})">Suivant ${icon("arrow",15)}</button>`
+        : `<span class="done-badge">${icon("check",16)} Dernière étape</span>`}
+    </div>`;
+
   content.innerHTML = `
-    <button class="back" onclick="navigate('projects')">← Mes projets</button>
+    <button class="back" onclick="navigate('projects')">${icon("arrow",14)} Mes projets</button>
     <div class="page-head" style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
       <div>
         <h1>${esc(proj.name)}</h1>
@@ -463,22 +483,29 @@ views.project = function(id){
           ${proj.key?`<span>${esc(proj.key)}</span>`:""}
           <span>${icon("target",13)} ${esc(proj.lufs||"-14 LUFS")}</span>
         </div>
-        ${proj.ref?`<p style="font-size:12px;color:var(--muted);margin-top:6px">Réf : ${esc(proj.ref)}</p>`:""}
       </div>
       <div style="text-align:right">
-        <div class="pct" style="font-size:34px">${pct}%</div>
-        <div class="progress" style="width:140px"><span style="width:${pct}%"></span></div>
+        <div class="pct" style="font-size:30px">${pct}%</div>
+        <div class="progress" style="width:120px"><span style="width:${pct}%"></span></div>
       </div>
     </div>
 
-    <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
-      <button class="btn secondary small" onclick="toggleAllPhases()">${icon("expand",15)} Tout déplier / replier</button>
-    </div>
-    <div style="margin-bottom:22px">${phasesHtml}</div>
+    <div class="psteps">${stepper}</div>
 
-    <div class="card" style="margin-bottom:18px">
+    <div class="card phase-slide">
+      <div class="slide-head">
+        <span class="phase-icon">${icon(ph.icon,22)}</span>
+        <div style="flex:1"><h2>${esc(ph.nom)}</h2><div class="pdesc">${esc(ph.desc)}</div></div>
+        <span class="phase-mini">${doneCount}/${ph.checklist.length}${allDone?" "+icon("check",14):""}</span>
+      </div>
+      <div class="checklist">${checklist}</div>
+      ${tips}
+    </div>
+    ${nav}
+
+    <div class="card" style="margin:18px 0">
       <h3>${icon("notes")} Notes du projet</h3>
-      <textarea id="proj-notes" placeholder="Idées, réglages clés, LUFS atteint, choses à refaire…">${esc(proj.notes)}</textarea>
+      <textarea id="proj-notes" placeholder="Idées, réglages clés, LUFS atteint…">${esc(proj.notes)}</textarea>
       <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
         <button class="btn small" onclick="saveNotes('${proj.id}')">Enregistrer les notes</button>
         <span id="notes-status" style="font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:5px">${icon("check",13)} Sauvegarde auto</span>
@@ -486,10 +513,10 @@ views.project = function(id){
     </div>
 
     <div class="row-actions">
-      <button class="btn secondary small" onclick="navigate('editproject','${proj.id}')">${icon("edit",15)} Modifier le projet</button>
+      <button class="btn secondary small" onclick="navigate('editproject','${proj.id}')">${icon("edit",15)} Modifier</button>
       <button class="btn secondary small" onclick="duplicateProject('${proj.id}')">${icon("copy",15)} Dupliquer</button>
       <button class="btn secondary small" onclick="exportProject('${proj.id}')">${icon("download",15)} Exporter</button>
-      <button class="btn danger small" onclick="confirmDelete('${proj.id}')">Supprimer le projet</button>
+      <button class="btn danger small" onclick="confirmDelete('${proj.id}')">Supprimer</button>
     </div>`;
 
   // Auto-save des notes (debounce) — plus besoin de cliquer pour ne rien perdre
@@ -510,6 +537,13 @@ views.project = function(id){
       }, 600);
     });
   }
+};
+
+window.projPhase = function(i){
+  projPhaseIdx = i;
+  views.project(projPhaseProjId);
+  window.scrollTo(0,0);
+  content.scrollTo(0,0);
 };
 
 /* ---- Cibles dB/LUFS ---- */
@@ -543,9 +577,9 @@ views.chains = function(){
     <div class="card">
       <h3>${icon("link")} ${esc(c.nom)}</h3>
       <p style="margin-bottom:12px">${esc(c.contexte)}</p>
-      <div class="plug-group"><ul>
-        ${c.etapes.map((e,i)=>`<li><strong>${i+1}.</strong> ${esc(e)}</li>`).join("")}
-      </ul></div>
+      <ol class="bus-steps">${c.etapes.map(e=>`<li>${esc(e)}</li>`).join("")}</ol>
+      ${c.vst?`<div class="plug-tags">${c.vst.map(v=>`<span class="tag">${esc(v)}</span>`).join("")}</div>`:""}
+      ${c.cible?`<div class="bus-cible">${icon("target",13)} ${esc(c.cible)}</div>`:""}
     </div>`).join("");
   content.innerHTML = `
     <div class="page-head"><h1>${icon("link",22)} Chaînes types</h1>
@@ -649,25 +683,10 @@ window.toggleCheck = function(projId, phaseId, idx, val){
   proj.updated = Date.now();
   upsertProject(proj);
 
-  // Maj ciblée du DOM (sans tout recharger → la phase ouverte le reste)
-  const box = document.getElementById(phaseId + "-" + idx);
-  if(box){
-    const checkRow = box.closest(".check");
-    if(checkRow) checkRow.classList.toggle("done", val);
-    const phaseEl = box.closest(".phase");
-    const phase = HIRA_DATA.phases.find(p => p.id === phaseId);
-    if(phaseEl && phase){
-      const done = (proj.checks[phaseId] || []).filter(Boolean).length;
-      const total = phase.checklist.length;
-      const mini = phaseEl.querySelector(".phase-mini");
-      if(mini) mini.innerHTML = done + "/" + total + (done === total ? " " + icon("check",14) : "");
-    }
-  }
-  const pct = projectProgress(proj);
-  const pctEl = content.querySelector(".page-head .pct");
-  if(pctEl) pctEl.textContent = pct + "%";
-  const bar = content.querySelector(".page-head .progress span");
-  if(bar) bar.style.width = pct + "%";
+  // Re-render de la slide (MAJ stepper, compteur, bouton Suivant) en gardant le scroll
+  const y = window.scrollY;
+  views.project(projId);
+  window.scrollTo(0, y);
 };
 window.saveNotes = function(projId){
   const proj = getProject(projId);
@@ -683,12 +702,6 @@ window.confirmDelete = function(projId){
     toast("Projet supprimé");
     navigate("projects");
   }
-};
-window.toggleAllPhases = function(){
-  const bodies = content.querySelectorAll(".phase-body");
-  // Si au moins une est fermée → tout ouvrir, sinon tout fermer
-  const anyClosed = Array.from(bodies).some(b => !b.classList.contains("open"));
-  bodies.forEach(b => b.classList.toggle("open", anyClosed));
 };
 window.duplicateProject = function(projId){
   const proj = getProject(projId);

@@ -156,9 +156,9 @@ const HIRA_DATA = {
         "Dossier projet propre (prod / recs / stems / mix)."
       ],
       checklist: [
-        "BPM, tonalité et intention définis",
-        "Éléments gardés en MIDI tant que possible (audio seulement quand figé)",
-        "Dossier projet organisé"
+        { t: "BPM, tonalité et intention définis", d: "Note le tempo, la gamme et l'émotion visée — ça cadre tout le reste." },
+        { t: "Éléments gardés en MIDI tant que possible", d: "Tu pourras changer un son ou une note tant que ce n'est pas figé en audio." },
+        { t: "Dossier projet organisé", d: "Sépare prod / recs / stems / mix. Tu t'y retrouveras dans 6 mois." }
       ],
       plugins: []
     },
@@ -175,12 +175,12 @@ const HIRA_DATA = {
         "Quand l'instru est figée : exporte les pistes/stems en WAV 24 bits pour les importer dans Luna."
       ],
       checklist: [
-        "Structure du morceau posée (intro/couplet/refrain/outro)",
-        "Sons choisis (drums, basse, mélodies) cohérents avec la réf",
-        "Arrangement laisse de l'espace pour la voix",
-        "Master FL avec headroom (pics ≈ -6 dBFS, pas de limiteur qui écrase)",
-        "Export des stems/pistes en WAV 24 bits (44.1 ou 48 kHz)",
-        "Fichier de projet FL sauvegardé + sauvegarde de secours"
+        { t: "Structure du morceau posée", d: "Intro / couplet / refrain / pont / outro avant les détails — évite de tourner en rond." },
+        { t: "Sons cohérents avec la réf", d: "Drums, basse, mélodies qui collent au style visé, pas juste 'jolis' isolément." },
+        { t: "De l'espace pour la voix", d: "Creuse les 1-4 kHz et n'encombre pas là où la voix vivra." },
+        { t: "Master FL avec headroom", d: "Pics ≈ -6 dBFS, aucun limiteur qui écrase : le volume se gère plus tard." },
+        { t: "Stems exportés en WAV 24 bits", d: "Une piste par élément (44.1/48 kHz) pour pouvoir mixer dans Luna." },
+        { t: "Projet FL sauvegardé + copie", d: "Garde le projet avec le MIDI intact, plus une sauvegarde de secours." }
       ],
       plugins: ["EQ", "Compression", "Saturation / Couleur", "Synthés / Instruments"]
     },
@@ -200,15 +200,15 @@ const HIRA_DATA = {
         "Enregistre plusieurs prises (3-5) + des doubles pour les refrains et les ad-libs."
       ],
       checklist: [
-        "Micro choisi selon la voix (SM7B ou NT1-A)",
-        "Alim +48V activée (obligatoire pour le FetHead/NT1-A)",
-        "Gain réglé : pics ≤ -6 dBFS, aucune LED rouge / clip",
-        "Filtre anti-pop en place, bonne distance au micro",
-        "Casque fermé (DT770) au tracking, balance confortable",
-        "Monitoring choisi : ARM ON + chaîne UAD native (zéro latence) OU ARM OFF + buffer bas (64/128) pour t'entendre via FabFilter/Waves",
-        "Pièce calme : pas de souffle/ronflette anormal (plancher < -60 dBFS)",
-        "Prise principale + doubles + ad-libs enregistrés",
-        "Meilleures prises repérées/nommées"
+        { t: "Micro choisi selon la voix", d: "SM7B = rap/voix puissante ; NT1-A = chant doux en pièce calme." },
+        { t: "Alim +48V activée", d: "Indispensable pour le FetHead (SM7B) et le NT1-A — sinon pas de signal." },
+        { t: "Gain réglé : pics ≤ -6 dBFS", d: "Aucune LED rouge / clip. Un clip ne se rattrape pas au mix." },
+        { t: "Anti-pop + bonne distance", d: "Une paume de distance, recule un peu sur les P et les B." },
+        { t: "Casque fermé (DT770), balance OK", d: "Fermé = pas de repisse dans le micro ; voix bien présente dans le casque." },
+        { t: "Mode de monitoring choisi", d: "ARM ON + chaîne UAD native (zéro latence) OU ARM OFF + buffer bas (64/128) pour t'entendre via FabFilter." },
+        { t: "Pièce calme (fond < -60 dBFS)", d: "Coupe les sources de bruit : pas de souffle ni de ronflette anormale." },
+        { t: "Lead + doubles + ad-libs enregistrés", d: "Prévois 3-5 prises et des doubles pour avoir de la matière au mix." },
+        { t: "Meilleures prises repérées", d: "Marque/nomme les bonnes prises tout de suite : gain de temps à l'édition." }
       ],
       plugins: ["Channel strip (chaîne voix complète)", "Compression"]
     },
@@ -226,12 +226,12 @@ const HIRA_DATA = {
         "Timing : cale les syllabes off-beat, aligne les doubles avec la prise lead."
       ],
       checklist: [
-        "Comp final assemblé (meilleures prises)",
-        "Blancs/bruits/clics nettoyés",
-        "Débruitage appliqué si besoin (léger)",
-        "Respirations gérées (réduites, pas supprimées totalement)",
-        "Tuning appliqué (naturel)",
-        "Timing calé, doubles alignés sur le lead"
+        { t: "Comp final assemblé", d: "Assemble la meilleure version à partir des prises, phrase par phrase si besoin." },
+        { t: "Blancs / bruits / clics nettoyés", d: "Enlève silences, bruits de bouche et clics (X-Click)." },
+        { t: "Débruitage léger si besoin", d: "Clarity Vx / X-Noise sur souffle/ronflette, sans créer d'artefacts." },
+        { t: "Respirations gérées", d: "Réduis-les, ne les supprime pas : ça doit rester naturel." },
+        { t: "Tuning appliqué (naturel)", d: "Cale la justesse sans effet robotique, sauf si c'est l'effet voulu." },
+        { t: "Timing calé, doubles alignés", d: "Recale les syllabes off-beat et aligne les doubles sur la prise lead." }
       ],
       plugins: ["Nettoyage voix", "Tuning voix"]
     },
@@ -256,18 +256,18 @@ const HIRA_DATA = {
         "Bus master : laisse les pics ≤ -6 dBFS, pas de limiteur destructif ici."
       ],
       checklist: [
-        "Gain staging fait (pistes ≈ -18 dBFS avant plugins)",
-        "Balance des faders posée sans effets",
-        "Coupe-bas sur tout ce qui n'a pas de grave utile",
-        "Voix : EQ + compression en série + de-ess traités",
-        "Basse et kick cohabitent (sidechain / EQ complémentaire)",
-        "Reverb & delay en sends, basses de reverb coupées",
-        "Panoramique : espace stéréo, centre dégagé (kick/basse/voix)",
-        "Vérifié en mono (pas d'annulation de phase)",
-        "1 à 3 références importées et comparées A/B (au même volume)",
-        "Écoute croisée D3V + DT1990, niveau modéré",
-        "Bus master propre, pics ≤ -6 dBFS",
-        "Bounce du mix en WAV 24 bits (sans limiteur master)"
+        { t: "Gain staging fait (~-18 dBFS)", d: "Amène chaque piste à ~-18 dBFS avant plugins : tes émulations analo sont calibrées pour ça." },
+        { t: "Balance des faders sans effets", d: "Un bon mix est d'abord une bonne balance de volumes, avant tout plugin." },
+        { t: "Coupe-bas où le grave est inutile", d: "Nettoie le bas du spectre pour dégager kick et basse." },
+        { t: "Voix : EQ + comp série + de-ess", d: "Pro-Q → LA-2A puis 1176 → Pro-DS. Voix devant et stable." },
+        { t: "Basse et kick cohabitent", d: "L'un laisse la place à l'autre : sidechain léger ou EQ complémentaire." },
+        { t: "Reverb & delay en sends", d: "En sends pour le contrôle ; coupe le bas de la reverb (pas de boue)." },
+        { t: "Panoramique : centre dégagé", d: "Élargis les éléments secondaires, garde kick/basse/voix au centre." },
+        { t: "Vérifié en mono", d: "Passe en mono : rien ne doit disparaître (problème de phase)." },
+        { t: "1 à 3 références comparées A/B", d: "Compare à des morceaux pros du même style, au MÊME volume." },
+        { t: "Écoute croisée D3V + DT1990", d: "Décide sur enceintes, peaufine au casque, à volume modéré." },
+        { t: "Bus master propre (pics ≤ -6 dBFS)", d: "Garde de la marge sur le bus pour que le master respire." },
+        { t: "Bounce WAV 24 bits sans limiteur", d: "Exporte une piste stéréo propre pour le mastering." }
       ],
       plugins: ["EQ", "Compression", "De-essing", "Saturation / Couleur", "Reverb", "Delay", "Imaging / Stéréo", "Mix sur casque"]
     },
@@ -289,17 +289,17 @@ const HIRA_DATA = {
         "Anticipe l'encodage lossy : un MP3/AAC peut faire remonter le True Peak — c'est pour ça qu'on plafonne à -1 dBTP, garde cette marge."
       ],
       checklist: [
-        "Mix importé avec headroom (pics ≤ -6 dBFS)",
-        "EQ de master en corrections douces (±1-2 dB)",
-        "Compression de bus légère (1-2 dB de réduction)",
-        "Saturation/couleur subtile si besoin",
-        "Limiteur Pro-L 2 : ceiling -1 dBTP, True Peak activé",
-        "Cible LUFS atteinte (-14 streaming, mesurée à WLM/Pro-L 2)",
-        "True Peak ≤ -1 dBTP vérifié",
-        "Comparé A/B à une réf commerciale au même volume",
-        "Vérifié sur plusieurs systèmes d'écoute",
-        "Dither ajouté si export en 16 bits (inutile en 24 bits)",
-        "Pas de distorsion / pompage audible"
+        { t: "Mix importé avec headroom", d: "Une seule piste stéréo (pics ≤ -6 dBFS), sans limiteur déjà posé." },
+        { t: "EQ de master doux (±1-2 dB)", d: "Pro-Q en retouches larges pour l'équilibre tonal global." },
+        { t: "Compression de bus légère", d: "Juste de la colle (SSLComp / Pro-C 2, 1-2 dB), sans pomper." },
+        { t: "Saturation subtile si besoin", d: "Une pointe de chaleur/densité (Abbey Road Saturator)." },
+        { t: "Pro-L 2 : ceiling -1 dBTP, TP ON", d: "Plafond à -1 dBTP, True Peak activé, monte le gain vers la cible." },
+        { t: "Cible LUFS atteinte", d: "-14 LUFS intégré pour le streaming, mesuré (WLM / Pro-L 2), pas à l'oreille." },
+        { t: "True Peak ≤ -1 dBTP vérifié", d: "Évite la distorsion après encodage MP3/AAC." },
+        { t: "Comparé A/B à une réf pro", d: "Aligne le volume avec un morceau commercial pour juger objectivement." },
+        { t: "Vérifié sur plusieurs écoutes", d: "D3V, casque, et idéalement téléphone / voiture." },
+        { t: "Dither si export 16 bits", d: "Seulement pour un export 16 bits, ajouté en tout dernier. Inutile en 24 bits." },
+        { t: "Aucune distorsion / pompage", d: "Écoute finale : rien ne pompe ni ne sature." }
       ],
       plugins: ["EQ", "Compression", "Multibande / Dynamique avancée", "Saturation / Couleur", "Limiteur / Loudness (master)"]
     },
@@ -317,11 +317,11 @@ const HIRA_DATA = {
         "Note tes réglages clés (BPM, tonalité, LUFS atteint) dans la fiche projet HIRA."
       ],
       checklist: [
-        "Master exporté en WAV 24 bits (44.1/48 kHz)",
-        "Version instrumentale exportée (si besoin)",
-        "Métadonnées / nom de fichier propres (Artiste - Titre)",
-        "Sauvegarde du projet + stems + master archivée",
-        "Réglages clés notés dans la fiche projet"
+        { t: "Master exporté en WAV 24 bits", d: "À la fréquence du projet (44.1/48 kHz) — c'est ton fichier maître." },
+        { t: "Version instrumentale exportée", d: "Garde une version sans voix (et 'clean' si pertinent)." },
+        { t: "Nom de fichier propre", d: "Format clair « Artiste - Titre » pour la distribution." },
+        { t: "Projet + stems + master archivés", d: "Sauvegarde projet Luna + stems + master + notes." },
+        { t: "Réglages clés notés", d: "BPM, tonalité, LUFS atteint — note-les dans la fiche projet." }
       ],
       plugins: []
     }
@@ -344,7 +344,9 @@ const HIRA_DATA = {
         "EQ couleur : un peu d'air vers 10-12 kHz (Fresh Air / Pro-Q)",
         "Saturation légère (Saturn 2 / RC-20) pour la présence",
         "Sends : reverb courte (Valhalla Room) + slap delay (H-Delay)"
-      ]
+      ],
+      vst: ["Pro-Q 4", "Clarity Vx", "LA-2A + 1176/CLA-76", "Pro-DS", "Saturn 2 / RC-20", "Valhalla Room + H-Delay"],
+      cible: "Voix devant l'instru, claire et punchy · -18 dBFS avant plugins"
     },
     {
       nom: "Chant mélodique (NT1-A)",
@@ -357,7 +359,9 @@ const HIRA_DATA = {
         "De-ess Pro-DS",
         "Reverb plaque (Valhalla Plate) + delay 1/4 (Valhalla Delay) en sends",
         "Vocal Rider pour lisser les variations de niveau"
-      ]
+      ],
+      vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A", "Pro-DS", "Valhalla Plate + Delay", "Vocal Rider"],
+      cible: "Voix douce et régulière, aérée · sans dureté 6-8 kHz"
     },
     {
       nom: "Bus Master streaming",
@@ -368,7 +372,9 @@ const HIRA_DATA = {
         "Saturation subtile (Abbey Road Saturator) pour la cohésion",
         "Pro-L 2 : ceiling -1 dBTP, True Peak ON, monte le gain jusqu'à -14 LUFS",
         "WLM Plus pour vérifier LUFS intégré + True Peak"
-      ]
+      ],
+      vst: ["Pro-Q 4", "SSLComp / Pro-C 2", "Abbey Road Saturator", "Pro-L 2", "WLM Plus"],
+      cible: "-14 LUFS intégré · True Peak ≤ -1 dBTP"
     },
     {
       nom: "Ad-libs & doublures (voix)",
@@ -380,7 +386,9 @@ const HIRA_DATA = {
         "Ad-libs : envoie-les plus loin — throw delay (1/4 pointé, H-Delay) + reverb plus généreuse (Valhalla VintageVerb)",
         "Détune léger sur les doubles (RC-20 ou pitch ±5-8 cents) pour élargir la stéréo",
         "Automation : baisse les couches quand le lead chante, remonte-les dans les trous"
-      ]
+      ],
+      vst: ["Pro-Q 4", "CLA-76", "RC-20 (détune)", "Valhalla VintageVerb + H-Delay"],
+      cible: "-4 à -6 dB sous le lead · larges sur les côtés"
     },
     {
       nom: "Voix Auto-Tune (effet trap / RnB)",
@@ -392,7 +400,9 @@ const HIRA_DATA = {
         "De-ess (Pro-DS) : l'auto-tune accentue les sifflantes",
         "Compression (1176 / CLA-76) APRÈS le tuning pour densifier",
         "Saturation (Saturn 2 / RC-20) + reverb/delay en sends pour la vibe moderne"
-      ]
+      ],
+      vst: ["Waves Tune Real-Time", "Pro-Q 4", "Pro-DS", "1176 / CLA-76", "Saturn 2 / RC-20"],
+      cible: "Pitch calé sur la gamme · effet selon le Retune Speed"
     },
     {
       nom: "Bus Drums (cohésion + punch)",
@@ -404,7 +414,9 @@ const HIRA_DATA = {
         "EQ de bus (Pro-Q) : un peu d'air vers 10 kHz, contrôle le bas si ça devient boueux",
         "Compression parallèle : un send très compressé remonté discrètement sous le bus = punch sans tuer la dynamique",
         "Garde le kick au centre ; panoramique légèrement hats/perc pour la largeur"
-      ]
+      ],
+      vst: ["SSLComp / API-2500", "Abbey Road Saturator / Kramer Tape", "Pro-Q 4"],
+      cible: "Batterie soudée qui groove · kick au centre"
     }
   ],
 
