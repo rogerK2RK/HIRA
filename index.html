@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HIRA — Studio Companion</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Barre du haut (mobile uniquement) -->
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="Ouvrir le menu"></button>
+    <div class="topbar-logo">HIRA</div>
+  </header>
+  <div class="backdrop" id="backdrop"></div>
+
+  <div id="app">
+
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">HIRA</div>
+        <div class="tagline">Studio Companion</div>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" data-view="dashboard">🏠 Accueil</button>
+        <button class="nav-btn" data-view="projects">🎵 Mes projets</button>
+        <button class="nav-btn" data-view="newproject">➕ Nouveau projet</button>
+        <div class="nav-sep">Guides</div>
+        <button class="nav-btn" data-view="targets">🎯 Cibles dB / LUFS</button>
+        <button class="nav-btn" data-view="chains">🔗 Chaînes types</button>
+        <button class="nav-btn" data-view="buses">🎚️ Templates de bus</button>
+        <button class="nav-btn" data-view="guide">💡 Conseils</button>
+        <button class="nav-btn" data-view="gear">🎛️ Mon matériel</button>
+        <button class="nav-btn" data-view="plugins">🧩 Mes plugins</button>
+      </nav>
+      <div class="sidebar-foot">
+        <button id="exportData" class="ghost-btn" title="Sauvegarder tes projets dans un fichier">⬇︎ Backup</button>
+        <button id="importData" class="ghost-btn" title="Restaurer depuis un fichier">⬆︎ Restaurer</button>
+        <input type="file" id="importFile" accept="application/json" hidden />
+      </div>
+    </aside>
+
+    <!-- Contenu -->
+    <main class="content" id="content"></main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

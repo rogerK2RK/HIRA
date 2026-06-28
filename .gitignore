@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Données locales de l'assistant (mémoire/session)
+.claude/
