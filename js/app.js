@@ -932,6 +932,13 @@ document.querySelectorAll(".nav-btn").forEach(b => {
   document.getElementById("backdrop")?.addEventListener("click", closeDrawer);
 })();
 
+/* ---- PWA : service worker (installable + hors ligne) ---- */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(()=>{});
+  });
+}
+
 /* ---- Démarrage ---- */
 navigate("dashboard");
 
