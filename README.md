@@ -32,6 +32,13 @@ bouton ☰ en haut à gauche, et la création de projet se fait en **étapes gui
 - **Mon matériel** — tes machines + conseils d'utilisation (Volt 276, micros, casques…).
 - **Mes plugins** — tes plugins détectés, classés par usage, avec le « quand l'utiliser ».
 
+## Synchro multi-appareils (optionnel)
+
+Onglet **Synchro** : connecte-toi par email (code à 6 chiffres) pour retrouver
+tes projets sur tous tes appareils (iPhone ↔ Mac). L'app reste **hors ligne**
+(localStorage = cache) et se synchronise dès que tu es connecté. Stockage via
+Supabase ; chaque utilisateur ne voit que ses données.
+
 ## Sauvegarde
 
 En bas de la barre latérale : **Backup** (télécharge un fichier de tes projets) et

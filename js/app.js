@@ -3,6 +3,7 @@
    ========================================================================= */
 
 const STORE_KEY = "hira.projects.v1";
+const TOMB_KEY  = "hira.tomb.v1";   // suppressions (id -> timestamp) pour la synchro
 const content = document.getElementById("content");
 
 /* ---------- Persistance ---------- */
@@ -10,7 +11,12 @@ function loadProjects(){
   try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
   catch(e){ return []; }
 }
-function saveProjects(list){ localStorage.setItem(STORE_KEY, JSON.stringify(list)); }
+function saveProjects(list, skipSync){
+  localStorage.setItem(STORE_KEY, JSON.stringify(list));
+  if(!skipSync && typeof schedulePush === "function") schedulePush();
+}
+function loadTomb(){ try { return JSON.parse(localStorage.getItem(TOMB_KEY)) || {}; } catch(e){ return {}; } }
+function saveTomb(t){ localStorage.setItem(TOMB_KEY, JSON.stringify(t)); }
 function getProject(id){ return loadProjects().find(p => p.id === id); }
 function upsertProject(proj){
   const list = loadProjects();
@@ -18,7 +24,10 @@ function upsertProject(proj){
   if(i >= 0) list[i] = proj; else list.push(proj);
   saveProjects(list);
 }
-function deleteProject(id){ saveProjects(loadProjects().filter(p => p.id !== id)); }
+function deleteProject(id){
+  const t = loadTomb(); t[id] = Date.now(); saveTomb(t);
+  saveProjects(loadProjects().filter(p => p.id !== id));
+}
 
 /* ---------- Utilitaires ---------- */
 function uid(){ return "p" + Math.random().toString(36).slice(2,9) + Date.now().toString(36); }
@@ -59,7 +68,9 @@ const ICONS = {
   book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
   menu:'<line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/>',
   arrow:'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
-  wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'
+  wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+  cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+  refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>'
 };
 function icon(name, size){
   const s = size || 18;
@@ -98,9 +109,11 @@ function toast(msg){
 /* ---------- Routeur ---------- */
 const views = {};
 let currentView = "dashboard";
+let currentParam = null;
 
 function navigate(view, param){
   currentView = view;
+  currentParam = param;
   document.querySelectorAll(".nav-btn").forEach(b =>
     b.classList.toggle("active", b.dataset.view === view));
   content.scrollTo(0,0);
@@ -755,8 +768,146 @@ document.getElementById("importFile").addEventListener("change", (e) => {
   e.target.value = ""; // permet de ré-importer le même fichier
 });
 
+/* =========================================================================
+   SYNCHRO CLOUD (Supabase) — offline-first
+   L'app marche sans réseau (localStorage = cache). Connecté, tes projets se
+   synchronisent entre appareils (fusion par date, suppressions propagées).
+   ========================================================================= */
+const SUPA_URL = "https://ajynukcwfhxgsertpwtx.supabase.co";
+const SUPA_KEY = "sb_publishable_jYmJd78oiEbHOZ4Y4s7VYA_bLhe55BU";
+
+let supa = null;
+try { if(window.supabase && SUPA_URL && SUPA_KEY) supa = window.supabase.createClient(SUPA_URL, SUPA_KEY); }
+catch(e){ supa = null; }
+
+let syncUser = null;
+let syncState = "off";   // off | ok | sync | err
+let otpEmail = "";
+
+function setSyncState(s){ syncState = s; if(currentView === "sync") views.sync(); }
+
+function mergeData(localP, localT, remoteP, remoteT){
+  const tomb = {};
+  [remoteT||{}, localT||{}].forEach(src => Object.keys(src).forEach(id => {
+    tomb[id] = Math.max(tomb[id]||0, src[id]||0);
+  }));
+  const map = {};
+  [...(remoteP||[]), ...(localP||[])].forEach(p => {
+    if(!p || !p.id) return;
+    const ex = map[p.id];
+    if(!ex || (p.updated||0) > (ex.updated||0)) map[p.id] = p;
+  });
+  const projects = Object.values(map).filter(p => !(tomb[p.id] && tomb[p.id] >= (p.updated||0)));
+  return { projects, tomb };
+}
+
+async function pushRemoteNow(){
+  if(!supa || !syncUser) return;
+  const payload = { projects: loadProjects(), tomb: loadTomb() };
+  const { error } = await supa.from("hira_data")
+    .upsert({ user_id: syncUser.id, data: payload, updated: Date.now() });
+  if(error) throw error;
+}
+let pushTimer;
+function schedulePush(){
+  if(!supa || !syncUser) return;
+  setSyncState("sync");
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(() => {
+    pushRemoteNow().then(()=>setSyncState("ok")).catch(()=>setSyncState("err"));
+  }, 900);
+}
+
+async function pullMergePush(){
+  if(!supa || !syncUser) return;
+  setSyncState("sync");
+  try {
+    const { data, error } = await supa.from("hira_data")
+      .select("data").eq("user_id", syncUser.id).maybeSingle();
+    if(error) throw error;
+    const remote = (data && data.data) || {};
+    const merged = mergeData(loadProjects(), loadTomb(), remote.projects||[], remote.tomb||{});
+    saveProjects(merged.projects, true);   // skip push (on pousse juste après)
+    saveTomb(merged.tomb);
+    await pushRemoteNow();
+    setSyncState("ok");
+    navigate(currentView, currentParam);   // rafraîchit l'écran courant
+  } catch(e){ setSyncState("err"); }
+}
+
+/* ---- Vue Synchro ---- */
+views.sync = function(){
+  const labels = { off:"Non connecté", ok:"À jour ✓", sync:"Synchronisation…", err:"Erreur réseau" };
+  if(!supa){
+    content.innerHTML = `
+      <div class="page-head"><h1>${icon("cloud",22)} Synchro</h1>
+        <p>Synchro indisponible (pas de réseau au chargement). Reconnecte-toi à internet puis recharge la page.</p></div>`;
+    return;
+  }
+  let body;
+  if(syncUser){
+    body = `
+      <div class="card" style="max-width:560px">
+        <p style="margin-bottom:10px">Connecté : <strong>${esc(syncUser.email||"")}</strong></p>
+        <p style="margin-bottom:16px;color:var(--muted)">État : ${esc(labels[syncState]||"")}</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn" onclick="syncNow()">${icon("refresh",16)} Synchroniser maintenant</button>
+          <button class="btn secondary" onclick="syncLogout()">Se déconnecter</button>
+        </div>
+      </div>`;
+  } else if(otpEmail){
+    body = `
+      <div class="card" style="max-width:560px">
+        <p style="margin-bottom:14px">Code à 6 chiffres envoyé à <strong>${esc(otpEmail)}</strong>. Saisis-le :</p>
+        <div class="form-row"><input type="text" id="otp-code" inputmode="numeric" placeholder="123456" /></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn" onclick="syncVerify()">Valider</button>
+          <button class="btn secondary" onclick="syncResetLogin()">Changer d'email</button>
+        </div>
+      </div>`;
+  } else {
+    body = `
+      <div class="card" style="max-width:560px">
+        <p style="margin-bottom:14px">Connecte-toi par email pour retrouver tes projets sur tous tes appareils (tu reçois un code à 6 chiffres).</p>
+        <div class="form-row"><label>Email</label><input type="email" id="sync-email" placeholder="toi@email.com" /></div>
+        <button class="btn" onclick="syncSendCode()">${icon("arrow",16)} Recevoir un code</button>
+      </div>`;
+  }
+  content.innerHTML = `
+    <div class="page-head"><h1>${icon("cloud",22)} Synchro</h1>
+      <p>Tes projets, partout. L'app marche hors ligne ; la synchro se fait dès que tu es connecté.</p></div>
+    ${body}`;
+};
+
+window.syncSendCode = async function(){
+  const email = (document.getElementById("sync-email")?.value || "").trim();
+  if(!email){ toast("Entre ton email"); return; }
+  try {
+    const { error } = await supa.auth.signInWithOtp({ email, options:{ shouldCreateUser:true } });
+    if(error) throw error;
+    otpEmail = email; views.sync(); toast("Code envoyé par email");
+  } catch(e){ toast("Échec de l'envoi"); }
+};
+window.syncVerify = async function(){
+  const token = (document.getElementById("otp-code")?.value || "").trim();
+  if(!token){ toast("Entre le code reçu"); return; }
+  try {
+    const { data, error } = await supa.auth.verifyOtp({ email: otpEmail, token, type:"email" });
+    if(error) throw error;
+    syncUser = data.user; otpEmail = ""; toast("Connecté");
+    await pullMergePush();
+    navigate("sync");
+  } catch(e){ toast("Code invalide"); }
+};
+window.syncResetLogin = function(){ otpEmail = ""; views.sync(); };
+window.syncLogout = async function(){
+  try { await supa.auth.signOut(); } catch(e){}
+  syncUser = null; setSyncState("off"); toast("Déconnecté"); navigate("sync");
+};
+window.syncNow = function(){ pullMergePush(); };
+
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", guide:"book", gear:"sliders", plugins:"grid" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", guide:"book", gear:"sliders", plugins:"grid", sync:"cloud" };
 document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";
@@ -779,3 +930,10 @@ document.querySelectorAll(".nav-btn").forEach(b => {
 
 /* ---- Démarrage ---- */
 navigate("dashboard");
+
+/* Reprend la session si déjà connecté, puis synchronise */
+if(supa){
+  supa.auth.getSession().then(({ data }) => {
+    if(data && data.session){ syncUser = data.session.user; pullMergePush(); }
+  }).catch(()=>{});
+}
