@@ -70,6 +70,7 @@ const ICONS = {
   arrow:'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
   wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
   cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+  bell:'<path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>',
   refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>'
 };
 function icon(name, size){
@@ -104,6 +105,44 @@ function toast(msg){
   if(!t){ t = document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
   t.textContent = msg; t.classList.add("show");
   setTimeout(()=>t.classList.remove("show"), 2200);
+}
+
+/* ---------- Rappels / notifications ---------- */
+function fmtReminder(ms){
+  const d = new Date(ms);
+  const pad = n => String(n).padStart(2,"0");
+  return pad(d.getDate())+"/"+pad(d.getMonth()+1)+" à "+pad(d.getHours())+"h"+pad(d.getMinutes());
+}
+function toLocalInput(ms){
+  const d = new Date(ms);
+  const pad = n => String(n).padStart(2,"0");
+  return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"T"+pad(d.getHours())+":"+pad(d.getMinutes());
+}
+function notifSupported(){ return ("Notification" in window) && ("serviceWorker" in navigator); }
+
+function fireNotif(title, body, projectId){
+  if(!notifSupported() || Notification.permission !== "granted") return;
+  navigator.serviceWorker.ready.then(reg => {
+    reg.showNotification(title, {
+      body, icon:"icon-192.png", badge:"icon-192.png",
+      tag: projectId ? ("hira-"+projectId) : "hira",
+      data: { projectId: projectId || null }
+    });
+  }).catch(()=>{});
+}
+
+// Vérifie les rappels échus (tourne tant que l'app est ouverte). One-shot : on efface après.
+function checkReminders(){
+  const now = Date.now();
+  const due = loadProjects().filter(p => p.reminder && p.reminder <= now);
+  if(!due.length) return;
+  due.forEach(p => {
+    fireNotif("HIRA — Rappel de projet", p.name, p.id);
+    const proj = getProject(p.id);
+    if(proj){ proj.reminder = null; proj.updated = Date.now(); upsertProject(proj); }
+  });
+  toast(due.length>1 ? (due.length+" rappels") : ("Rappel : "+due[0].name));
+  if(currentView==="dashboard" || currentView==="projects" || currentView==="project") navigate(currentView, currentParam);
 }
 
 /* ---------- Routeur ---------- */
@@ -198,6 +237,7 @@ views.projects = function(){
             ${p.bpm ? `<span>${esc(p.bpm)} BPM</span>` : ""}
             ${p.key ? `<span>${esc(p.key)}</span>` : ""}
             <span>${currentPhaseLabel(p)}</span>
+            ${p.reminder ? `<span>${icon("bell",13)} ${esc(fmtReminder(p.reminder))}</span>` : ""}
           </div>
           <div class="progress"><span style="width:${projectProgress(p)}%"></span></div>
         </div>
@@ -503,6 +543,24 @@ views.project = function(id){
     </div>
     ${nav}
 
+    <div class="card" style="margin:18px 0 0">
+      <h3>${icon("bell")} Rappel</h3>
+      ${proj.reminder
+        ? `<p style="color:var(--accent2);font-size:13px;margin-bottom:10px">Programmé : ${fmtReminder(proj.reminder)}</p>`
+        : `<p style="color:var(--muted);font-size:13px;margin-bottom:10px">Programme un rappel pour ne pas oublier ce projet.</p>`}
+      <div class="form-row" style="margin-bottom:0;max-width:280px">
+        <label>Date & heure</label>
+        <input type="datetime-local" id="proj-reminder" value="${proj.reminder?toLocalInput(proj.reminder):""}">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn small" onclick="setReminder('${proj.id}')">${icon("bell",14)} Définir le rappel</button>
+        ${proj.reminder?`<button class="btn secondary small" onclick="clearReminder('${proj.id}')">Effacer</button>`:""}
+        <button class="btn secondary small" onclick="testNotif()">Tester une notif</button>
+      </div>
+      ${notifSupported() && Notification.permission!=="granted"
+        ? `<p style="font-size:12px;color:var(--warn);margin-top:10px">Notifications non activées — touche « Définir » ou « Tester » pour autoriser.</p>` : ""}
+    </div>
+
     <div class="card" style="margin:18px 0">
       <h3>${icon("notes")} Notes du projet</h3>
       <textarea id="proj-notes" placeholder="Idées, réglages clés, LUFS atteint…">${esc(proj.notes)}</textarea>
@@ -707,6 +765,36 @@ window.confirmDelete = function(projId){
     toast("Projet supprimé");
     navigate("projects");
   }
+};
+async function ensureNotifPermission(){
+  if(!notifSupported()){ toast("Notifications non supportées ici"); return false; }
+  if(Notification.permission === "granted") return true;
+  if(Notification.permission === "denied"){ toast("Notifs bloquées — autorise-les dans les réglages du tél"); return false; }
+  const r = await Notification.requestPermission();
+  return r === "granted";
+}
+window.setReminder = async function(projId){
+  const proj = getProject(projId); if(!proj) return;
+  const v = document.getElementById("proj-reminder").value;
+  if(!v){ toast("Choisis une date et une heure"); return; }
+  const ms = new Date(v).getTime();
+  if(isNaN(ms)){ toast("Date invalide"); return; }
+  if(ms <= Date.now()){ toast("Choisis une date future"); return; }
+  await ensureNotifPermission();
+  proj.reminder = ms; proj.updated = Date.now(); upsertProject(proj);
+  toast("Rappel programmé : " + fmtReminder(ms));
+  navigate("project", projId);
+};
+window.clearReminder = function(projId){
+  const proj = getProject(projId); if(!proj) return;
+  proj.reminder = null; proj.updated = Date.now(); upsertProject(proj);
+  toast("Rappel effacé"); navigate("project", projId);
+};
+window.testNotif = async function(){
+  const ok = await ensureNotifPermission();
+  if(!ok) return;
+  fireNotif("HIRA — Test", "Les notifications fonctionnent ✅", null);
+  toast("Notification envoyée");
 };
 window.duplicateProject = function(projId){
   const proj = getProject(projId);
@@ -937,10 +1025,21 @@ if("serviceWorker" in navigator){
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js").catch(()=>{});
   });
+  navigator.serviceWorker.addEventListener("message", (e) => {
+    if(e.data && e.data.type === "open-project" && e.data.id) navigate("project", e.data.id);
+  });
 }
 
+/* ---- Rappels (tant que l'app est ouverte) ---- */
+checkReminders();
+setInterval(checkReminders, 60000);
+
 /* ---- Démarrage ---- */
-navigate("dashboard");
+(function(){
+  const pid = new URLSearchParams(location.search).get("p");
+  if(pid && getProject(pid)) navigate("project", pid);
+  else navigate("dashboard");
+})();
 
 /* Auth : reprend la session, capte le retour du lien magique, puis synchronise */
 if(supa){

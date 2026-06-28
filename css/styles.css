@@ -78,7 +78,7 @@ body{
 /* Forms */
 .form-row{margin-bottom:16px}
 .form-row label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
-input[type=text],input[type=number],select,textarea{
+input[type=text],input[type=number],input[type=email],input[type=datetime-local],select,textarea{
   width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--txt);
   padding:11px 12px;border-radius:10px;font-size:14px;font-family:inherit}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}

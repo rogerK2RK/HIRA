@@ -1,5 +1,5 @@
 /* HIRA — Service Worker (offline-first) */
-const CACHE = "hira-v1";
+const CACHE = "hira-v2";
 const ASSETS = [
   "./", "./index.html", "./css/styles.css",
   "./js/data.js", "./js/app.js", "./manifest.json",
@@ -17,6 +17,20 @@ self.addEventListener("activate", (e) => {
     caches.keys()
       .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const id = e.notification.data && e.notification.data.projectId;
+  const url = id ? ("./?p=" + id) : "./";
+  e.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
+      for (const c of list) {
+        if ("focus" in c) { c.postMessage({ type: "open-project", id: id || null }); return c.focus(); }
+      }
+      if (self.clients.openWindow) return self.clients.openWindow(url);
+    })
   );
 });
 
