@@ -263,9 +263,11 @@ const HIRA_DATA = {
         { t: "Basse et kick cohabitent", d: "L'un laisse la place à l'autre : sidechain léger ou EQ complémentaire." },
         { t: "Reverb & delay en sends", d: "En sends pour le contrôle ; coupe le bas de la reverb (pas de boue)." },
         { t: "Panoramique : centre dégagé", d: "Élargis les éléments secondaires, garde kick/basse/voix au centre." },
-        { t: "Vérifié en mono", d: "Passe en mono : rien ne doit disparaître (problème de phase)." },
-        { t: "1 à 3 références comparées A/B", d: "Compare à des morceaux pros du même style, au MÊME volume." },
-        { t: "Écoute croisée D3V + DT1990", d: "Décide sur enceintes, peaufine au casque, à volume modéré." },
+        { t: "Test référence (A/B)", d: "Importe 1-3 morceaux pros du même style, égalise le volume et compare. Outil : Pro-Q (analyseur) ; gratuits : Youlean (caler le volume) + Voxengo SPAN (spectre)." },
+        { t: "Test balance / tonalité", d: "Aucun élément ne domine ; spectre équilibré (ni trop de bas ni d'aigus). Outil : FabFilter Pro-Q (analyseur) ; gratuit : Voxengo SPAN." },
+        { t: "Test mono (phase)", d: "Somme le mix en mono : rien ne doit disparaître. Outil : Waves S1 (ou le bouton mono du monitoring) ; gratuit : Voxengo SPAN (corrélateur proche de +1)." },
+        { t: "Test casque + enceintes", d: "Écoute sur D3V puis DT1990 : grave, sifflantes, réverbes. Option : Waves CLA Nx sur le casque pour simuler une pièce." },
+        { t: "Test petites enceintes / téléphone", d: "Bounce puis écoute sur téléphone, laptop, voiture : voix et kick doivent rester audibles. Aucun plugin requis." },
         { t: "Bus master propre (pics ≤ -6 dBFS)", d: "Garde de la marge sur le bus pour que le master respire." },
         { t: "Bounce WAV 24 bits sans limiteur", d: "Exporte une piste stéréo propre pour le mastering." }
       ],
@@ -294,7 +296,7 @@ const HIRA_DATA = {
         { t: "Compression de bus légère", d: "Juste de la colle (SSLComp / Pro-C 2, 1-2 dB), sans pomper." },
         { t: "Saturation subtile si besoin", d: "Une pointe de chaleur/densité (Abbey Road Saturator)." },
         { t: "Pro-L 2 : ceiling -1 dBTP, TP ON", d: "Plafond à -1 dBTP, True Peak activé, monte le gain vers la cible." },
-        { t: "Cible LUFS atteinte", d: "-14 LUFS intégré pour le streaming, mesuré (WLM / Pro-L 2), pas à l'oreille." },
+        { t: "Cible LUFS atteinte", d: "-14 LUFS intégré (streaming), mesuré — pas à l'oreille. Outil : Pro-L 2 / WLM Plus ; gratuit : Youlean Loudness Meter." },
         { t: "True Peak ≤ -1 dBTP vérifié", d: "Évite la distorsion après encodage MP3/AAC." },
         { t: "Comparé A/B à une réf pro", d: "Aligne le volume avec un morceau commercial pour juger objectivement." },
         { t: "Vérifié sur plusieurs écoutes", d: "D3V, casque, et idéalement téléphone / voiture." },
@@ -605,8 +607,8 @@ const HIRA_DATA = {
       lignes: [
         "Niveau par piste (dBFS) → les mètres de LUNA, ou un VU-mètre (Waves VU). Vise ~-18 dBFS de moyenne avant plugins.",
         "Loudness + True Peak (master) → FabFilter Pro-L 2 (mètre intégré au limiteur) ou Waves WLM Plus. C'est là que tu lis -14 LUFS / -1 dBTP.",
-        "Spectre / EQ → l'analyseur temps réel de FabFilter Pro-Q (voir la boue, les bosses, comparer à une réf).",
-        "Stéréo / phase → Waves S1 ou un corrélateur pour vérifier la compatibilité mono.",
+        "Spectre / EQ → l'analyseur temps réel de FabFilter Pro-Q (voir la boue, les bosses, comparer à une réf). Gratuit : Voxengo SPAN.",
+        "Stéréo / phase → Waves S1 ou un corrélateur pour vérifier la compatibilité mono. Gratuit : Voxengo SPAN (corrélateur de phase).",
         "Gratuit et toujours visible → Youlean Loudness Meter (LUFS).",
         "Règle → mesure le LUFS INTÉGRÉ (tout le morceau), pas un instant. Mètres pour les niveaux, oreille pour le son."
       ]
