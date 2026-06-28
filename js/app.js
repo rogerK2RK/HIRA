@@ -782,7 +782,7 @@ catch(e){ supa = null; }
 
 let syncUser = null;
 let syncState = "off";   // off | ok | sync | err
-let otpEmail = "";
+let linkSent = false;
 
 function setSyncState(s){ syncState = s; if(currentView === "sync") views.sync(); }
 
@@ -835,7 +835,7 @@ async function pullMergePush(){
   } catch(e){ setSyncState("err"); }
 }
 
-/* ---- Vue Synchro ---- */
+/* ---- Vue Synchro (lien magique par email) ---- */
 views.sync = function(){
   const labels = { off:"Non connecté", ok:"À jour ✓", sync:"Synchronisation…", err:"Erreur réseau" };
   if(!supa){
@@ -855,22 +855,19 @@ views.sync = function(){
           <button class="btn secondary" onclick="syncLogout()">Se déconnecter</button>
         </div>
       </div>`;
-  } else if(otpEmail){
+  } else if(linkSent){
     body = `
       <div class="card" style="max-width:560px">
-        <p style="margin-bottom:14px">Code à 6 chiffres envoyé à <strong>${esc(otpEmail)}</strong>. Saisis-le :</p>
-        <div class="form-row"><input type="text" id="otp-code" inputmode="numeric" placeholder="123456" /></div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <button class="btn" onclick="syncVerify()">Valider</button>
-          <button class="btn secondary" onclick="syncResetLogin()">Changer d'email</button>
-        </div>
+        <p style="margin-bottom:8px">Lien de connexion envoyé par email.</p>
+        <p style="margin-bottom:16px;color:var(--muted)">Ouvre ton email <strong>sur cet appareil</strong> et clique sur « Sign in » : tu reviendras connecté automatiquement.</p>
+        <button class="btn secondary" onclick="syncResetLogin()">Renvoyer / changer d'email</button>
       </div>`;
   } else {
     body = `
       <div class="card" style="max-width:560px">
-        <p style="margin-bottom:14px">Connecte-toi par email pour retrouver tes projets sur tous tes appareils (tu reçois un code à 6 chiffres).</p>
+        <p style="margin-bottom:14px">Connecte-toi par email pour retrouver tes projets sur tous tes appareils. Tu recevras un lien de connexion.</p>
         <div class="form-row"><label>Email</label><input type="email" id="sync-email" placeholder="toi@email.com" /></div>
-        <button class="btn" onclick="syncSendCode()">${icon("arrow",16)} Recevoir un code</button>
+        <button class="btn" onclick="syncSendLink()">${icon("arrow",16)} Recevoir le lien</button>
       </div>`;
   }
   content.innerHTML = `
@@ -879,30 +876,19 @@ views.sync = function(){
     ${body}`;
 };
 
-window.syncSendCode = async function(){
+window.syncSendLink = async function(){
   const email = (document.getElementById("sync-email")?.value || "").trim();
   if(!email){ toast("Entre ton email"); return; }
   try {
     const { error } = await supa.auth.signInWithOtp({ email, options:{ shouldCreateUser:true } });
     if(error) throw error;
-    otpEmail = email; views.sync(); toast("Code envoyé par email");
+    linkSent = true; views.sync(); toast("Lien envoyé par email");
   } catch(e){ toast("Échec de l'envoi"); }
 };
-window.syncVerify = async function(){
-  const token = (document.getElementById("otp-code")?.value || "").trim();
-  if(!token){ toast("Entre le code reçu"); return; }
-  try {
-    const { data, error } = await supa.auth.verifyOtp({ email: otpEmail, token, type:"email" });
-    if(error) throw error;
-    syncUser = data.user; otpEmail = ""; toast("Connecté");
-    await pullMergePush();
-    navigate("sync");
-  } catch(e){ toast("Code invalide"); }
-};
-window.syncResetLogin = function(){ otpEmail = ""; views.sync(); };
+window.syncResetLogin = function(){ linkSent = false; views.sync(); };
 window.syncLogout = async function(){
   try { await supa.auth.signOut(); } catch(e){}
-  syncUser = null; setSyncState("off"); toast("Déconnecté"); navigate("sync");
+  syncUser = null; linkSent = false; setSyncState("off"); toast("Déconnecté"); navigate("sync");
 };
 window.syncNow = function(){ pullMergePush(); };
 
@@ -931,9 +917,11 @@ document.querySelectorAll(".nav-btn").forEach(b => {
 /* ---- Démarrage ---- */
 navigate("dashboard");
 
-/* Reprend la session si déjà connecté, puis synchronise */
+/* Auth : reprend la session, capte le retour du lien magique, puis synchronise */
 if(supa){
-  supa.auth.getSession().then(({ data }) => {
-    if(data && data.session){ syncUser = data.session.user; pullMergePush(); }
-  }).catch(()=>{});
+  supa.auth.onAuthStateChange((event, session) => {
+    syncUser = session ? session.user : null;
+    if(session){ linkSent = false; setTimeout(() => pullMergePush(), 0); }
+    else if(currentView === "sync"){ views.sync(); }
+  });
 }
