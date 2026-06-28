@@ -3,3 +3,6 @@
 
 # Données locales de l'assistant (mémoire/session)
 .claude/
+
+# Secrets locaux (ne JAMAIS pousser)
+.secrets.local.md

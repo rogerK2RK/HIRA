@@ -53,6 +53,41 @@ ajouter un plugin, une étape ou un conseil.
 
 ---
 
+## 🚧 État d'avancement — REPRENDRE ICI
+
+**Fait et déployé** (Vercel auto depuis `main`) :
+- App complète (projets en slides, checklists + sous-desc, cibles, chaînes & bus en accordéons, conseils, tests de mix).
+- **PWA installable + hors ligne** (manifest, service worker, icônes).
+- **Synchro multi-appareils** Supabase (lien magique email) — ✅ fonctionne.
+- **Rappels (phase A)** : notif quand l'app est ouverte. ✅
+- **Push (phase B)** : code client + Edge Function `supabase/functions/send-reminders/` + SW push — **CODE POUSSÉ, reste la config serveur ci-dessous.**
+
+**À FAIRE pour finir le push « app fermée » (phase B)** — côté Supabase, une fois :
+1. **SQL** (SQL Editor) : créer `push_subs` + `push_log` + le **cron** `hira-reminders` (toutes les minutes) qui appelle la fonction. Mettre la clé `service_role` dans le header du cron. *(script complet : voir l'historique du chat / ci-dessous)*
+2. **Déployer la fonction** : `cd ~/Documents/HIRA && supabase functions deploy send-reminders` (après `supabase login` + `link --project-ref ajynukcwfhxgsertpwtx`).
+3. **Secrets** : `supabase secrets set VAPID_PUBLIC=… VAPID_PRIVATE=… VAPID_SUBJECT=mailto:…`
+   - `VAPID_PUBLIC` (publique, déjà dans `js/app.js`) : `BBEBrFg-tVNlfQebR606fiPbEbk6JYa9i-C9LnHIFAkui-T40yllLOeU1P1ApACa8oFOUSovmseDJhcxYMOrj9o`
+   - `VAPID_PRIVATE` + `service_role` : dans le fichier local **`.secrets.local.md`** (non poussé) — ou régénérables (commande dedans).
+
+**Test final** : iPhone → ouvrir HIRA **depuis l'icône** (PWA) → onglet **Synchro** se connecter → projet → **Rappel** dans ~2 min → **fermer l'app** → la notif doit tomber.
+
+> SQL du cron à exécuter (remplace `<SERVICE_ROLE_KEY>`) :
+> ```sql
+> create extension if not exists pg_cron;  create extension if not exists pg_net;
+> create table if not exists push_subs (id bigint generated always as identity primary key,
+>   user_id uuid references auth.users on delete cascade, subscription jsonb not null, created bigint default 0);
+> alter table push_subs enable row level security;
+> create policy "own subs" on push_subs for all to authenticated using (auth.uid()=user_id) with check (auth.uid()=user_id);
+> create table if not exists push_log (id bigint generated always as identity primary key,
+>   user_id uuid, project_id text, reminder_ts bigint, sent_at timestamptz default now());
+> alter table push_log enable row level security;
+> select cron.schedule('hira-reminders','* * * * *', $$
+>   select net.http_post(url:='https://ajynukcwfhxgsertpwtx.supabase.co/functions/v1/send-reminders',
+>     headers:=jsonb_build_object('Content-Type','application/json','Authorization','Bearer <SERVICE_ROLE_KEY>')); $$);
+> ```
+
+---
+
 ### Ton setup détecté
 - MacBook Pro M4 · macOS 26.5 · 16 Go
 - UAD Volt 276 · Adam Audio D3V · Rode NT1-A · Shure SM7B (+ FetHead) · DT1990 Pro · DT770 Pro
