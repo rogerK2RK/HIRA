@@ -780,7 +780,7 @@ window.setReminder = async function(projId){
   const ms = new Date(v).getTime();
   if(isNaN(ms)){ toast("Date invalide"); return; }
   if(ms <= Date.now()){ toast("Choisis une date future"); return; }
-  await ensureNotifPermission();
+  await enablePush();
   proj.reminder = ms; proj.updated = Date.now(); upsertProject(proj);
   toast("Rappel programmé : " + fmtReminder(ms));
   navigate("project", projId);
@@ -791,7 +791,7 @@ window.clearReminder = function(projId){
   toast("Rappel effacé"); navigate("project", projId);
 };
 window.testNotif = async function(){
-  const ok = await ensureNotifPermission();
+  const ok = await enablePush();
   if(!ok) return;
   fireNotif("HIRA — Test", "Les notifications fonctionnent ✅", null);
   toast("Notification envoyée");
@@ -941,6 +941,41 @@ async function pullMergePush(){
   } catch(e){ setSyncState("err"); }
 }
 
+/* ---- Push (abonnement navigateur → Supabase) ---- */
+const VAPID_PUBLIC = "BBEBrFg-tVNlfQebR606fiPbEbk6JYa9i-C9LnHIFAkui-T40yllLOeU1P1ApACa8oFOUSovmseDJhcxYMOrj9o";
+function urlB64ToUint8Array(b64){
+  const pad = "=".repeat((4 - b64.length % 4) % 4);
+  const base = (b64 + pad).replace(/-/g,"+").replace(/_/g,"/");
+  const raw = atob(base);
+  const arr = new Uint8Array(raw.length);
+  for(let i=0;i<raw.length;i++) arr[i] = raw.charCodeAt(i);
+  return arr;
+}
+async function subscribeToPush(){
+  if(!supa || !syncUser) return false;
+  if(!("serviceWorker" in navigator) || !("PushManager" in window)) return false;
+  if(Notification.permission !== "granted") return false;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if(!sub){
+      sub = await reg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC) });
+    }
+    const json = sub.toJSON();
+    await supa.from("push_subs").delete().eq("user_id", syncUser.id).filter("subscription->>endpoint","eq", json.endpoint);
+    await supa.from("push_subs").insert({ user_id: syncUser.id, subscription: json, created: Date.now() });
+    return true;
+  } catch(e){ return false; }
+}
+// Demande la permission, puis abonne au push si connecté
+async function enablePush(){
+  const ok = await ensureNotifPermission();
+  if(!ok) return false;
+  if(!syncUser){ toast("Connecte-toi (onglet Synchro) pour les rappels même app fermée"); return true; }
+  await subscribeToPush();
+  return true;
+}
+
 /* ---- Vue Synchro (lien magique par email) ---- */
 views.sync = function(){
   const labels = { off:"Non connecté", ok:"À jour ✓", sync:"Synchronisation…", err:"Erreur réseau" };
@@ -1045,7 +1080,11 @@ setInterval(checkReminders, 60000);
 if(supa){
   supa.auth.onAuthStateChange((event, session) => {
     syncUser = session ? session.user : null;
-    if(session){ linkSent = false; setTimeout(() => pullMergePush(), 0); }
+    if(session){
+      linkSent = false;
+      setTimeout(() => pullMergePush(), 0);
+      if(notifSupported() && Notification.permission === "granted") setTimeout(() => subscribeToPush(), 0);
+    }
     else if(currentView === "sync"){ views.sync(); }
   });
 }
