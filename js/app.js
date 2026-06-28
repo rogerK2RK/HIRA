@@ -573,19 +573,24 @@ views.targets = function(){
 
 /* ---- Chaînes types ---- */
 views.chains = function(){
-  const cards = HIRA_DATA.chains.map(c => `
-    <div class="card">
-      <h3>${icon("link")} ${esc(c.nom)}</h3>
-      <p style="margin-bottom:12px">${esc(c.contexte)}</p>
-      <ol class="bus-steps">${c.etapes.map(e=>`<li>${esc(e)}</li>`).join("")}</ol>
-      ${c.vst?`<div class="plug-tags">${c.vst.map(v=>`<span class="tag">${esc(v)}</span>`).join("")}</div>`:""}
-      ${c.cible?`<div class="bus-cible">${icon("target",13)} ${esc(c.cible)}</div>`:""}
+  const items = HIRA_DATA.chains.map(c => `
+    <div class="phase">
+      <div class="phase-head" onclick="this.nextElementSibling.classList.toggle('open')">
+        <span class="phase-icon">${icon("link",20)}</span>
+        <div class="phase-title"><h3>${esc(c.nom)}</h3><div class="pdesc">${esc(c.contexte)}</div></div>
+        <span class="phase-mini">${icon("expand",16)}</span>
+      </div>
+      <div class="phase-body">
+        <ol class="bus-steps">${c.etapes.map(e=>`<li>${esc(e)}</li>`).join("")}</ol>
+        ${c.vst?`<div class="plug-tags">${c.vst.map(v=>`<span class="tag">${esc(v)}</span>`).join("")}</div>`:""}
+        ${c.cible?`<div class="bus-cible">${icon("target",13)} ${esc(c.cible)}</div>`:""}
+      </div>
     </div>`).join("");
   content.innerHTML = `
     <div class="page-head"><h1>${icon("link",22)} Chaînes types</h1>
       <p>Des recettes prêtes à l'emploi avec tes plugins, dans le bon ordre.
-      Adapte toujours à l'oreille et au morceau.</p></div>
-    <div class="grid">${cards}</div>`;
+      Touche une chaîne pour l'ouvrir.</p></div>
+    <div>${items}</div>`;
 };
 
 /* ---- Templates de bus (par instrument / canal) ---- */
