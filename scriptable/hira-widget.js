@@ -5,9 +5,11 @@
 // 3) Ajoute un widget Scriptable sur l'écran de verrouillage/accueil,
 //    et choisis ce script. (Verrouillage : iOS 16+)
 
+// ⚠️ Colle ICI ta clé secrète widget (voir .secrets.local.md — NE LA PUBLIE JAMAIS).
+const WIDGET_KEY = "COLLE_TON_SECRET_ICI";
 const ENDPOINT =
-  "https://ajynukcwfhxgsertpwtx.supabase.co/functions/v1/widget-status" +
-  "?key=6ae276e0d5c4d1c84e51d923ec7daa07872de6ced23421f3";
+  "https://ajynukcwfhxgsertpwtx.supabase.co/functions/v1/widget-status?key=" +
+  WIDGET_KEY;
 
 const ACCENT = new Color("#8a7cff");
 const WHITE = new Color("#ffffff");
