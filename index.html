@@ -14,12 +14,14 @@
   <link rel="apple-touch-icon" href="icon-180.png" />
 </head>
 <body>
-  <!-- Barre du haut (mobile uniquement) -->
+  <!-- En-tête flottant (mobile) : logo à gauche, menu à droite, sans fond -->
   <header class="topbar">
+    <div class="topbar-logo" onclick="navigate('dashboard')">HIRA</div>
     <button class="menu-btn" id="menuBtn" aria-label="Ouvrir le menu"></button>
-    <div class="topbar-logo">HIRA</div>
   </header>
   <div class="backdrop" id="backdrop"></div>
+  <!-- Bouton flottant : nouveau projet -->
+  <button class="fab" id="fab" aria-label="Nouveau projet"></button>
 
   <div id="app">
 

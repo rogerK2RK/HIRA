@@ -188,6 +188,8 @@ function navigate(view, param){
   window.scrollTo(0,0);
   (views[view] || views.dashboard)(param);
   closeDrawer();
+  const fab = document.getElementById("fab");
+  if(fab) fab.style.display = (view === "newproject") ? "none" : "flex";
 }
 
 /* ---- Tiroir de navigation (mobile) ---- */
@@ -240,9 +242,19 @@ views.dashboard = function(){
       <div class="stat"><div class="label">En cours</div><div class="val">${active}</div></div>
       <div class="stat"><div class="label">Terminés</div><div class="val">${done}</div></div>
     </div>
-    <div style="display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap">
-      <button class="btn" onclick="navigate('newproject')">${icon("plus")} Nouveau projet</button>
-      <button class="btn secondary" onclick="navigate('targets')">${icon("target")} Voir les cibles dB/LUFS</button>
+    <h3 style="margin:4px 0 12px;font-size:15px;color:var(--muted)">Accès rapide</h3>
+    <div class="cta-grid">
+      ${[
+        {v:"newproject", ic:"plus",   l:"Nouveau projet"},
+        {v:"projects",   ic:"music",  l:"Mes projets"},
+        {v:"targets",    ic:"target", l:"Cibles dB/LUFS"},
+        {v:"chains",     ic:"link",   l:"Chaînes types"},
+        {v:"buses",      ic:"wave",   l:"Templates de bus"},
+        {v:"calc",       ic:"clock",  l:"Calculateur"},
+        {v:"guide",      ic:"book",   l:"Conseils"},
+        {v:"gear",       ic:"sliders",l:"Matériel"},
+        {v:"plugins",    ic:"grid",   l:"Plugins"}
+      ].map(c => `<button class="cta" onclick="navigate('${c.v}')">${icon(c.ic,26)}<span>${c.l}</span></button>`).join("")}
     </div>
     <h3 style="margin-bottom:14px;font-size:15px;color:var(--muted)">Projets récents</h3>
     <div class="grid">${recent}</div>
@@ -1194,8 +1206,10 @@ document.querySelectorAll(".nav-btn").forEach(b => {
 })();
 (function(){
   const mb = document.getElementById("menuBtn");
-  if(mb){ mb.innerHTML = icon("menu",22); mb.addEventListener("click", openDrawer); }
+  if(mb){ mb.innerHTML = icon("menu",24); mb.addEventListener("click", openDrawer); }
   document.getElementById("backdrop")?.addEventListener("click", closeDrawer);
+  const fab = document.getElementById("fab");
+  if(fab){ fab.innerHTML = icon("plus",26); fab.addEventListener("click", () => navigate("newproject")); }
 })();
 
 /* ---- PWA : service worker (installable + hors ligne) ---- */
