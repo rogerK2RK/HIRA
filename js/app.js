@@ -889,6 +889,7 @@ catch(e){ supa = null; }
 let syncUser = null;
 let syncState = "off";   // off | ok | sync | err
 let linkSent = false;
+let pendingEmail = "";   // email en attente de validation du code
 
 function setSyncState(s){ syncState = s; if(currentView === "sync") views.sync(); }
 
@@ -999,16 +1000,22 @@ views.sync = function(){
   } else if(linkSent){
     body = `
       <div class="card" style="max-width:560px">
-        <p style="margin-bottom:8px">Lien de connexion envoyé par email.</p>
-        <p style="margin-bottom:16px;color:var(--muted)">Ouvre ton email <strong>sur cet appareil</strong> et clique sur « Sign in » : tu reviendras connecté automatiquement.</p>
-        <button class="btn secondary" onclick="syncResetLogin()">Renvoyer / changer d'email</button>
+        <p style="margin-bottom:8px">Code envoyé à <strong>${esc(pendingEmail)}</strong>.</p>
+        <p style="margin-bottom:16px;color:var(--muted)">Ouvre ton email, copie le <strong>code à 6 chiffres</strong> et saisis-le ci-dessous — tu restes dans l'app.</p>
+        <div class="form-row"><label>Code à 6 chiffres</label>
+          <input type="text" id="sync-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" />
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn" onclick="syncVerifyCode()">${icon("arrow",16)} Valider le code</button>
+          <button class="btn secondary" onclick="syncResetLogin()">Renvoyer / changer d'email</button>
+        </div>
       </div>`;
   } else {
     body = `
       <div class="card" style="max-width:560px">
-        <p style="margin-bottom:14px">Connecte-toi par email pour retrouver tes projets sur tous tes appareils. Tu recevras un lien de connexion.</p>
+        <p style="margin-bottom:14px">Connecte-toi par email pour retrouver tes projets sur tous tes appareils. Tu recevras un <strong>code à 6 chiffres</strong>.</p>
         <div class="form-row"><label>Email</label><input type="email" id="sync-email" placeholder="toi@email.com" /></div>
-        <button class="btn" onclick="syncSendLink()">${icon("arrow",16)} Recevoir le lien</button>
+        <button class="btn" onclick="syncSendLink()">${icon("arrow",16)} Recevoir le code</button>
       </div>`;
   }
   content.innerHTML = `
@@ -1023,13 +1030,25 @@ window.syncSendLink = async function(){
   try {
     const { error } = await supa.auth.signInWithOtp({ email, options:{ shouldCreateUser:true } });
     if(error) throw error;
-    linkSent = true; views.sync(); toast("Lien envoyé par email");
+    pendingEmail = email; linkSent = true; views.sync(); toast("Code envoyé par email");
   } catch(e){ toast("Échec de l'envoi"); }
 };
-window.syncResetLogin = function(){ linkSent = false; views.sync(); };
+window.syncVerifyCode = async function(){
+  const token = (document.getElementById("sync-code")?.value || "").trim().replace(/\s/g,"");
+  if(!/^\d{6}$/.test(token)){ toast("Entre le code à 6 chiffres"); return; }
+  if(!pendingEmail){ toast("Renvoie un code"); return; }
+  try {
+    const { error } = await supa.auth.verifyOtp({ email: pendingEmail, token, type: "email" });
+    if(error) throw error;
+    // onAuthStateChange prend le relais (session + synchro). On nettoie l'état local.
+    linkSent = false; pendingEmail = "";
+    toast("Connecté ✓");
+  } catch(e){ toast("Code invalide ou expiré"); }
+};
+window.syncResetLogin = function(){ linkSent = false; pendingEmail = ""; views.sync(); };
 window.syncLogout = async function(){
   try { await supa.auth.signOut(); } catch(e){}
-  syncUser = null; linkSent = false; setSyncState("off"); toast("Déconnecté"); navigate("sync");
+  syncUser = null; linkSent = false; pendingEmail = ""; setSyncState("off"); toast("Déconnecté"); navigate("sync");
 };
 window.syncNow = function(){ pullMergePush(); };
 
