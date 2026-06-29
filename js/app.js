@@ -1222,6 +1222,19 @@ if("serviceWorker" in navigator){
   });
 }
 
+/* ---- En-tête flottant : se masque en scrollant vers le bas, réapparaît en remontant ---- */
+(function(){
+  let lastY = 0;
+  window.addEventListener("scroll", () => {
+    const tb = document.querySelector(".topbar");
+    if(!tb) return;
+    const y = window.scrollY;
+    if(y > lastY && y > 60) tb.classList.add("hide");
+    else tb.classList.remove("hide");
+    lastY = y;
+  }, { passive: true });
+})();
+
 /* ---- Rappels (tant que l'app est ouverte) ---- */
 checkReminders();
 setInterval(checkReminders, 60000);
