@@ -274,6 +274,35 @@ tr:last-child td{border-bottom:none}
   .field-inline{flex-direction:column;gap:0}
   .page-head h1{font-size:20px}
 }
+
+/* ===== Paysage téléphone : plus grand, plus lisible, 2 colonnes ===== */
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 600px){
+  /* utilise la largeur, allège la hauteur (écran court) */
+  .content{padding:18px max(26px, env(safe-area-inset-right)) 22px max(26px, env(safe-area-inset-left))}
+  .page-head{margin-bottom:12px}
+  .page-head h1{font-size:22px}
+  .page-head p{display:none}                 /* on n'affiche que le nécessaire */
+
+  /* 2 colonnes pour voir plus sans scroller */
+  .grid-2{grid-template-columns:1fr 1fr}
+  .checklist{display:grid;grid-template-columns:1fr 1fr;column-gap:30px;align-items:start}
+
+  /* texte & éléments plus gros */
+  .ck-t{font-size:16px}
+  .ck-d{font-size:13.5px}
+  .check{padding:12px 0}
+  .check input{width:22px;height:22px;margin-top:2px}
+  .slide-head h2{font-size:21px}
+  .phase-title h3{font-size:17px}
+  .pdesc{font-size:13px}
+  .bus-steps li,.guide-list li,.tips li{font-size:14.5px;line-height:1.6}
+  .bus-cible{font-size:13px}
+  .tag{font-size:12px}
+  .pstep{width:46px;height:46px}
+  .btn{font-size:15px;padding:12px 20px}
+  .btn.small{font-size:13px}
+  th,td{font-size:14px;padding:14px 16px}
+}
 /* Paysage téléphone : respecter l'encoche latérale + topbar plus compacte */
 @media (orientation:landscape) and (max-height:540px){
   .topbar{padding-left:calc(14px + env(safe-area-inset-left));
