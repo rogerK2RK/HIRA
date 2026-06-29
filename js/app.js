@@ -942,7 +942,7 @@ async function pullMergePush(){
 }
 
 /* ---- Push (abonnement navigateur → Supabase) ---- */
-const VAPID_PUBLIC = "BBEBrFg-tVNlfQebR606fiPbEbk6JYa9i-C9LnHIFAkui-T40yllLOeU1P1ApACa8oFOUSovmseDJhcxYMOrj9o";
+const VAPID_PUBLIC = "BDrC_ov5Yr1Nhq2h5jStgf_bgCBJJS-Heslm1iqjRkLGd9QIVc9UtsQBNjI7xTYYBJscEG4P_Adxc6eAmMr7mHA";
 function urlB64ToUint8Array(b64){
   const pad = "=".repeat((4 - b64.length % 4) % 4);
   const base = (b64 + pad).replace(/-/g,"+").replace(/_/g,"/");
