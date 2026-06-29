@@ -27,6 +27,7 @@ body{
 .sidebar{
   width:240px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--line);
   display:flex;flex-direction:column;padding:22px 14px;position:sticky;top:0;height:100vh;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
 }
 .brand{padding:6px 8px 22px}
 .logo{font-size:30px;font-weight:800;letter-spacing:4px;
