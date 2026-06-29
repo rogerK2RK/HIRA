@@ -71,7 +71,8 @@ const ICONS = {
   wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
   cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
   bell:'<path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>',
-  refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>'
+  refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
 };
 function icon(name, size){
   const s = size || 18;
@@ -729,6 +730,101 @@ views.guide = function(){
     <div>${items}</div>`;
 };
 
+/* ---- Calculateur (temps reverb/delay + réglages selon le BPM) ---- */
+const NOTE_BEATS = { "1/1":4, "1/2":2, "1/4":1, "1/8":0.5, "1/16":0.25, "1/32":0.125, "1/64":0.0625 };
+const NOTE_ROWS = [
+  { k:"1/2", lbl:"Blanche" }, { k:"1/4", lbl:"Noire" },
+  { k:"1/8", lbl:"Croche" }, { k:"1/16", lbl:"Double-croche" }, { k:"1/32", lbl:"Triple-croche" }
+];
+let calcBpm = 120;
+function noteMs(bpm, beats){ return Math.round(beats * 60000 / bpm); }
+
+function buildCalc(bpm){
+  // 1) Table des temps
+  const rows = NOTE_ROWS.map(n => {
+    const base = NOTE_BEATS[n.k] * 60000 / bpm;
+    return `<tr><td><strong>${n.k}</strong> · ${n.lbl}</td>
+      <td class="cible">${Math.round(base)} ms</td>
+      <td>${Math.round(base*1.5)} ms</td>
+      <td>${Math.round(base*2/3)} ms</td></tr>`;
+  }).join("");
+  const table = `
+    <div class="card" style="margin-bottom:14px">
+      <h3>${icon("clock")} Temps selon le BPM (${bpm})</h3>
+      <p style="margin-bottom:10px">Pour les <strong>delays</strong>, le <strong>pré-delay</strong> et caler le <strong>release</strong> d'un compresseur.</p>
+      <table>
+        <tr><th>Note</th><th>Normal</th><th>Pointé</th><th>Triolet</th></tr>
+        ${rows}
+      </table>
+    </div>`;
+
+  // 2) Reverb par source
+  const rev = HIRA_DATA.reverb.map(r => {
+    const pd = noteMs(bpm, NOTE_BEATS[r.predelay] || 0.125);
+    const dec = (r.decayBeats * 60 / bpm);
+    return `
+      <div class="phase">
+        <div class="phase-head" onclick="this.nextElementSibling.classList.toggle('open')">
+          <span class="phase-icon">${icon("link",20)}</span>
+          <div class="phase-title"><h3>${esc(r.source)}</h3><div class="pdesc">${esc(r.type)}</div></div>
+          <span class="phase-mini">${icon("expand",16)}</span>
+        </div>
+        <div class="phase-body">
+          <ul class="guide-list">
+            <li><strong>Pré-delay</strong> <span class="g-arrow">→</span> ${pd} ms <span style="color:var(--muted)">(${r.predelay})</span></li>
+            <li><strong>Decay (queue)</strong> <span class="g-arrow">→</span> ≈ ${dec.toFixed(dec<1?2:1)} s <span style="color:var(--muted)">(${r.decayBeats} temps)</span></li>
+            <li><strong>Astuce</strong> <span class="g-arrow">→</span> ${esc(r.note)}</li>
+          </ul>
+          <div class="plug-tags"><span class="tag">${esc(r.plugin)}</span></div>
+        </div>
+      </div>`;
+  }).join("");
+
+  // 3) Compression par source
+  const comp = HIRA_DATA.comp.map(c => {
+    const rel = c.releaseNote === "auto" ? "auto" : (noteMs(bpm, NOTE_BEATS[c.releaseNote] || 0.5) + " ms");
+    return `
+      <div class="phase">
+        <div class="phase-head" onclick="this.nextElementSibling.classList.toggle('open')">
+          <span class="phase-icon">${icon("sliders",20)}</span>
+          <div class="phase-title"><h3>${esc(c.source)}</h3><div class="pdesc">Ratio ${esc(c.ratio)} · ${esc(c.gr)} de réduction</div></div>
+          <span class="phase-mini">${icon("expand",16)}</span>
+        </div>
+        <div class="phase-body">
+          <ul class="guide-list">
+            <li><strong>Ratio</strong> <span class="g-arrow">→</span> ${esc(c.ratio)}</li>
+            <li><strong>Attaque</strong> <span class="g-arrow">→</span> ${esc(c.attack)}</li>
+            <li><strong>Release</strong> <span class="g-arrow">→</span> ${rel} <span style="color:var(--muted)">(${c.releaseNote})</span></li>
+            <li><strong>Réduction (GR)</strong> <span class="g-arrow">→</span> ${esc(c.gr)}</li>
+            <li><strong>Astuce</strong> <span class="g-arrow">→</span> ${esc(c.note)}</li>
+          </ul>
+          <div class="plug-tags"><span class="tag">${esc(c.plugin)}</span></div>
+        </div>
+      </div>`;
+  }).join("");
+
+  return table
+    + `<h3 style="margin:18px 0 10px;font-size:15px">${icon("link",16)} Reverb par source</h3>${rev}`
+    + `<h3 style="margin:18px 0 10px;font-size:15px">${icon("sliders",16)} Compression par source</h3>${comp}`;
+}
+
+views.calc = function(){
+  content.innerHTML = `
+    <div class="page-head"><h1>${icon("clock",22)} Calculateur</h1>
+      <p>Entre le BPM : temps de delay/reverb + réglages reverb et compression par source.</p></div>
+    <div class="card" style="max-width:280px;margin-bottom:16px">
+      <label style="display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px">BPM</label>
+      <input type="number" id="calc-bpm" value="${calcBpm}" min="40" max="300" inputmode="numeric" oninput="setCalcBpm(this.value)">
+    </div>
+    <div id="calc-results">${buildCalc(calcBpm)}</div>`;
+};
+window.setCalcBpm = function(v){
+  const n = parseInt(v, 10);
+  if(!isNaN(n) && n >= 40 && n <= 300) calcBpm = n;
+  const r = document.getElementById("calc-results");
+  if(r) r.innerHTML = buildCalc(calcBpm);
+};
+
 /* ---- Matériel ---- */
 views.gear = function(){
   const cards = HIRA_DATA.gear.map(g => `
@@ -1081,7 +1177,7 @@ window.syncLogout = async function(){
 window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", guide:"book", gear:"sliders", plugins:"grid", sync:"cloud" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", sync:"cloud" };
 document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";

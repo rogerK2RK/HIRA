@@ -654,5 +654,29 @@ const HIRA_DATA = {
         "Reverb/Delay en sends → toujours, pour garder le contrôle et traiter l'effet (coupe les basses de la reverb)."
       ]
     }
+  ],
+
+  /* ----------------------------------------------------------------------
+     CALCULATEUR — reverb & compression par source (temps calés au BPM)
+     predelay = note (calculée en ms) · decayBeats = durée de queue en temps (noires)
+     releaseNote = note pour le release (calculée en ms) ou "auto"
+     ---------------------------------------------------------------------- */
+  reverb: [
+    { source:"Voix lead",      type:"Plate — Valhalla VintageVerb",   predelay:"1/32", decayBeats:2, plugin:"VintageVerb / Pro-R 2",     note:"Pré-delay court = diction claire ; plaque brillante." },
+    { source:"Chant doux",     type:"Hall — VintageVerb",             predelay:"1/16", decayBeats:3, plugin:"VintageVerb",               note:"Plus enveloppant, queue plus longue." },
+    { source:"Ad-libs",        type:"Hall/Plate (send généreux)",     predelay:"1/16", decayBeats:4, plugin:"VintageVerb + delay",        note:"Envoie-les loin, derrière le lead." },
+    { source:"Snare / Clap",   type:"Room ou Plate courte",           predelay:"1/64", decayBeats:1, plugin:"Valhalla Room",             note:"La queue s'arrête avant le prochain coup." },
+    { source:"Piano / Keys",   type:"Hall / Room naturelle",          predelay:"1/32", decayBeats:2, plugin:"VintageVerb / Pro-R 2",     note:"Naturel, pas trop long pour rester clair." },
+    { source:"Synthé / Pad",   type:"Hall long",                      predelay:"1/16", decayBeats:6, plugin:"Valhalla Supermassive",     note:"Nappes : longues queues OK." },
+    { source:"Drums (room)",   type:"Room courte",                    predelay:"1/64", decayBeats:0.5, plugin:"Valhalla Room",           note:"Colle la batterie sans la noyer." }
+  ],
+  comp: [
+    { source:"Kick",          ratio:"4:1",          attack:"10-30 ms",            releaseNote:"1/16", gr:"2-4 dB",     plugin:"UAD 1176 / Pro-C 2", note:"Attaque assez lente pour garder le clic." },
+    { source:"Basse / 808",   ratio:"3-4:1",        attack:"10-20 ms",            releaseNote:"1/8",  gr:"3-5 dB",     plugin:"LA-2A / Pro-C 2",    note:"Niveau stable ; release qui respire avec le groove." },
+    { source:"Snare / Clap",  ratio:"4:1",          attack:"5-15 ms",             releaseNote:"1/8",  gr:"3-5 dB",     plugin:"1176 / CLA-76",      note:"Punch + corps ; release avant le prochain coup." },
+    { source:"Voix lead",     ratio:"3-4:1 (série)",attack:"15-30 ms puis rapide",releaseNote:"1/8",  gr:"3-5 dB (×2)",plugin:"LA-2A puis 1176",    note:"Comp douce pour la régularité, puis rapide pour les pics." },
+    { source:"Bus Drums",     ratio:"4:1",          attack:"10-30 ms",            releaseNote:"1/8",  gr:"2-4 dB",     plugin:"SSLComp / API-2500", note:"Colle l'ensemble ; release calé au tempo." },
+    { source:"Bus Master",    ratio:"2:1",          attack:"30 ms +",             releaseNote:"auto", gr:"1-2 dB",     plugin:"SSLComp / Pro-C 2",  note:"Juste de la colle, sans pomper." },
+    { source:"Synthé / Keys", ratio:"2-3:1",        attack:"20-30 ms",            releaseNote:"1/8",  gr:"2-3 dB",     plugin:"Pro-C 2",            note:"Régularité sans tuer la dynamique." }
   ]
 };
