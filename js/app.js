@@ -99,6 +99,34 @@ function currentPhaseLabel(proj){
   }
   return icon("check", 14) + " Terminé";
 }
+// Résumé compact du projet en cours, pour le widget iOS (lu via l'Edge Function widget-status)
+function widgetSummary(){
+  const projs = loadProjects();
+  if(!projs.length) return null;
+  const proj = projs.slice().sort((a,b)=>(b.updated||0)-(a.updated||0))[0]; // le plus récemment modifié
+  const phases = phasesFor(proj.type);
+  let idx = phases.length - 1;
+  for(let i=0;i<phases.length;i++){
+    const c = (proj.checks && proj.checks[phases[i].id]) || [];
+    if(!phases[i].checklist.every((_,k)=>c[k])){ idx = i; break; }
+  }
+  const ph = phases[idx] || { nom:"—", checklist:[] };
+  const c = (proj.checks && proj.checks[ph.id]) || [];
+  const done = ph.checklist.filter((_,k)=>c[k]).length;
+  const pct = projectProgress(proj);
+  return {
+    name: proj.name || "Projet",
+    phase: ph.nom,
+    phaseIndex: idx + 1,
+    phaseTotal: phases.length,
+    doneInPhase: done,
+    stepTotal: ph.checklist.length,
+    percent: pct,
+    complete: pct >= 100,
+    reminder: proj.reminder || null,
+    updated: Date.now()
+  };
+}
 
 function toast(msg){
   let t = document.querySelector(".toast");
@@ -910,7 +938,7 @@ function mergeData(localP, localT, remoteP, remoteT){
 
 async function pushRemoteNow(){
   if(!supa || !syncUser) return;
-  const payload = { projects: loadProjects(), tomb: loadTomb() };
+  const payload = { projects: loadProjects(), tomb: loadTomb(), widget: widgetSummary() };
   const { error } = await supa.from("hira_data")
     .upsert({ user_id: syncUser.id, data: payload, updated: Date.now() });
   if(error) throw error;
