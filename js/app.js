@@ -883,9 +883,9 @@ window.toggleCheck = function(projId, phaseId, idx, val){
   upsertProject(proj);
 
   // Re-render de la slide (MAJ stepper, compteur, bouton Suivant) en gardant le scroll
-  const y = window.scrollY;
+  const y = content.scrollTop;
   views.project(projId);
-  window.scrollTo(0, y);
+  content.scrollTo(0, y);
 };
 window.saveNotes = function(projId){
   const proj = getProject(projId);
@@ -1225,10 +1225,11 @@ if("serviceWorker" in navigator){
 /* ---- En-tête flottant : se masque en scrollant vers le bas, réapparaît en remontant ---- */
 (function(){
   let lastY = 0;
-  window.addEventListener("scroll", () => {
+  // Le scroll se fait désormais DANS .content (la page elle-même ne scrolle plus)
+  content.addEventListener("scroll", () => {
     const tb = document.querySelector(".topbar");
     if(!tb) return;
-    const y = window.scrollY;
+    const y = content.scrollTop;
     if(y > lastY && y > 60) tb.classList.add("hide");
     else tb.classList.remove("hide");
     lastY = y;

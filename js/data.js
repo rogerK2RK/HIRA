@@ -483,6 +483,53 @@ const HIRA_DATA = {
       cible: "Nappe vocale large et fondue · -4 à -8 dB sous le lead"
     },
     {
+      nom: "🔥 DRILL MÉLODIQUE — Voix lead (SM7B)",
+      contexte: "Drill UK/NY mélodique (mélodie + flow). SM7B + FetHead. Auto-tune marqué mais musical, voix sombre et présente qui colle aux glides 808. Entre le rap dur et le chant.",
+      etapes: [
+        "Coupe-bas ~90 Hz (Pro-Q 4)",
+        "Auto-tune marqué TÔT (Waves Tune Real-Time, Retune ~8-15 ms) — signature drill mélo",
+        "EQ : dompte la boue 250-450 Hz, présence 3-4 kHz, garde un côté sombre (pas trop d'aigus)",
+        "LA-2A doux (3-4 dB) puis 1176/CLA-76 (3-4 dB) en série pour densifier",
+        "De-ess (Pro-DS) — l'auto-tune accentue les sifflantes",
+        "Saturation modérée (Saturn 2 / RC-20) pour la présence sans agresser",
+        "Sends : reverb courte/moyenne (Valhalla Room) + throw delay 1/4 pointé (H-Delay) sur les fins de phrase"
+      ],
+      vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A → 1176/CLA-76 (série)", "Pro-DS", "Saturn 2 / RC-20", "Valhalla Room + H-Delay"],
+      cible: "Voix sombre, tunée et présente · collée aux 808"
+    },
+    {
+      nom: "🎙️ POP — Voix lead (NT1-A)",
+      contexte: "Pop moderne / variété. NT1-A en pièce calme. Voix propre, brillante, parfaitement lisse et régulière, très en avant. Le moins de défauts possible.",
+      etapes: [
+        "Coupe-bas ~80 Hz (Pro-Q 4)",
+        "Tuning propre mais naturel (Waves Tune Real-Time, Retune ~15-25 ms)",
+        "EQ correctif précis : enlève résonances/boue, présence 3-5 kHz, brillance contrôlée",
+        "LA-2A (3-5 dB) → Pro-C 2 (2-3 dB) en série : voix ultra-régulière et dense",
+        "Vocal Rider pour aplanir les dernières variations de niveau",
+        "De-ess (Pro-DS) soigné — la pop met la voix très en avant",
+        "Saturation discrète (Saturn 2 doux) + air généreux 10-14 kHz (Fresh Air)",
+        "Sends : reverb plaque courte (UAD Pure Plate / Valhalla Plate) + delay subtil (Valhalla Delay)"
+      ],
+      vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A → Pro-C 2", "Vocal Rider", "Pro-DS", "Saturn 2 / Fresh Air", "UAD Pure Plate / Valhalla Plate"],
+      cible: "Voix lisse, brillante et très en avant · zéro défaut"
+    },
+    {
+      nom: "🌴 DANCEHALL / AFRO-DANCEHALL — Voix lead (SM7B)",
+      contexte: "Dancehall / afro-dancehall. SM7B (voix proche, énergique) ou NT1-A. Voix punchy et rythmique, légèrement tunée, avec des effets délais/throws qui groovent. Énergie et présence.",
+      etapes: [
+        "Coupe-bas ~90 Hz (Pro-Q 4)",
+        "Tuning léger-naturel (Waves Tune Real-Time, Retune ~20-30 ms)",
+        "EQ : dompte la boue, présence marquée 3-5 kHz pour que ça percute",
+        "LA-2A (3-4 dB) → 1176/CLA-76 (4-5 dB) : voix punchy et énergique",
+        "De-ess (Pro-DS)",
+        "Saturation chaude (RC-20 / Kramer Tape) pour le grain",
+        "Sends RYTHMIQUES : delay 1/4 ou 1/8 synchro (Valhalla Delay / H-Delay) + reverb courte — les throws font partie du flow",
+        "Automation des throws sur les fins de phrases pour le mouvement"
+      ],
+      vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A → 1176/CLA-76", "Pro-DS", "RC-20 / Kramer Tape", "Valhalla Delay + H-Delay"],
+      cible: "Voix punchy et rythmique · throws qui groovent"
+    },
+    {
       nom: "Bus Drums (cohésion + punch)",
       contexte: "Regroupe kick/snare/hats/perc sur un bus pour les souder. Utile quand tu mixes les drums dans Luna.",
       etapes: [
@@ -640,6 +687,25 @@ const HIRA_DATA = {
       ],
       vst: ["Pro-Q 4", "Pro-C 2", "Saturn 2 / RC-20", "Valhalla VintageVerb"],
       cible: "Creuse là où la voix vit (1-4 kHz)"
+    },
+    {
+      nom: "Voix — réglages par genre", icon: "mic",
+      tag: "Aide-mémoire : ce qui change d'un style à l'autre sur le lead.",
+      prerequis: [
+        "Pars de la chaîne « Voix lead » comme base commune.",
+        "Le micro et le coupe-bas s'adaptent au style (voir ci-dessous).",
+        "Le détail complet est dans l'onglet Chaînes types (une chaîne par genre)."
+      ],
+      chaine: [
+        "RAP DUR (SM7B) → coupe-bas haut ~90-110 Hz, comp série marquée, satu qui mord, peu de réverb. Cible : voix sèche et frontale.",
+        "DRILL MÉLO (SM7B) → auto-tune marqué (Retune 8-15 ms), voix sombre, reverb courte + throws. Cible : collée aux 808.",
+        "AFROBEAT (NT1-A) → tuning naturel (20-30 ms), satu chaude, sends GÉNÉREUX (Pure Plate + delay). Cible : voix aérée qui flotte.",
+        "RnB LEAD (NT1-A/SM7B) → tuning tôt, comp optique lisse, air généreux, Pure Plate luxueuse. Cible : lead soyeux et brillant.",
+        "POP (NT1-A) → tuning propre, LA-2A → Pro-C 2 + Vocal Rider, air 10-14 kHz. Cible : voix lisse, zéro défaut.",
+        "DANCEHALL (SM7B) → présence 3-5 kHz, comp punchy, delays rythmiques (throws). Cible : voix énergique qui groove."
+      ],
+      vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A + 1176/CLA-76", "Pro-DS", "Saturn 2 / RC-20", "UAD Pure Plate / Valhalla", "Vocal Rider"],
+      cible: "Même base · réglages adaptés au style"
     },
     {
       nom: "Bus Master (sur LUNA)", icon: "flag",

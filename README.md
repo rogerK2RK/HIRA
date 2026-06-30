@@ -57,7 +57,11 @@ ajouter un plugin, une étape ou un conseil.
 
 **Fait et déployé** (Vercel auto depuis `main`) :
 - App complète (projets en slides, checklists + sous-desc, cibles, chaînes & bus en accordéons, conseils, tests de mix).
-- **PWA installable + hors ligne** (manifest, service worker, icônes).
+- **Chaînes voix par genre** (onglet Chaînes types) : Rap dur, Drill mélodique, Afrobeat, RnB Lead, RnB Backs, Pop, Dancehall — chacune avec sa chaîne ordonnée + plugins + cible.
+- **Plugins UAD natifs à jour** : scan disque intégré (UA 610, Verve Analog Machines, Pure Plate, Little Labs VOG, Hemisphere, Electra 88, PolyMAX, amplis) — listés dans « Mes plugins » et réutilisés dans les chaînes/bus.
+- **Bus « Voix — réglages par genre »** (onglet Templates de bus) : aide-mémoire compact des différences par style.
+- **Affichage sans scroll de page** : la page est verrouillée (`html,body overflow:hidden`, `#app` en `100dvh`), seul le **contenu** scrolle en interne et le **tiroir burger** garde son scroll. Header stable, plus de rebond/double-scroll.
+- **PWA installable + hors ligne** (manifest, service worker `hira-v10`, icônes).
 - **Synchro multi-appareils** Supabase (lien magique email) — ✅ fonctionne.
 - **Rappels (phase A)** : notif quand l'app est ouverte. ✅
 - **Push (phase B)** : code client + Edge Function `supabase/functions/send-reminders/` + SW push — **CODE POUSSÉ, reste la config serveur ci-dessous.**
