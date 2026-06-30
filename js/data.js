@@ -55,7 +55,8 @@ const HIRA_DATA = {
       "FabFilter Pro-Q 4 / Pro-Q 3 (EQ chirurgical + dynamique — ton EQ n°1)",
       "Waves Scheps 73 / PuigTec / API 550 / SSL E-Channel EQ (EQ couleur)",
       "Waves F6 (EQ dynamique), H-EQ, REQ",
-      "UAD Century Channel Strip (EQ+comp tout-en-un)"
+      "UAD Century Channel Strip (EQ+comp tout-en-un)",
+      "UAD Little Labs VOG (Voice Of God — ajoute/recale le grave : voix, kick, basse, 808)"
     ],
     "Compression": [
       "FabFilter Pro-C 2 (transparent, polyvalent — ton comp n°1)",
@@ -72,14 +73,17 @@ const HIRA_DATA = {
       "FabFilter Saturn 2 (multibande, polyvalent)",
       "RC-20 Retro Color (lo-fi, vintage, vibe)",
       "Waves Abbey Road Saturator, J37, Kramer Tape, BB Tubes",
-      "Tape Fiasco, Fresh Air (aigus/air)"
+      "Tape Fiasco, Fresh Air (aigus/air)",
+      "UAD Verve Analog Machines (tape/color analo — colle et chaleur sur voix, drums, bus)",
+      "UAD 610 (préampli tube — chaleur/drive à l'entrée d'une voix ou d'un instrument)"
     ],
     "Reverb": [
       "Valhalla VintageVerb (le couteau suisse — chant, instruments)",
       "Valhalla Room / Plate (plus naturel / plaques)",
       "Valhalla Supermassive (ambiances XXL, GRATUIT)",
       "FabFilter Pro-R 2 (reverb transparente et modelable)",
-      "Waves Abbey Road Chambers, H-Reverb, IR-L (convolution)"
+      "Waves Abbey Road Chambers, H-Reverb, IR-L (convolution)",
+      "UAD Pure Plate (réverb plaque studio — superbe sur voix RnB/soul et caisse claire)"
     ],
     "Delay": [
       "Valhalla Delay (modes vintage/analog/tape)",
@@ -99,7 +103,8 @@ const HIRA_DATA = {
     "Channel strip (chaîne voix complète)": [
       "Waves Scheps Omni Channel (EQ+comp+de-ess+saturation, excellent pour la voix)",
       "Waves CLA Vocals (rapide, préréglages voix)",
-      "UAD Century Channel Strip"
+      "UAD Century Channel Strip",
+      "UAD Hemisphere Mic Collection (modélise d'autres micros à partir de ton SM7B/NT1-A — change le caractère de la voix)"
     ],
     "Multibande / Dynamique avancée": [
       "FabFilter Pro-MB (compression multibande chirurgicale)",
@@ -120,7 +125,9 @@ const HIRA_DATA = {
     "Synthés / Instruments": [
       "Omnisphere, Kontakt 7 & 8, Arturia Analog Lab V",
       "Xpand!2, Lounge Lizard EP-4, LABS",
-      "Afroplug : Amavibe, Percussions, LogDrums"
+      "Afroplug : Amavibe, Percussions, LogDrums",
+      "UAD Electra 88 (piano électrique Rhodes), UAD PolyMAX (synthé poly analo)",
+      "UAD Enigmatic '82 & Showtime (amplis guitare)"
     ]
   },
 
@@ -407,17 +414,86 @@ const HIRA_DATA = {
       cible: "Pitch calé sur la gamme · effet selon le Retune Speed"
     },
     {
+      nom: "🎤 RAP DUR — Voix lead (SM7B)",
+      contexte: "Drill / trap dur / boom bap moderne. SM7B + FetHead + Volt (mode Vintage). Voix proche, agressive, qui claque DEVANT l'instru. Prise serrée, sans repisse.",
+      etapes: [
+        "Option couleur à l'entrée : UA 610 (préampli tube) pour épaissir/driver la voix dès le départ",
+        "Coupe-bas franc ~90-110 Hz (Pro-Q 4) — la voix rap n'a pas besoin de grave",
+        "Nettoyage (Clarity Vx) si souffle/clim, et dompte la boue 250-450 Hz",
+        "EQ correctif : creuse 400-600 Hz si nasillard, présence vers 3-5 kHz",
+        "LA-2A : compression douce et constante (4-6 dB) pour poser le niveau",
+        "1176 / CLA-76 EN SÉRIE après : attaque rapide, 4-6 dB de punch (ratio 4:1, voire all-buttons par touches)",
+        "De-ess agressif (Pro-DS) sur 5-9 kHz — la chaîne dure accentue les sifflantes",
+        "Saturation marquée (Saturn 2 / RC-20) : dents + grain pour que ça morde",
+        "EQ couleur : air 10-12 kHz (Fresh Air) + petit boost 2-3 kHz pour l'intelligibilité",
+        "Sends : slap delay court (H-Delay ~80-120 ms) + reverb TRÈS courte (Valhalla Room) — garde la voix sèche et frontale"
+      ],
+      vst: ["UA 610 (option)", "Pro-Q 4", "Clarity Vx", "LA-2A → 1176/CLA-76 (série)", "Pro-DS", "Saturn 2 / RC-20", "Valhalla Room + H-Delay"],
+      cible: "Voix sèche, frontale et qui mord · -18 dBFS avant plugins"
+    },
+    {
+      nom: "🥁 AFROBEAT — Chant lead (NT1-A)",
+      contexte: "Afrobeats / afropop. NT1-A en pièce calme (ou SM7B si pièce vive). Voix douce, chaude, légèrement tunée, qui flotte SUR le groove sans l'écraser. Beaucoup d'espace/réverb.",
+      etapes: [
+        "Coupe-bas ~75-90 Hz (Pro-Q 4)",
+        "Tuning naturel-discret (Waves Tune Real-Time, Retune ~20-30 ms) — la vibe afro garde le naturel",
+        "EQ : adoucis la brillance NT1-A (léger creux 6-8 kHz), chaleur en bas-médium",
+        "Compression optique douce LA-2A (3-4 dB) pour la régularité, le chant respire",
+        "De-ess léger (Pro-DS)",
+        "Saturation chaude et subtile (Kramer Tape / RC-20) — couleur sans agressivité",
+        "Air discret 10-12 kHz (Fresh Air)",
+        "Sends GÉNÉREUX : reverb plaque/hall (UAD Pure Plate, Valhalla Plate ou VintageVerb) + delay 1/4 pointé (Valhalla Delay) — l'espace fait partie du genre",
+        "Vocal Rider pour lisser les nuances de chant"
+      ],
+      vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A", "Pro-DS", "Kramer Tape / RC-20", "UAD Pure Plate / Valhalla Plate + Delay", "Vocal Rider"],
+      cible: "Voix chaude et aérée qui flotte sur le groove · sends généreux"
+    },
+    {
+      nom: "💜 RnB — Lead (chant principal)",
+      contexte: "RnB moderne / smooth. NT1-A (chant doux) ou SM7B (voix proche, intime). Lead riche, soyeux, contrôlé. Auto-tune souvent présent mais musical. Dynamique maîtrisée pour les nuances.",
+      etapes: [
+        "Coupe-bas ~80 Hz (Pro-Q 4)",
+        "Tuning (Waves Tune Real-Time) placé TÔT — RnB = pitch propre, du discret au signé",
+        "EQ correctif doux : dégage 200-400 Hz, présence soyeuse vers 3-4 kHz",
+        "LA-2A : compression optique lisse (4-6 dB) pour le velouté",
+        "Pro-C 2 ou CLA-76 derrière : 2-3 dB pour tenir les pics sans tuer la nuance",
+        "De-ess (Pro-DS) — le RnB met la voix très en avant, sifflantes à surveiller",
+        "Saturation soyeuse (Saturn 2 doux / Abbey Road Saturator) pour la richesse harmonique",
+        "Air généreux 10-14 kHz (Fresh Air) = ce côté brillant 'studio'",
+        "Sends : reverb plaque luxueuse (UAD Pure Plate ou Valhalla Plate) + delay 1/8 ou 1/4 (Valhalla Delay) en touches"
+      ],
+      vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A → Pro-C 2/CLA-76", "Pro-DS", "Saturn 2 / Abbey Road Saturator", "UAD Pure Plate / Valhalla Plate + Delay"],
+      cible: "Lead soyeux, brillant et contrôlé · très en avant"
+    },
+    {
+      nom: "💜 RnB — Backs / harmonies (stack)",
+      contexte: "Les empilements RnB (stacks d'harmonies, doubles, ad-libs chantés). Doivent ENROBER le lead façon nappe vocale, larges et fondus, JAMAIS devant le lead.",
+      etapes: [
+        "Reprends une chaîne plus simple que le lead — pas besoin de tout le détail",
+        "Coupe-bas plus haut (~120-150 Hz) + creuse les médiums (300 Hz-2 kHz) pour laisser le lead respirer",
+        "Tuning plus marqué (Retune rapide) — les stacks doivent être PARFAITEMENT calés pour fondre ensemble",
+        "Compression plus serrée (CLA-76) pour 'coller' toutes les couches en un bloc homogène",
+        "Panoramique large : doubles -50/+50, harmonies réparties L/R pour une nappe stéréo",
+        "Détune léger (RC-20 ±5-10 cents) entre les couches = largeur et épaisseur",
+        "Reverb plus longue/diffuse (Valhalla VintageVerb) que le lead pour reculer les backs",
+        "Bus harmonies dédié : EQ + comp de bus pour traiter tout le stack d'un coup",
+        "Automation : remonte les backs dans les trous, baisse-les quand le lead chante"
+      ],
+      vst: ["Pro-Q 4", "Waves Tune Real-Time", "CLA-76", "RC-20 (détune)", "Valhalla VintageVerb"],
+      cible: "Nappe vocale large et fondue · -4 à -8 dB sous le lead"
+    },
+    {
       nom: "Bus Drums (cohésion + punch)",
       contexte: "Regroupe kick/snare/hats/perc sur un bus pour les souder. Utile quand tu mixes les drums dans Luna.",
       etapes: [
         "Route toutes les drums dans un bus/groupe dédié",
         "Compression de bus (SSLComp / API-2500) : ratio ~4:1, attack medium, 2-4 dB de réduction pour le punch",
-        "Saturation/tape (Abbey Road Saturator, Kramer Tape) pour la chaleur et la colle",
+        "Saturation/tape (UAD Verve Analog Machines, Abbey Road Saturator ou Kramer Tape) pour la chaleur et la colle",
         "EQ de bus (Pro-Q) : un peu d'air vers 10 kHz, contrôle le bas si ça devient boueux",
         "Compression parallèle : un send très compressé remonté discrètement sous le bus = punch sans tuer la dynamique",
         "Garde le kick au centre ; panoramique légèrement hats/perc pour la largeur"
       ],
-      vst: ["SSLComp / API-2500", "Abbey Road Saturator / Kramer Tape", "Pro-Q 4"],
+      vst: ["SSLComp / API-2500", "UAD Verve / Abbey Road Saturator / Kramer Tape", "Pro-Q 4"],
       cible: "Batterie soudée qui groove · kick au centre"
     }
   ],
@@ -440,9 +516,10 @@ const HIRA_DATA = {
         "Saturn 2 / RC-20 → harmoniques. Cible : audible sur mobile/laptop sans le sub.",
         "Pro-C 2 (ou LA-2A) → compression douce 2-4 dB. Cible : niveau stable, pas de trous.",
         "Pro-MB en sidechain du kick → duck léger. Cible : -2 à -4 dB quand le kick frappe.",
+        "UAD Little Labs VOG (option) → ajoute/recale un sub propre si la 808 manque de bas. Cible : grave qui se sent sur grosses enceintes.",
         "Pro-Q en M/S → mono sous ~120 Hz. Cible : grave centré, mono-compatible."
       ],
-      vst: ["Pro-Q 4", "Saturn 2 / RC-20", "Pro-C 2 / LA-2A", "Pro-MB"],
+      vst: ["Pro-Q 4", "Saturn 2 / RC-20", "Pro-C 2 / LA-2A", "Pro-MB", "UAD Little Labs VOG (option)"],
       cible: "Mono dans le grave · laisse respirer le kick"
     },
     {
@@ -456,9 +533,10 @@ const HIRA_DATA = {
         "Pro-Q 4 → creuse 300-500 Hz, boost 50-80 Hz + 3-5 kHz. Cible : poids en bas, clic qui passe.",
         "ShaperBox → règle attaque/sustain. Cible : transitoire net.",
         "Saturn 2 → saturation légère. Cible : corps et présence.",
+        "UAD Little Labs VOG (option) → renforce le poids 40-80 Hz si le kick manque de bas. Cible : kick qui pousse en bas.",
         "UAD 1176 (option) → compression courte. Cible : niveau régulier, punch contrôlé."
       ],
-      vst: ["Pro-Q 4", "ShaperBox 3", "Saturn 2", "UAD 1176"],
+      vst: ["Pro-Q 4", "ShaperBox 3", "Saturn 2", "UAD Little Labs VOG (option)", "UAD 1176"],
       cible: "Ancre du grave, complémentaire de la basse"
     },
     {
@@ -471,10 +549,10 @@ const HIRA_DATA = {
       chaine: [
         "Pro-Q 4 → coupe-bas ~150 Hz, corps 200 Hz, présence 5 kHz, air 10 kHz. Cible : claque sans dureté.",
         "CLA-76 / 1176 → compression. Cible : punch et transitoires maîtrisés.",
-        "Valhalla Room (send) → reverb courte. Cible : profondeur sans noyer.",
+        "UAD Pure Plate ou Valhalla Room (send) → reverb courte. Cible : profondeur sans noyer.",
         "Saturn 2 → couleur. Cible : présence sur petites enceintes."
       ],
-      vst: ["Pro-Q 4", "CLA-76 / 1176", "Valhalla Room", "Saturn 2"],
+      vst: ["Pro-Q 4", "CLA-76 / 1176", "UAD Pure Plate / Valhalla Room", "Saturn 2"],
       cible: "Présente sans masquer la voix (1-4 kHz)"
     },
     {
@@ -502,11 +580,11 @@ const HIRA_DATA = {
       ],
       chaine: [
         "SSLComp / API-2500 → ~4:1, 2-4 dB. Cible : batterie soudée qui groove.",
-        "Abbey Road Saturator / Kramer Tape → Cible : colle et chaleur.",
+        "UAD Verve / Abbey Road Saturator / Kramer Tape → Cible : colle et chaleur.",
         "Pro-Q 4 → air 10 kHz, contrôle du bas. Cible : équilibre global.",
         "Comp parallèle (bus dupliqué très compressé, remonté) → Cible : punch sans perdre la dynamique."
       ],
-      vst: ["SSLComp / API-2500", "Abbey Road Saturator", "Pro-Q 4"],
+      vst: ["SSLComp / API-2500", "UAD Verve / Abbey Road Saturator", "Pro-Q 4"],
       cible: "Kick au centre · l'ensemble respire et pousse"
     },
     {
@@ -518,15 +596,17 @@ const HIRA_DATA = {
         "Coupe-bas posé pour virer le rumble."
       ],
       chaine: [
+        "UAD Hemisphere (option, au tracking) → change le caractère du micro (SM7B/NT1-A). Cible : couleur de voix qui colle au style.",
         "Clarity Vx (si besoin) → débruitage léger. Cible : fond propre (< -60 dBFS).",
+        "UA 610 (option) → couleur/drive tube à l'entrée. Cible : voix plus épaisse et présente.",
         "Pro-Q 4 → EQ soustractif. Cible : enlève boue 200-400 Hz + résonances.",
         "LA-2A → compression douce 3-5 dB. Cible : niveau régulier.",
         "1176 / CLA-76 → 2e comp pour le punch. Cible : transitoires tenus, voix dense.",
         "Pro-DS → de-ess 5-9 kHz. Cible : sifflantes domptées, pas tuées.",
         "EQ couleur + Saturn 2 → air 10-12 kHz. Cible : voix devant, présente.",
-        "Reverb + delay (sends) → Cible : profondeur, voix posée dans l'espace."
+        "Reverb (UAD Pure Plate / Valhalla) + delay (sends) → Cible : profondeur, voix posée dans l'espace."
       ],
-      vst: ["Pro-Q 4", "LA-2A + 1176", "Pro-DS", "Scheps Omni Channel"],
+      vst: ["UAD Hemisphere (option)", "UA 610 (option)", "Pro-Q 4", "LA-2A + 1176", "Pro-DS", "UAD Pure Plate", "Scheps Omni Channel"],
       cible: "Au-dessus de l'instru · -18 dBFS avant plugins"
     },
     {
