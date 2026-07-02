@@ -731,6 +731,156 @@ const HIRA_DATA = {
   ],
 
   /* ----------------------------------------------------------------------
+     MONTER LE STUDIO — ce qu'il reste à acquérir (Madagascar)
+     Chaque poste : option "entree" et "milieu" (entrée / milieu de gamme).
+     flag = étiquette contextuelle ("Madagascar", "Climat") ou "" si aucune.
+     ---------------------------------------------------------------------- */
+  studio: {
+    have: [
+      "MacBook Pro M4 · 16 Go", "Interface UAD Volt 276", "Monitors Adam D3V",
+      "Casque mix DT1990 Pro", "Casque rec DT770 Pro", "Micro Rode NT1-A",
+      "Micro Shure SM7B + FetHead", "FL Studio · LUNA", "FabFilter · Waves · Valhalla · UAD",
+      "Omnisphere · Kontakt"
+    ],
+    tiers: [
+      {
+        id: "p1",
+        nom: "Priorité 1 — Les indispensables",
+        tag: "À acheter en premier. Sans ces postes, pas de studio fiable — ou le son de la pièce sabotera tout ton matériel.",
+        items: [
+          {
+            n: "01", nom: "Alimentation électrique protégée", flag: "Madagascar",
+            why: "Coupures JIRAMA fréquentes + surtensions qui grillent le matériel et polluent l'audio. Le poste n°1 à sécuriser avant tout achat coûteux.",
+            entree: { opts: ["Onduleur line-interactive 650-850 VA (APC Back-UPS)", "Multiprise parafoudre de qualité"], prix: "≈ 110-150 €" },
+            milieu: { opts: ["Onduleur 1500 VA pure sine wave (APC / Eaton)", "Régulateur de tension AVR dédié", "Conditionneur secteur rackable (Furman)"], prix: "≈ 400-650 €" }
+          },
+          {
+            n: "02", nom: "Traitement acoustique de la pièce", flag: "",
+            why: "Le poste le plus décisif pour le SON — plus qu'un micro cher. Vise d'abord les angles (bass traps) et le point de première réflexion autour du micro et des monitors.",
+            entree: { opts: ["Panneaux DIY laine de roche (Rockwool) encadrés", "Bass traps mousse dans les angles"], prix: "≈ 100-200 €" },
+            milieu: { opts: ["Panneaux fabriqués (GIK, EQ Acoustics)", "Bass traps épais + nuage plafond", "Quelques diffuseurs à l'arrière"], prix: "≈ 300-700 €" }
+          },
+          {
+            n: "03", nom: "Pied de micro, suspension & anti-pop", flag: "",
+            why: "Pour tenir le SM7B / NT1-A proprement, éviter les vibrations (shock mount) et les plosives (filtre anti-pop) au tracking.",
+            entree: { opts: ["Pied perche (K&M / Hercules)", "Shock mount + filtre anti-pop tissu"], prix: "≈ 40-70 €" },
+            milieu: { opts: ["Bras articulé de bureau (Rode PSA1+)", "Shock mount dédié + anti-pop métal"], prix: "≈ 100-140 €" }
+          },
+          {
+            n: "04", nom: "Câblage XLR / jack", flag: "",
+            why: "Des câbles fiables et blindés évitent parasites et faux-contacts. Prévois-en plus que nécessaire (ça lâche toujours au mauvais moment).",
+            entree: { opts: ["XLR Cordial / Stagg 3-6 m (x3-4)", "Quelques jacks TRS"], prix: "≈ 40-70 €" },
+            milieu: { opts: ["Câbles Mogami / Sommer", "Petite patchbay si multi-sources"], prix: "≈ 100-150 €" }
+          },
+          {
+            n: "05", nom: "Retour casque artistes (distribution)", flag: "",
+            why: "Un studio enregistre des invités : il leur faut un ampli casque de distribution + des casques fermés en plus des tiens.",
+            entree: { opts: ["Ampli casque 4 canaux (Behringer HA400)", "1-2 casques fermés (ATH-M20x / M40x)"], prix: "≈ 90-160 €" },
+            milieu: { opts: ["Ampli casque (PreSonus HP4 / HP60)", "Casques AKG K92 / ATH-M50x (x2)"], prix: "≈ 250-400 €" }
+          },
+          {
+            n: "06", nom: "Clavier maître MIDI", flag: "",
+            why: "Pour jouer tes lignes dans FL / Omnisphere / Kontakt — indispensable pour la prod afro/RnB (accords, mélodies, basses).",
+            entree: { opts: ["Akai MPK Mini / Arturia MiniLab 3", "25 touches + pads"], prix: "≈ 80-110 €" },
+            milieu: { opts: ["Arturia KeyLab Essential 49/61", "ou Native KOMPLETE Kontrol A49"], prix: "≈ 150-250 €" }
+          },
+          {
+            n: "07", nom: "Stockage & sauvegarde", flag: "Climat",
+            why: "Sessions lourdes + chaleur/humidité = risque de perte. Règle 3-2-1 : 2 copies locales + 1 hors site (cloud).",
+            entree: { opts: ["SSD externe 1 To USB-C (Crucial X6)", "Disque de backup séparé"], prix: "≈ 90-140 €" },
+            milieu: { opts: ["SSD 2 To rapide (Samsung T7 / T9)", "HDD 4 To archives + backup cloud"], prix: "≈ 200-350 €" }
+          }
+        ]
+      },
+      {
+        id: "p2",
+        nom: "Priorité 2 — Fortement recommandé",
+        tag: "Pas bloquants, mais ils font franchir un vrai palier de qualité et de fiabilité — surtout dans le climat malgache.",
+        items: [
+          {
+            n: "08", nom: "Filtre de réflexion / coin voix", flag: "",
+            why: "Tant que la pièce n'est pas traitée à 100 %, il isole le micro des réflexions — précieux avec le NT1-A très sensible à la pièce.",
+            entree: { opts: ["Réflexion filter (sE RF-X / Monoprice)"], prix: "≈ 60-90 €" },
+            milieu: { opts: ["Cabine portable (Isovox) ou coin traité sur mesure"], prix: "≈ 300 € +" }
+          },
+          {
+            n: "09", nom: "Caisson de basse (sub)", flag: "",
+            why: "Tes Adam D3V décrochent sous ~50 Hz. Un sub calé = tu entends enfin les 808 / sub, crucial pour l'afro, la trap et le RnB.",
+            entree: { opts: ["Adam Audio T10S (s'accorde avec les D3V)"], prix: "≈ 250 €" },
+            milieu: { opts: ["Sub 8-10\" mieux défini (KRK / PreSonus / Adam)"], prix: "≈ 300-450 €" }
+          },
+          {
+            n: "10", nom: "Micro polyvalent supplémentaire", flag: "",
+            why: "Un 3e micro élargit tes options : autre couleur de voix, chœurs simultanés, instruments (guitare, percussions).",
+            entree: { opts: ["Statique AT2020 / AT2035", "ou dynamique SM57 (instruments)"], prix: "≈ 100-150 €" },
+            milieu: { opts: ["Statique large membrane (AKG C214 / Rode NT1 5e)", "+ SM57 pour amplis/percus"], prix: "≈ 300-400 €" }
+          },
+          {
+            n: "11", nom: "Mobilier & positionnement", flag: "",
+            why: "Bureau studio, chaise confortable et stands/isolateurs de monitors à hauteur d'oreille : ça change l'écoute et le confort des longues sessions.",
+            entree: { opts: ["Bureau simple + chaise correcte", "Isolateurs monitors génériques"], prix: "≈ 100-200 €" },
+            milieu: { opts: ["Bureau studio + chaise ergonomique", "IsoAcoustics ISO-155 (paire)"], prix: "≈ 400 € +" }
+          },
+          {
+            n: "12", nom: "Second écran", flag: "",
+            why: "Mixer/produire sur deux écrans = mixer, plugins et arrangement visibles d'un coup. Gros gain de vitesse.",
+            entree: { opts: ["Moniteur 24-27\" 1080p"], prix: "≈ 120-180 €" },
+            milieu: { opts: ["27\" 1440p (plus d'espace de travail)"], prix: "≈ 250-350 €" }
+          },
+          {
+            n: "13", nom: "Protection contre l'humidité", flag: "Madagascar",
+            why: "Sur les côtes, l'humidité attaque les micros à condensateur (NT1-A) et l'électronique. Range-les au sec entre les sessions.",
+            entree: { opts: ["Boîte étanche + silica gel + hygromètre"], prix: "≈ 20-40 €" },
+            milieu: { opts: ["Armoire déshumidifiante (dry cabinet)"], prix: "≈ 100-200 €" }
+          }
+        ]
+      },
+      {
+        id: "p3",
+        nom: "Priorité 3 — Optionnel / évolution",
+        tag: "À envisager quand le studio tourne, selon la direction que tu veux lui donner (groupes live, contenu vidéo…).",
+        items: [
+          {
+            n: "14", nom: "Interface audio multi-entrées", flag: "",
+            why: "Ton Volt 276 (2 entrées) suffit pour la voix. Passe à plus d'entrées seulement si tu enregistres batterie / groupe live.",
+            entree: { opts: ["Focusrite Scarlett 18i8 / 18i20"], prix: "≈ 300-450 €" },
+            milieu: { opts: ["UAD Apollo x4 / x8 (reste dans l'écosystème UAD + DSP)"], prix: "≈ 900-1500 €" }
+          },
+          {
+            n: "15", nom: "Micros d'instruments", flag: "",
+            why: "Si tu ouvres aux instruments acoustiques / groupes : kit batterie ou paire matched pour prises stéréo.",
+            entree: { opts: ["Kit micros batterie d'entrée + SM57"], prix: "≈ 200-300 €" },
+            milieu: { opts: ["Paire matched (Rode NT5 / M5) + dynamiques"], prix: "≈ 300-500 €" }
+          },
+          {
+            n: "16", nom: "Captation vidéo des sessions", flag: "",
+            why: "Filmer les sessions (YouTube / réseaux) est un énorme levier de visibilité pour un studio qui démarre.",
+            entree: { opts: ["Smartphone + trépied + LED softbox"], prix: "≈ 80-150 €" },
+            milieu: { opts: ["Hybride (Sony ZV-E10) + objectif + éclairage"], prix: "≈ 800 € +" }
+          },
+          {
+            n: "17", nom: "Éclairage d'ambiance", flag: "",
+            why: "Identité visuelle du studio + meilleures vidéos. Petit budget, gros effet sur l'image de marque.",
+            entree: { opts: ["Bandes / barres LED RGB"], prix: "≈ 40-80 €" },
+            milieu: { opts: ["Panneaux LED pro + variateurs"], prix: "≈ 200 € +" }
+          }
+        ]
+      }
+    ],
+    budget: [
+      { palier: "P1 — Indispensables", entree: "≈ 600-900 €", milieu: "≈ 1 600-2 600 €", debloque: "Studio fiable qui enregistre des invités" },
+      { palier: "+ P2 — Recommandé", entree: "≈ 1 300-1 900 €", milieu: "≈ 3 300-4 700 €", debloque: "Vraie qualité d'écoute + confort + durabilité" },
+      { palier: "+ P3 — Optionnel", entree: "selon projet", milieu: "selon projet", debloque: "Groupes live, contenu vidéo, image de marque" }
+    ],
+    notes: [
+      { t: "Électricité", d: "Réseau 220 V / 50 Hz, prises type C/E (européennes). Priorise onduleur + régulateur AVANT tout : c'est ce qui protège des coupures et surtensions qui grillent le matériel importé." },
+      { t: "Climat & humidité", d: "Chaleur et humidité (surtout côtières) attaquent micros à condensateur et disques. Range au sec (silica / dry box), aère, évite la condensation." },
+      { t: "Import & douane", d: "Beaucoup de matériel s'importe : prévois délais, frais de douane et TVA dans ton budget. Groupe tes commandes et privilégie un SAV accessible." },
+      { t: "Ordre d'achat", d: "Suis la numérotation 01→17 : sécurise l'électricité et l'acoustique d'abord — un micro cher dans une pièce non traitée sonnera moins bien qu'un micro simple bien placé." }
+    ]
+  },
+
+  /* ----------------------------------------------------------------------
      CONSEILS & RÉFLEXES — les bons gestes
      "icon" = nom d'icône. Une ligne contenant " → " s'affiche problème → solution.
      ---------------------------------------------------------------------- */

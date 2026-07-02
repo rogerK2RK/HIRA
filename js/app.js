@@ -72,7 +72,8 @@ const ICONS = {
   cloud:'<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
   bell:'<path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>',
   refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>',
-  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
+  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  building:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01M12 6h.01M12 10h.01M12 14h.01"/>'
 };
 function icon(name, size){
   const s = size || 18;
@@ -253,7 +254,8 @@ views.dashboard = function(){
         {v:"calc",       ic:"clock",  l:"Calculateur"},
         {v:"guide",      ic:"book",   l:"Conseils"},
         {v:"gear",       ic:"sliders",l:"Matériel"},
-        {v:"plugins",    ic:"grid",   l:"Plugins"}
+        {v:"plugins",    ic:"grid",   l:"Plugins"},
+        {v:"studio",     ic:"building",l:"Monter le studio"}
       ].map(c => `<button class="cta" onclick="navigate('${c.v}')">${icon(c.ic,26)}<span>${c.l}</span></button>`).join("")}
     </div>
     <h3 style="margin-bottom:14px;font-size:15px;color:var(--muted)">Projets récents</h3>
@@ -715,6 +717,75 @@ views.buses = function(){
       <p>Quoi mettre sur chaque élément : basse, kick, voix… La chaîne dans l'ordre,
       les plugins conseillés et la cible. Touche un bus pour l'ouvrir.</p></div>
     <div>${items}</div>`;
+};
+
+/* ---- Monter le studio (Madagascar) ---- */
+views.studio = function(){
+  const S = HIRA_DATA.studio;
+  const chips = S.have.map(h => `<span class="tag">${esc(h)}</span>`).join("");
+
+  const opt = (o, kind, label) => `
+    <div class="studio-opt ${kind}">
+      <div class="studio-opt-label">${label}</div>
+      <ul>${o.opts.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+      <div class="studio-price">${esc(o.prix)}</div>
+    </div>`;
+
+  const tiers = S.tiers.map(t => `
+    <div class="studio-tier ${t.id}">
+      <h2>${esc(t.nom)}</h2>
+      <p>${esc(t.tag)}</p>
+    </div>
+    ${t.items.map(it => `
+      <div class="phase studio-comp ${t.id}">
+        <div class="phase-head" onclick="this.nextElementSibling.classList.toggle('open')">
+          <span class="studio-idx">${esc(it.n)}</span>
+          <div class="phase-title">
+            <h3>${esc(it.nom)}</h3>
+            <div class="pdesc">${it.flag ? `<span class="mg-pill">${esc(it.flag)}</span> ` : ""}${esc(it.why)}</div>
+          </div>
+          <span class="phase-mini">${icon("expand",16)}</span>
+        </div>
+        <div class="phase-body">
+          <div class="studio-opts">
+            ${opt(it.entree, "entry", "Entrée de gamme")}
+            ${opt(it.milieu, "mid", "Milieu de gamme")}
+          </div>
+        </div>
+      </div>`).join("")}
+  `).join("");
+
+  const budget = `
+    <table class="studio-budget">
+      <thead><tr><th>Palier</th><th>Entrée de gamme</th><th>Milieu de gamme</th><th>Ce que ça débloque</th></tr></thead>
+      <tbody>${S.budget.map(b => `<tr>
+        <td><strong>${esc(b.palier)}</strong></td>
+        <td class="num">${esc(b.entree)}</td>
+        <td class="num mid">${esc(b.milieu)}</td>
+        <td>${esc(b.debloque)}</td></tr>`).join("")}</tbody>
+    </table>`;
+
+  const notes = S.notes.map(n => `
+    <div class="studio-note"><h4>${esc(n.t)}</h4><p>${esc(n.d)}</p></div>`).join("");
+
+  content.innerHTML = `
+    <div class="page-head"><h1>${icon("building",22)} Monter le studio</h1>
+      <p>Ce qu'il te reste pour passer du home-studio au vrai studio d'enregistrement, à Madagascar.
+      Pour chaque poste : une option entrée de gamme et une milieu de gamme. Touche un poste pour l'ouvrir.</p></div>
+
+    <div class="have-box">
+      <h3><span class="dot"></span> Ce que tu possèdes déjà</h3>
+      <p>Ton setup couvre déjà l'enregistrement voix + la prod/mix/master en solo — on ne le rachète pas.</p>
+      <div class="plug-tags have-chips">${chips}</div>
+    </div>
+
+    ${tiers}
+
+    <div class="studio-tier"><h2>Récap budget</h2><p>Fourchettes indicatives hors import/douane. Additionne selon les paliers visés.</p></div>
+    <div class="tbl-scroll">${budget}</div>
+
+    <div class="studio-tier"><h2>À garder en tête — contexte Madagascar</h2></div>
+    <div class="studio-notes">${notes}</div>`;
 };
 
 /* ---- Conseils & réflexes ---- */
@@ -1189,7 +1260,7 @@ window.syncLogout = async function(){
 window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", sync:"cloud" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", sync:"cloud" };
 document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";
