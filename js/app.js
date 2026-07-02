@@ -724,10 +724,16 @@ views.studio = function(){
   const S = HIRA_DATA.studio;
   const chips = S.have.map(h => `<span class="tag">${esc(h)}</span>`).join("");
 
+  // Lien de recherche par produit (universel : import + local Madagascar)
+  // Requête = ligne complète (marque entre parenthèses conservée), sans "ou " en tête.
+  const shop = (label) => {
+    const q = encodeURIComponent(label.replace(/^ou /i, "").trim());
+    return `<a class="studio-shop" href="https://www.google.com/search?q=${q}" target="_blank" rel="noopener">${esc(label)} ${icon("arrow",12)}</a>`;
+  };
   const opt = (o, kind, label) => `
     <div class="studio-opt ${kind}">
       <div class="studio-opt-label">${label}</div>
-      <ul>${o.opts.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+      <ul>${o.opts.map(x => `<li>${shop(x)}</li>`).join("")}</ul>
       <div class="studio-price">${esc(o.prix)}</div>
     </div>`;
 
