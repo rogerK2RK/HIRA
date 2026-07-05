@@ -58,6 +58,8 @@ const HIRA_DATA = {
       "UAD Century Channel Strip (EQ+comp tout-en-un)",
       "UAD Little Labs VOG (Voice Of God — ajoute/recale le grave : voix, kick, basse, 808)",
       "iZotope Neutron 5/4 EQ (EQ + détection de masquage entre pistes)",
+      "Waves Q10 (paragraphique classique), PuigTec EQP1A (Pultec — couleur analo)",
+      "Waves LoAir (renfort/synthèse de sub sous 60 Hz — voix, kick, 808)",
       "Kilohearts kHs 3-Band EQ (rapide, modulaire)"
     ],
     "Compression": [
@@ -65,19 +67,22 @@ const HIRA_DATA = {
       "UAD Teletronix LA-2A (voix, chant — doux, optique)",
       "UAD 1176 / Waves CLA-76 (voix rap, punch, transitoires)",
       "Waves CLA-2A / CLA-3A, API-2500, SSLComp (bus)",
+      "Waves RVox (comp voix 1 bouton, ultra rapide), RCompressor, VComp, C1",
+      "Waves CLA Bass (compression de basse dédiée)",
       "Waves Vocal Rider / Bass Rider (automation de niveau)",
       "Brainworx bx_glue (comp de bus type SSL — colle drums/mix)",
       "iZotope Neutron Compressor, Kilohearts kHs Compressor / Dynamics"
     ],
     "De-essing": [
       "FabFilter Pro-DS (ton de-esser n°1)",
-      "Waves Sibilance / DeEsser",
+      "Waves Sibilance / DeEsser / RDeEsser",
       "iZotope Nectar 4 (module de-ess intégré à la chaîne voix)"
     ],
     "Saturation / Couleur": [
       "FabFilter Saturn 2 (multibande, polyvalent)",
       "RC-20 Retro Color (lo-fi, vintage, vibe)",
       "Waves Abbey Road Saturator, J37, Kramer Tape, BB Tubes",
+      "Waves NLS (couleur console/summing), Aphex Vintage Exciter (air/exciter)",
       "Tape Fiasco, Fresh Air (aigus/air)",
       "UAD Verve Analog Machines (tape/color analo — colle et chaleur sur voix, drums, bus)",
       "UAD 610 (préampli tube — chaleur/drive à l'entrée d'une voix ou d'un instrument)",
@@ -89,35 +94,42 @@ const HIRA_DATA = {
       "Valhalla Room / Plate (plus naturel / plaques)",
       "Valhalla Supermassive (ambiances XXL, GRATUIT)",
       "FabFilter Pro-R 2 (reverb transparente et modelable)",
-      "Waves Abbey Road Chambers, H-Reverb, IR-L (convolution)",
+      "iZotope Aurora (réverb moderne / nappes — belle sur voix RnB/pop)",
+      "Waves RVerb, LuxeVerb, Abbey Road Chambers, H-Reverb, IR-L (convolution)",
       "UAD Pure Plate (réverb plaque studio — superbe sur voix RnB/soul et caisse claire)",
       "NI Raum (moderne, nappes/ambiances), Kilohearts kHs Reverb"
     ],
     "Delay": [
       "Valhalla Delay (modes vintage/analog/tape)",
       "FabFilter Timeless 3 (delay créatif modulable)",
-      "Waves H-Delay (slap/dub classique)",
+      "Waves H-Delay (slap/dub classique), CLA EchoSphere (écho vintage)",
       "NI Replika XT (multi-modes, diffusion/ducking), Kilohearts kHs Delay / Dual Delay"
     ],
     "Nettoyage voix": [
       "iZotope RX 12/11 (LA référence débruitage : Voice De-noise, De-click, De-hum, De-reverb, De-clip, Repair Assistant)",
       "Waves Clarity Vx / Clarity Vx Pro (débruitage IA — top pour SM7B/NT1-A)",
+      "Waves Clarity Vx DeReverb (enlève la réverb d'une prise dans une pièce vive)",
+      "Waves NS1 (suppresseur de bruit 1 bouton, temps réel)",
       "Waves X-Noise, Z-Noise (bruit de fond), DeBreath (respirations)",
       "Waves X-Hum, X-Click (ronflette, clics)"
     ],
     "Tuning voix": [
+      "Antares Auto-Tune Artist (LA référence — du naturel au robotique, mode Flow temps réel)",
       "Waves Tune Real-Time (correction temps réel, type Auto-Tune)",
       "Waves Tune (correction graphique précise)",
-      "UAD Topline Vocal Tune"
+      "Waves Vocal Bender (pitch/formant créatif), UAD Topline Vocal Tune"
     ],
     "Channel strip (chaîne voix complète)": [
       "iZotope Nectar 4 Elements (chaîne voix complète : EQ, comp, de-ess, saturation, assistant)",
       "Waves Scheps Omni Channel (EQ+comp+de-ess+saturation, excellent pour la voix)",
-      "Waves CLA Vocals (rapide, préréglages voix)",
+      "Waves Magma Channel Strip (tubes/couleur), SSLChannel, RChannel",
+      "Waves CLA Vocals (rapide, préréglages voix), GW VoiceCentric (voix 1 bouton)",
       "UAD Century Channel Strip",
       "UAD Hemisphere Mic Collection (modélise d'autres micros à partir de ton SM7B/NT1-A — change le caractère de la voix)"
     ],
     "Effets voix créatifs (vocodeur / harmonies)": [
+      "Waves Harmony (harmoniseur temps réel jusqu'à 8 voix — top pour backs/ad-libs)",
+      "Waves UltraPitch (harmonies/pitch, 6 voix), Waves OVox (vocoder / synth vocal)",
       "iZotope VocalSynth 2 (vocoder, talkbox, harmonies, textures modernes)",
       "Vocodine (vocodeur), LeVoix (traitement voix)",
       "NI Choral (chœurs/épaississeur), pour élargir les backs"
@@ -140,6 +152,7 @@ const HIRA_DATA = {
     ],
     "Imaging / Stéréo": [
       "Waves S1 Stereo Imager, Center, B360",
+      "Waves Doubler 2/4 (double/élargit voix, backs, synthés)",
       "iZotope Ozone Imager 2 (largeur stéréo, GRATUIT)",
       "Kilohearts kHs Stereo / kHs Haas, FabFilter Pro-Q (mode M/S)"
     ],
