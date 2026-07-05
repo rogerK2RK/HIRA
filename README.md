@@ -58,7 +58,9 @@ ajouter un plugin, une étape ou un conseil.
 **Fait et déployé** (Vercel auto depuis `main`) :
 - App complète (projets en slides, checklists + sous-desc, cibles, chaînes & bus en accordéons, conseils, tests de mix).
 - **Chaînes voix par genre** (onglet Chaînes types) : Rap dur, Drill mélodique, Afrobeat, RnB Lead, RnB Backs, Pop, Dancehall — chacune avec sa chaîne ordonnée + plugins + cible.
-- **Plugins UAD natifs à jour** : scan disque intégré (UA 610, Verve Analog Machines, Pure Plate, Little Labs VOG, Hemisphere, Electra 88, PolyMAX, amplis) — listés dans « Mes plugins » et réutilisés dans les chaînes/bus.
+- **Plugins à jour (rescan complet)** : UAD natifs + iZotope (RX 12/11, Nectar 4, Neutron 4/5, Ozone 12/11, Insight 2, VocalSynth 2), Native Instruments (Massive X, Battery 4, Guitar Rig 7, Raum, Replika XT), Brainworx (bx_glue, bx_enhancer), suite Kilohearts complète… Rangés dans « Mes plugins » (16 catégories, dont « Effets voix créatifs » et « Mesure / Analyse »).
+- **Process REC sur prod** (achetée / YouTube) : onglet dédié, sélecteur de genre, channels REC + MIX (lead/ad-libs/backs) et simulateur d'effets (BPM → autotune/reverb/delay).
+- **Onglet « Monter le studio »** : plan d'équipement Madagascar, options entrée/milieu de gamme + liens de recherche produits.
 - **Bus « Voix — réglages par genre »** (onglet Templates de bus) : aide-mémoire compact des différences par style.
 - **Affichage sans scroll de page** : la page est verrouillée (`html,body overflow:hidden`, `#app` en `100dvh`), seul le **contenu** scrolle en interne et le **tiroir burger** garde son scroll. Header stable, plus de rebond/double-scroll.
 - **PWA installable + hors ligne** (manifest, service worker `hira-v10`, icônes).
@@ -66,12 +68,10 @@ ajouter un plugin, une étape ou un conseil.
 - **Rappels (phase A)** : notif quand l'app est ouverte. ✅
 - **Push (phase B)** : code client + Edge Function `supabase/functions/send-reminders/` + SW push — **CODE POUSSÉ, reste la config serveur ci-dessous.**
 
-**À FAIRE pour finir le push « app fermée » (phase B)** — côté Supabase, une fois :
-1. **SQL** (SQL Editor) : créer `push_subs` + `push_log` + le **cron** `hira-reminders` (toutes les minutes) qui appelle la fonction. Mettre la clé `service_role` dans le header du cron. *(script complet : voir l'historique du chat / ci-dessous)*
-2. **Déployer la fonction** : `cd ~/Documents/HIRA && supabase functions deploy send-reminders` (après `supabase login` + `link --project-ref ajynukcwfhxgsertpwtx`).
-3. **Secrets** : `supabase secrets set VAPID_PUBLIC=… VAPID_PRIVATE=… VAPID_SUBJECT=mailto:…`
-   - `VAPID_PUBLIC` (publique, déjà dans `js/app.js`) : `BBEBrFg-tVNlfQebR606fiPbEbk6JYa9i-C9LnHIFAkui-T40yllLOeU1P1ApACa8oFOUSovmseDJhcxYMOrj9o`
-   - `VAPID_PRIVATE` + `service_role` : dans le fichier local **`.secrets.local.md`** (non poussé) — ou régénérables (commande dedans).
+**À FAIRE pour finir le push « app fermée » (phase B)** — voir le runbook **[`PHASE-B.md`](PHASE-B.md)** (étapes copier-coller).
+- ✅ **CLI Supabase installé** (`supabase 2.109.0`, via Homebrew).
+- Reste (interactif, à faire par toi) : `supabase login` + `link`, le **SQL** (tables + cron), `functions deploy send-reminders`, `secrets set` (clés dans `.secrets.local.md`).
+- ⚠️ Ces étapes exigent le navigateur (OAuth) ou un personal access token `sbp_…` : non automatisables sans ça.
 
 **Test final** : iPhone → ouvrir HIRA **depuis l'icône** (PWA) → onglet **Synchro** se connecter → projet → **Rappel** dans ~2 min → **fermer l'app** → la notif doit tomber.
 

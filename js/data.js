@@ -56,18 +56,23 @@ const HIRA_DATA = {
       "Waves Scheps 73 / PuigTec / API 550 / SSL E-Channel EQ (EQ couleur)",
       "Waves F6 (EQ dynamique), H-EQ, REQ",
       "UAD Century Channel Strip (EQ+comp tout-en-un)",
-      "UAD Little Labs VOG (Voice Of God — ajoute/recale le grave : voix, kick, basse, 808)"
+      "UAD Little Labs VOG (Voice Of God — ajoute/recale le grave : voix, kick, basse, 808)",
+      "iZotope Neutron 5/4 EQ (EQ + détection de masquage entre pistes)",
+      "Kilohearts kHs 3-Band EQ (rapide, modulaire)"
     ],
     "Compression": [
       "FabFilter Pro-C 2 (transparent, polyvalent — ton comp n°1)",
       "UAD Teletronix LA-2A (voix, chant — doux, optique)",
       "UAD 1176 / Waves CLA-76 (voix rap, punch, transitoires)",
       "Waves CLA-2A / CLA-3A, API-2500, SSLComp (bus)",
-      "Waves Vocal Rider / Bass Rider (automation de niveau)"
+      "Waves Vocal Rider / Bass Rider (automation de niveau)",
+      "Brainworx bx_glue (comp de bus type SSL — colle drums/mix)",
+      "iZotope Neutron Compressor, Kilohearts kHs Compressor / Dynamics"
     ],
     "De-essing": [
       "FabFilter Pro-DS (ton de-esser n°1)",
-      "Waves Sibilance / DeEsser"
+      "Waves Sibilance / DeEsser",
+      "iZotope Nectar 4 (module de-ess intégré à la chaîne voix)"
     ],
     "Saturation / Couleur": [
       "FabFilter Saturn 2 (multibande, polyvalent)",
@@ -75,7 +80,9 @@ const HIRA_DATA = {
       "Waves Abbey Road Saturator, J37, Kramer Tape, BB Tubes",
       "Tape Fiasco, Fresh Air (aigus/air)",
       "UAD Verve Analog Machines (tape/color analo — colle et chaleur sur voix, drums, bus)",
-      "UAD 610 (préampli tube — chaleur/drive à l'entrée d'une voix ou d'un instrument)"
+      "UAD 610 (préampli tube — chaleur/drive à l'entrée d'une voix ou d'un instrument)",
+      "Brainworx bx_enhancer (couleur/présence), iZotope Trash (distorsion créative)",
+      "NI Guitar Rig 7 (Dirt, Driver, Bite, Trash — saturations créatives)"
     ],
     "Reverb": [
       "Valhalla VintageVerb (le couteau suisse — chant, instruments)",
@@ -83,14 +90,17 @@ const HIRA_DATA = {
       "Valhalla Supermassive (ambiances XXL, GRATUIT)",
       "FabFilter Pro-R 2 (reverb transparente et modelable)",
       "Waves Abbey Road Chambers, H-Reverb, IR-L (convolution)",
-      "UAD Pure Plate (réverb plaque studio — superbe sur voix RnB/soul et caisse claire)"
+      "UAD Pure Plate (réverb plaque studio — superbe sur voix RnB/soul et caisse claire)",
+      "NI Raum (moderne, nappes/ambiances), Kilohearts kHs Reverb"
     ],
     "Delay": [
       "Valhalla Delay (modes vintage/analog/tape)",
       "FabFilter Timeless 3 (delay créatif modulable)",
-      "Waves H-Delay (slap/dub classique)"
+      "Waves H-Delay (slap/dub classique)",
+      "NI Replika XT (multi-modes, diffusion/ducking), Kilohearts kHs Delay / Dual Delay"
     ],
     "Nettoyage voix": [
+      "iZotope RX 12/11 (LA référence débruitage : Voice De-noise, De-click, De-hum, De-reverb, De-clip, Repair Assistant)",
       "Waves Clarity Vx / Clarity Vx Pro (débruitage IA — top pour SM7B/NT1-A)",
       "Waves X-Noise, Z-Noise (bruit de fond), DeBreath (respirations)",
       "Waves X-Hum, X-Click (ronflette, clics)"
@@ -101,33 +111,50 @@ const HIRA_DATA = {
       "UAD Topline Vocal Tune"
     ],
     "Channel strip (chaîne voix complète)": [
+      "iZotope Nectar 4 Elements (chaîne voix complète : EQ, comp, de-ess, saturation, assistant)",
       "Waves Scheps Omni Channel (EQ+comp+de-ess+saturation, excellent pour la voix)",
       "Waves CLA Vocals (rapide, préréglages voix)",
       "UAD Century Channel Strip",
       "UAD Hemisphere Mic Collection (modélise d'autres micros à partir de ton SM7B/NT1-A — change le caractère de la voix)"
     ],
+    "Effets voix créatifs (vocodeur / harmonies)": [
+      "iZotope VocalSynth 2 (vocoder, talkbox, harmonies, textures modernes)",
+      "Vocodine (vocodeur), LeVoix (traitement voix)",
+      "NI Choral (chœurs/épaississeur), pour élargir les backs"
+    ],
     "Multibande / Dynamique avancée": [
       "FabFilter Pro-MB (compression multibande chirurgicale)",
-      "Waves C6 / C4 (multibande), LinMB (mastering)"
+      "Waves C6 / C4 (multibande), LinMB (mastering)",
+      "iZotope Neutron / Ozone (multibande + assistant de mix/master)"
     ],
     "Limiteur / Loudness (master)": [
       "FabFilter Pro-L 2 (limiteur de master n°1 + mesure LUFS/True Peak)",
+      "iZotope Ozone 12/11 Elements (Maximizer + assistant de master IA)",
       "Waves L2 / L3 / L4 Ultramaximizer",
       "Waves WLM Plus (mètre de loudness LUFS de référence)"
     ],
+    "Mesure / Analyse": [
+      "iZotope Insight 2 (metering complet : LUFS, True Peak, corrélation, spectre — parfait pour tes cibles master)",
+      "FabFilter Pro-Q (analyseur temps réel), Voxengo SPAN (gratuit)",
+      "Car Test (vérifier le mix façon autoradio / petites enceintes)"
+    ],
     "Imaging / Stéréo": [
       "Waves S1 Stereo Imager, Center, B360",
-      "Kilohearts Stereo, FabFilter Pro-Q (mode M/S)"
+      "iZotope Ozone Imager 2 (largeur stéréo, GRATUIT)",
+      "Kilohearts kHs Stereo / kHs Haas, FabFilter Pro-Q (mode M/S)"
     ],
     "Mix sur casque": [
-      "Waves CLA Nx / Nx (simule une vraie pièce sur casque — utile avec ton DT1990)"
+      "Waves CLA Nx / Nx (simule une vraie pièce sur casque — utile avec ton DT1990)",
+      "Headphone Lab (correction/simulation casque)"
     ],
     "Synthés / Instruments": [
-      "Omnisphere, Kontakt 7 & 8, Arturia Analog Lab V",
-      "Xpand!2, Lounge Lizard EP-4, LABS",
+      "Omnisphere, Kontakt 7 & 8 (+ Kontakt full), Arturia Analog Lab V",
+      "NI Massive X (synthé moderne — basses, leads), NI Battery 4 (sampler drums/808)",
+      "Xpand!2, Lounge Lizard EP-4, EP-1, LABS",
       "Afroplug : Amavibe, Percussions, LogDrums",
+      "Ultramaster KR-106 (boîte à rythmes / synthé vintage)",
       "UAD Electra 88 (piano électrique Rhodes), UAD PolyMAX (synthé poly analo)",
-      "UAD Enigmatic '82 & Showtime (amplis guitare)"
+      "NI Guitar Rig 7, UAD Enigmatic '82 & Showtime (amplis guitare)"
     ]
   },
 
