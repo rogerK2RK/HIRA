@@ -881,6 +881,178 @@ const HIRA_DATA = {
   },
 
   /* ----------------------------------------------------------------------
+     PROCESS REC SUR PROD (achetée / YouTube) — par genre
+     Chaque genre a : channel REC (tracking), channel MIX (lead/ad-libs/backs)
+     et des réglages de simulateur (autotune / reverb / delay).
+     ---------------------------------------------------------------------- */
+  recProcess: {
+    intro: "Tu as déjà la prod (achetée ou récupérée sur YouTube) ? Voici le process pour poser ta voix dessus — du tracking au mix — adapté à ton style. Choisis le genre.",
+    prep: [
+      "Récupère la prod en qualité max : WAV/FLAC, ou MP3 320. Un MP3 YouTube 128 kbps s'entend au master — rip en 256+ ou achète l'instru si possible.",
+      "Note le BPM et la tonalité (souvent dans le titre YouTube ; sinon détecte avec Tunebat ou un plugin). Indispensable pour l'autotune, les delays et les reverbs calées.",
+      "Importe la prod sur une piste stéréo dans LUNA, baisse ses pics vers ~-6 dBFS (headroom pour ta voix).",
+      "Crée 3 pistes voix : Lead, Ad-libs, Backs — chacune sa chaîne.",
+      "Repère l'énergie de la prod (calme/agressive, aérée/dense) : ta voix et tes effets doivent lui répondre."
+    ],
+    recCommon: [
+      "Garde la chaîne LÉGÈRE au tracking — on peaufine au mix. Objectif : confort et zéro latence.",
+      "Coupe-bas (Pro-Q ou EQ natif) pour virer le rumble.",
+      "Compression douce pour dompter les pics : bouton 76 du Volt (2-4 dB) OU un LA-2A natif UAD.",
+      "De-ess léger si sifflantes marquées.",
+      "En SEND (non enregistré) : un peu de reverb/delay juste pour que l'artiste se sente bien.",
+      "Enregistre la voix À SEC : pics ≈ -12 à -6 dBFS, moyenne ~-18 dBFS."
+    ],
+    recMonitorTip: "Zéro latence dans LUNA : ARM ON + chaîne UAD native (LA-2A, Century, Topline Vocal Tune pour l'autotune de monitoring). Pour t'entendre via FabFilter/Waves, laisse l'ARM OFF et baisse le buffer (64/128).",
+    genres: {
+      rap: {
+        nom: "Rap", emoji: "🎤", mic: "SM7B (+ FetHead)",
+        prod: "Prod souvent dense et rythmée : la voix doit passer DEVANT, sèche et frontale. Peu d'effets qui traînent.",
+        recNote: "Monitoring SEC : peu ou pas de reverb, voix frontale. Autotune optionnel selon le flow.",
+        lead: {
+          steps: [
+            "Coupe-bas 90-110 Hz + EQ correctif (boue 250-450 Hz, présence 3-5 kHz)",
+            "LA-2A doux (4-6 dB) → 1176/CLA-76 (4-6 dB) en série : voix dense et frontale",
+            "De-ess (Pro-DS) + saturation qui mord (Saturn 2 / RC-20)",
+            "Air 10-12 kHz (Fresh Air) ; garde la voix SÈCHE devant l'instru",
+            "Sends : slap delay court (H-Delay) + reverb Room très courte"
+          ],
+          vst: ["Pro-Q 4", "LA-2A → 1176/CLA-76", "Pro-DS", "Saturn 2 / RC-20", "Valhalla Room + H-Delay"]
+        },
+        adlibs: {
+          steps: [
+            "Reprends la chaîne du lead, panoramique L/R et -4 à -6 dB sous le lead",
+            "Coupe-bas plus haut (~120 Hz), compression marquée (CLA-76) pour coller",
+            "Throws : delay 1/4 pointé + reverb plus généreuse sur les fins de phrase",
+            "Détune léger (RC-20) pour élargir la stéréo"
+          ],
+          vst: ["Pro-Q 4", "CLA-76", "RC-20", "Valhalla VintageVerb + H-Delay"]
+        },
+        backs: {
+          steps: [
+            "Doubles du lead calés à la syllabe, panoramiques larges (-50/+50)",
+            "Compression serrée pour fondre, creuse les médiums pour laisser le lead",
+            "Baisse -4 à -8 dB sous le lead"
+          ],
+          vst: ["Pro-Q 4", "CLA-76", "Valhalla Room"]
+        },
+        sim: {
+          retune: "Correction discrète à marquée. Retune Speed 0-15 ms (0 = effet robotique, ~10-15 = naturel).",
+          reverb: { type: "Room courte", decay: "0.6-1.0 s" },
+          delay: { note: "Slap ou 1/8", feel: "Slap 80-120 ms, sec et frontal" }
+        }
+      },
+      afro: {
+        nom: "Afro", emoji: "🥁", mic: "NT1-A (ou SM7B)",
+        prod: "Prod groovy et aérée : la voix FLOTTE sur le groove, chaude et légèrement tunée. L'espace (reverb/delay) fait partie du genre.",
+        recNote: "Ajoute un peu de reverb + autotune naturel en monitoring : ça aide à poser le chant et à viber.",
+        lead: {
+          steps: [
+            "Coupe-bas 75-90 Hz + tuning naturel (Retune 20-30 ms)",
+            "EQ : adoucis 6-8 kHz, chaleur bas-médium",
+            "LA-2A doux (3-4 dB), la voix respire",
+            "Saturation chaude (Kramer Tape / RC-20)",
+            "Sends GÉNÉREUX : Pure Plate / Valhalla Plate + delay 1/4 pointé"
+          ],
+          vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A", "Kramer Tape / RC-20", "UAD Pure Plate + Delay"]
+        },
+        adlibs: {
+          steps: [
+            "Ad-libs chantés, plus aérés que le lead ; throws delay généreux",
+            "Reverb longue (VintageVerb), panoramique large",
+            "Baisse sous le lead, remonte dans les trous"
+          ],
+          vst: ["Pro-Q 4", "CLA-76", "Valhalla VintageVerb + Delay"]
+        },
+        backs: {
+          steps: [
+            "Harmonies empilées, tuning serré pour fondre",
+            "Nappe large L/R, reverb diffuse",
+            "Bus harmonies : EQ + comp de bus commun"
+          ],
+          vst: ["Pro-Q 4", "Waves Tune Real-Time", "CLA-76", "Valhalla VintageVerb"]
+        },
+        sim: {
+          retune: "Naturel. Retune Speed 20-30 ms (garde le vibrato et les glisses).",
+          reverb: { type: "Plaque / Hall", decay: "1.5-2.5 s" },
+          delay: { note: "1/4 pointé", feel: "Throws généreux sur les fins de phrase" }
+        }
+      },
+      rnb: {
+        nom: "RnB", emoji: "💜", mic: "NT1-A ou SM7B",
+        prod: "Prod smooth et spacieuse : lead soyeux et brillant TRÈS en avant, dynamique maîtrisée pour les nuances. Autotune musical.",
+        recNote: "Autotune en monitoring (Topline natif) placé tôt : le chanteur cale ses mélodies. Reverb douce.",
+        lead: {
+          steps: [
+            "Coupe-bas 80 Hz + tuning musical placé tôt (Retune 10-20 ms)",
+            "EQ soyeux (présence 3-4 kHz), LA-2A lisse (4-6 dB) → Pro-C 2 (2-3 dB)",
+            "De-ess soigné + saturation douce (Saturn 2 / Abbey Road Saturator)",
+            "Air généreux 10-14 kHz (Fresh Air)",
+            "Sends : Pure Plate luxueuse + delay 1/8"
+          ],
+          vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A → Pro-C 2", "Pro-DS", "UAD Pure Plate + Delay"]
+        },
+        adlibs: {
+          steps: [
+            "Ad-libs soul (riffs, runs), souvent chantés ; delay 1/8 en soutien",
+            "Reverb plaque plus longue, panoramique",
+            "Automation : présents dans les trous, discrets sous le lead"
+          ],
+          vst: ["Pro-Q 4", "CLA-76", "UAD Pure Plate / VintageVerb"]
+        },
+        backs: {
+          steps: [
+            "Stacks d'harmonies riches (3-5 voix), tuning serré pour fondre",
+            "Nappe large et fondue, -4 à -8 dB sous le lead",
+            "Bus harmonies dédié (EQ + comp de bus)"
+          ],
+          vst: ["Pro-Q 4", "Waves Tune Real-Time", "CLA-76", "Valhalla VintageVerb"]
+        },
+        sim: {
+          retune: "Musical. Retune Speed 10-20 ms, placé TÔT dans la chaîne.",
+          reverb: { type: "Plaque luxueuse", decay: "1.2-2.0 s" },
+          delay: { note: "1/8", feel: "Doux, en soutien, jamais devant" }
+        }
+      },
+      pop: {
+        nom: "Pop", emoji: "🎙️", mic: "NT1-A",
+        prod: "Prod propre et carrée : voix lisse, brillante, parfaitement régulière et TRÈS en avant. Le moins de défauts possible.",
+        recNote: "Autotune propre + légère reverb en monitoring pour le confort et la justesse.",
+        lead: {
+          steps: [
+            "Coupe-bas 80 Hz + tuning propre (Retune 15-25 ms)",
+            "EQ précis, LA-2A (3-5 dB) → Pro-C 2 (2-3 dB) + Vocal Rider : ultra régulier",
+            "De-ess soigné + air 10-14 kHz (Fresh Air)",
+            "Voix très en avant, lisse, zéro défaut",
+            "Sends : plaque courte (Pure Plate / Valhalla Plate) + delay subtil"
+          ],
+          vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A → Pro-C 2", "Vocal Rider", "UAD Pure Plate / Valhalla Plate"]
+        },
+        adlibs: {
+          steps: [
+            "Ad-libs propres et calés ; delay discret",
+            "Reverb courte, panoramique modéré",
+            "Restent au service de la mélodie principale"
+          ],
+          vst: ["Pro-Q 4", "CLA-76", "Valhalla Plate"]
+        },
+        backs: {
+          steps: [
+            "Harmonies larges et brillantes, tuning parfait",
+            "Compression serrée, nappe homogène",
+            "Panoramique large pour un refrain qui s'ouvre"
+          ],
+          vst: ["Pro-Q 4", "Waves Tune Real-Time", "CLA-76", "Valhalla Plate"]
+        },
+        sim: {
+          retune: "Propre et régulier. Retune Speed 15-25 ms.",
+          reverb: { type: "Plaque courte", decay: "0.8-1.5 s" },
+          delay: { note: "1/8", feel: "Subtil, ne masque pas la voix" }
+        }
+      }
+    }
+  },
+
+  /* ----------------------------------------------------------------------
      CONSEILS & RÉFLEXES — les bons gestes
      "icon" = nom d'icône. Une ligne contenant " → " s'affiche problème → solution.
      ---------------------------------------------------------------------- */

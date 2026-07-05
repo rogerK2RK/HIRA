@@ -251,6 +251,7 @@ views.dashboard = function(){
         {v:"targets",    ic:"target", l:"Cibles dB/LUFS"},
         {v:"chains",     ic:"link",   l:"Chaînes types"},
         {v:"buses",      ic:"wave",   l:"Templates de bus"},
+        {v:"recprocess", ic:"mic",    l:"Process REC"},
         {v:"calc",       ic:"clock",  l:"Calculateur"},
         {v:"guide",      ic:"book",   l:"Conseils"},
         {v:"gear",       ic:"sliders",l:"Matériel"},
@@ -794,6 +795,89 @@ views.studio = function(){
     <div class="studio-notes">${notes}</div>`;
 };
 
+/* ---- Process REC sur prod (achetée / YouTube), par genre ---- */
+const REC_GENRES = ["rap", "afro", "rnb", "pop"];
+let recGenre = localStorage.getItem("hira_recgenre") || "rap";
+let recBpm = 90;
+if(!REC_GENRES.includes(recGenre)) recGenre = "rap";
+
+function setRecGenre(g){ recGenre = g; localStorage.setItem("hira_recgenre", g); views.recprocess(); }
+
+function recDelays(bpm){
+  bpm = Math.max(40, Math.min(220, parseInt(bpm,10) || 90));
+  const q = 60000 / bpm;
+  return { q:Math.round(q), e:Math.round(q/2), ed:Math.round(q*0.75), s:Math.round(q/4), pre:Math.round(q/8) };
+}
+function recSimHTML(){
+  const g = HIRA_DATA.recProcess.genres[recGenre], d = recDelays(recBpm);
+  return `<table class="rec-simtable">
+    <tr><td>Autotune</td><td class="cible">${esc(g.sim.retune)}</td></tr>
+    <tr><td>Reverb</td><td class="cible">${esc(g.sim.reverb.type)} · decay ${esc(g.sim.reverb.decay)} · pré-delay ~${d.pre} ms (≈ 1/32)</td></tr>
+    <tr><td>Delay conseillé</td><td class="cible">${esc(g.sim.delay.note)} — ${esc(g.sim.delay.feel)}</td></tr>
+    <tr><td>Temps de delay</td><td>1/4 = <strong>${d.q} ms</strong> · 1/8 = <strong>${d.e} ms</strong> · 1/8 pointé = <strong>${d.ed} ms</strong> · 1/16 = <strong>${d.s} ms</strong></td></tr>
+  </table>`;
+}
+function recSim(v){ recBpm = v; const o = document.getElementById("recSimOut"); if(o) o.innerHTML = recSimHTML(); }
+
+views.recprocess = function(){
+  const RP = HIRA_DATA.recProcess, g = RP.genres[recGenre];
+
+  const genreBtns = REC_GENRES.map(k => {
+    const gg = RP.genres[k];
+    return `<button class="rec-gbtn ${k===recGenre?"active":""}" onclick="setRecGenre('${k}')">
+      <span class="rec-gemoji">${gg.emoji}</span><span>${esc(gg.nom)}</span></button>`;
+  }).join("");
+
+  const chan = (title, icn, tag, obj) => `
+    <div class="phase">
+      <div class="phase-head" onclick="this.nextElementSibling.classList.toggle('open')">
+        <span class="phase-icon">${icon(icn,20)}</span>
+        <div class="phase-title"><h3>${title}</h3><div class="pdesc">${esc(tag)}</div></div>
+        <span class="phase-mini">${icon("expand",16)}</span>
+      </div>
+      <div class="phase-body">
+        <ol class="bus-steps">${obj.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+        <div class="plug-tags">${obj.vst.map(v=>`<span class="tag">${esc(v)}</span>`).join("")}</div>
+      </div>
+    </div>`;
+
+  content.innerHTML = `
+    <div class="page-head"><h1>${icon("mic",22)} Process REC sur prod</h1>
+      <p>${esc(RP.intro)}</p></div>
+
+    <div class="rec-genres">${genreBtns}</div>
+
+    <div class="card rec-prodnote">
+      <strong>${g.emoji} ${esc(g.nom)} — micro conseillé : ${esc(g.mic)}</strong>
+      <p>${esc(g.prod)}</p>
+    </div>
+
+    <div class="bus-sub">1 · Préparer la prod</div>
+    <ul class="guide-list">${RP.prep.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
+
+    <div class="bus-sub">2 · Channel REC — tracking</div>
+    <div class="card">
+      <ol class="bus-steps">${RP.recCommon.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+      <div class="rec-tip">${icon("lightbulb",14)} ${esc(RP.recMonitorTip)}</div>
+      <div class="rec-tip alt">${g.emoji} <strong>${esc(g.nom)} :</strong> ${esc(g.recNote)}</div>
+    </div>
+
+    <div class="bus-sub">3 · Channel MIX — une fois le rec fini</div>
+    ${chan("Voix Lead", "mic", "Le chant principal, au centre et devant.", g.lead)}
+    ${chan("Ad-libs", "share", "Les couches d'énergie autour du lead (throws, exclamations).", g.adlibs)}
+    ${chan("Backs / Harmonies", "copy", "La nappe vocale qui enrobe le lead, jamais devant.", g.backs)}
+
+    <div class="bus-sub">4 · Simulateur d'effets — cale selon la prod</div>
+    <div class="card">
+      <div class="rec-simctl">
+        <label for="recBpmIn">BPM de la prod</label>
+        <input id="recBpmIn" type="number" min="40" max="220" value="${esc(String(recBpm))}" oninput="recSim(this.value)">
+        <span class="rec-simhint">Renseigne le BPM pour caler delays &amp; reverb au tempo</span>
+      </div>
+      <div id="recSimOut">${recSimHTML()}</div>
+    </div>`;
+};
+
 /* ---- Conseils & réflexes ---- */
 views.guide = function(){
   const items = HIRA_DATA.guides.map(g => `
@@ -1266,7 +1350,7 @@ window.syncLogout = async function(){
 window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", sync:"cloud" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", sync:"cloud" };
 document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";
