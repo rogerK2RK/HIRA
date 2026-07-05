@@ -433,24 +433,25 @@ const HIRA_DATA = {
         "Coupe-bas plus haut (~120 Hz) et creuse un peu les médiums pour laisser la place au lead",
         "Compression plus marquée (CLA-76) pour 'coller' les doubles derrière le lead",
         "Ad-libs : envoie-les plus loin — throw delay (1/4 pointé, H-Delay) + reverb plus généreuse (Valhalla VintageVerb)",
+        "Harmonies : Waves Harmony génère des voix supplémentaires calées sur la tonalité (backs, tierces, octaves)",
         "Détune léger sur les doubles (RC-20 ou pitch ±5-8 cents) pour élargir la stéréo",
         "Automation : baisse les couches quand le lead chante, remonte-les dans les trous"
       ],
-      vst: ["Pro-Q 4", "CLA-76", "RC-20 (détune)", "Valhalla VintageVerb + H-Delay"],
+      vst: ["Waves Harmony", "Pro-Q 4", "CLA-76", "RC-20 (détune)", "Valhalla VintageVerb + H-Delay"],
       cible: "-4 à -6 dB sous le lead · larges sur les côtés"
     },
     {
       nom: "Voix Auto-Tune (effet trap / RnB)",
       contexte: "Pitch verrouillé sur la gamme, du subtil au robotique. SM7B ou NT1-A. Vise une prise déjà juste : l'auto-tune corrige mieux du proche.",
       etapes: [
-        "Renseigne la tonalité/gamme du morceau dans Waves Tune Real-Time",
-        "Place Tune Real-Time TÔT : après coupe-bas + nettoyage, AVANT la compression",
-        "Retune Speed à 0 ms = effet robotique marqué ; plus lent (~20-40 ms) = correction discrète",
+        "Renseigne la tonalité/gamme du morceau dans Antares Auto-Tune Artist (LA référence) ou Waves Tune Real-Time",
+        "Place l'auto-tune TÔT : après coupe-bas + nettoyage, AVANT la compression",
+        "Retune Speed à 0 ms = effet robotique marqué ; plus lent (~20-40 ms) = correction discrète (mode Flow d'Antares pour le naturel)",
         "De-ess (Pro-DS) : l'auto-tune accentue les sifflantes",
         "Compression (1176 / CLA-76) APRÈS le tuning pour densifier",
         "Saturation (Saturn 2 / RC-20) + reverb/delay en sends pour la vibe moderne"
       ],
-      vst: ["Waves Tune Real-Time", "Pro-Q 4", "Pro-DS", "1176 / CLA-76", "Saturn 2 / RC-20"],
+      vst: ["Antares Auto-Tune Artist", "Waves Tune Real-Time", "Pro-Q 4", "Pro-DS", "1176 / CLA-76", "Saturn 2 / RC-20"],
       cible: "Pitch calé sur la gamme · effet selon le Retune Speed"
     },
     {
@@ -493,7 +494,7 @@ const HIRA_DATA = {
       contexte: "RnB moderne / smooth. NT1-A (chant doux) ou SM7B (voix proche, intime). Lead riche, soyeux, contrôlé. Auto-tune souvent présent mais musical. Dynamique maîtrisée pour les nuances.",
       etapes: [
         "Coupe-bas ~80 Hz (Pro-Q 4)",
-        "Tuning (Waves Tune Real-Time) placé TÔT — RnB = pitch propre, du discret au signé",
+        "Tuning placé TÔT (Antares Auto-Tune Artist en mode Flow, ou Waves Tune Real-Time) — RnB = pitch propre, du discret au signé",
         "EQ correctif doux : dégage 200-400 Hz, présence soyeuse vers 3-4 kHz",
         "LA-2A : compression optique lisse (4-6 dB) pour le velouté",
         "Pro-C 2 ou CLA-76 derrière : 2-3 dB pour tenir les pics sans tuer la nuance",
@@ -502,13 +503,14 @@ const HIRA_DATA = {
         "Air généreux 10-14 kHz (Fresh Air) = ce côté brillant 'studio'",
         "Sends : reverb plaque luxueuse (UAD Pure Plate ou Valhalla Plate) + delay 1/8 ou 1/4 (Valhalla Delay) en touches"
       ],
-      vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A → Pro-C 2/CLA-76", "Pro-DS", "Saturn 2 / Abbey Road Saturator", "UAD Pure Plate / Valhalla Plate + Delay"],
+      vst: ["Pro-Q 4", "Antares Auto-Tune Artist / Waves Tune Real-Time", "LA-2A → Pro-C 2/CLA-76", "Pro-DS", "Saturn 2 / Abbey Road Saturator", "UAD Pure Plate / Valhalla Plate + Delay"],
       cible: "Lead soyeux, brillant et contrôlé · très en avant"
     },
     {
       nom: "💜 RnB — Backs / harmonies (stack)",
       contexte: "Les empilements RnB (stacks d'harmonies, doubles, ad-libs chantés). Doivent ENROBER le lead façon nappe vocale, larges et fondus, JAMAIS devant le lead.",
       etapes: [
+        "Génère ou renforce les harmonies avec Waves Harmony (jusqu'à 8 voix calées sur la tonalité) — ou chante-les toi-même",
         "Reprends une chaîne plus simple que le lead — pas besoin de tout le détail",
         "Coupe-bas plus haut (~120-150 Hz) + creuse les médiums (300 Hz-2 kHz) pour laisser le lead respirer",
         "Tuning plus marqué (Retune rapide) — les stacks doivent être PARFAITEMENT calés pour fondre ensemble",
@@ -519,7 +521,7 @@ const HIRA_DATA = {
         "Bus harmonies dédié : EQ + comp de bus pour traiter tout le stack d'un coup",
         "Automation : remonte les backs dans les trous, baisse-les quand le lead chante"
       ],
-      vst: ["Pro-Q 4", "Waves Tune Real-Time", "CLA-76", "RC-20 (détune)", "Valhalla VintageVerb"],
+      vst: ["Waves Harmony", "Pro-Q 4", "Waves Tune Real-Time", "CLA-76", "RC-20 (détune)", "Valhalla VintageVerb"],
       cible: "Nappe vocale large et fondue · -4 à -8 dB sous le lead"
     },
     {
@@ -729,6 +731,25 @@ const HIRA_DATA = {
       cible: "Creuse là où la voix vit (1-4 kHz)"
     },
     {
+      nom: "Guitare / Ampli", icon: "sliders",
+      tag: "Un son de guitare qui trouve sa place sans manger la voix.",
+      prerequis: [
+        "Gain staging ~-18 dBFS.",
+        "DI propre (guitare enregistrée à sec) si tu ré-ampes en plugin.",
+        "Décide du rôle : rythmique (recule, large) ou lead (devant, centré)."
+      ],
+      chaine: [
+        "Guitar Rig 7 → ampli + baffle + effets (le son de base). Cible : le grain qui colle au morceau.",
+        "Pro-Q 4 → coupe-bas ~100 Hz + creuse 1-4 kHz là où vit la voix. Cible : place pour le chant.",
+        "Pro-C 2 → compression douce 2-4 dB. Cible : niveau régulier, jeu tenu.",
+        "Saturn 2 / RC-20 → couleur/drive en plus si besoin. Cible : présence sans dureté.",
+        "Reverb (Valhalla Room) + delay calé au BPM (sends). Cible : profondeur, largeur.",
+        "Rythmiques : double-track L/R (2 prises) pour la largeur ; lead : centré et devant."
+      ],
+      vst: ["Guitar Rig 7", "Pro-Q 4", "Pro-C 2", "Saturn 2 / RC-20", "Valhalla Room + H-Delay"],
+      cible: "Trouve sa place autour de la voix (creuse 1-4 kHz)"
+    },
+    {
       nom: "Voix — réglages par genre", icon: "mic",
       tag: "Aide-mémoire : ce qui change d'un style à l'autre sur le lead.",
       prerequis: [
@@ -932,6 +953,8 @@ const HIRA_DATA = {
       "Note le BPM et la tonalité (souvent dans le titre YouTube ; sinon détecte avec Tunebat ou un plugin). Indispensable pour l'autotune, les delays et les reverbs calées.",
       "Importe la prod sur une piste stéréo dans LUNA, baisse ses pics vers ~-6 dBFS (headroom pour ta voix).",
       "Crée 3 pistes voix : Lead, Ad-libs, Backs — chacune sa chaîne.",
+      "Autotune : Antares Auto-Tune Artist (référence, mode Flow pour le naturel) ou Waves Tune Real-Time — renseigne la tonalité de la prod dedans.",
+      "Backs/harmonies : Waves Harmony peut générer jusqu'à 8 voix calées sur la tonalité (tierces, octaves) au lieu de tout rechanter.",
       "Repère l'énergie de la prod (calme/agressive, aérée/dense) : ta voix et tes effets doivent lui répondre."
     ],
     recCommon: [

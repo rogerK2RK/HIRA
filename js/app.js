@@ -81,6 +81,37 @@ function icon(name, size){
 }
 const GEAR_ICONS = { "Ordinateur":"laptop", "Interface audio":"sliders", "Écoute":"headphones", "Micros":"mic", "Logiciels":"app" };
 
+/* Catégorie "parent" d'un plugin (miroir des dossiers FL) — pour retrouver le VST vite.
+   Règles ordonnées : la 1re qui matche gagne. Renvoie "" si inconnu. */
+const PLUG_CAT_RULES = [
+  [/de-?ess|Pro-DS|Sibilance|RDeEsser/i, "De-ess"],
+  [/RX 1|Clarity|X-Noise|Z-Noise|DeBreath|NS1|De-noise|DeReverb|débruit/i, "Nettoyage"],
+  [/Auto-Tune|Antares|Tune Real-Time|Waves Tune|Topline|Vocal Bender|UltraPitch/i, "Tuning"],
+  [/Harmony|OVox|VocalSynth|Vocodine|LeVoix|Choral/i, "Voix FX"],
+  [/Channel Strip|Omni Channel|Scheps Omni|Magma|NLS|SSLChannel|RChannel|Century|Nectar|Neutron|VoiceCentric|CLA Vocals|Hemisphere/i, "Channel"],
+  [/Insight|WLM|Wave Candy|SPAN|Youlean|Meter/i, "Mesure"],
+  [/Pro-MB|multiband|C6|C4|LinMB/i, "Multibande"],
+  [/Pro-L|Ozone|Maximizer|\bL2\b|\bL3\b|\bL4\b|limiteur|limiter/i, "Master"],
+  [/Imager|Doubler|B360|S1 |Stereo Imager|kHs Stereo|Haas/i, "Imaging"],
+  [/Guitar Rig|Enigmatic|Showtime|ampli|\bamp\b/i, "Ampli"],
+  [/Trash|Dirt|Driver|Bite|Freak|Supercharger|distors/i, "Disto"],
+  [/Flair|Phasis|MondoMod|chorus|flanger|phaser|Ensemble/i, "Modulation"],
+  [/verb|reverb|Raum|Plate|Room|Shimmer|Supermassive|LuxeVerb|Pure Plate|Aurora|VintageVerb/i, "Reverb"],
+  [/delay|Timeless|Replika|H-Delay|EchoSphere|FreqEcho|\becho\b/i, "Delay"],
+  [/Saturn|RC-20|Tape|Fresh Air|bx_enhancer|Aphex|Exciter|Verve|Vibe Analog|Kramer|J37|Abbey Road Sat|BB Tube|610|Preamp/i, "Saturation"],
+  [/comp|CLA-2A|CLA-3A|CLA-76|1176|LA-2A|SSLComp|Pro-C|RVox|bx_glue|Transient|API-2500|Rider|VComp|\bC1\b|Glue/i, "Comp"],
+  [/Pro-Q|\bEQ\b|EQP|PuigTec|Pultec|EQUO|Q10|REQ|H-EQ|VOG|LoAir|F6|Scheps 73|API 550/i, "EQ"],
+  [/Omnisphere|Kontakt|Massive|Serum|Battery|Xpand|Analog Lab|PolyMAX|Electra|KR-106|LABS|Lounge Lizard|Afroplug|Amavibe/i, "Instru"]
+];
+function plugCat(v){
+  for(const [re, cat] of PLUG_CAT_RULES){ if(re.test(v)) return cat; }
+  return "";
+}
+function vstTag(v){
+  const c = plugCat(v);
+  return `<span class="tag">${esc(v)}${c ? `<i class="tag-cat">${esc(c)}</i>` : ""}</span>`;
+}
+
 function projectProgress(proj){
   const phases = phasesFor(proj.type);
   let total = 0, done = 0;
@@ -684,7 +715,7 @@ views.chains = function(){
       </div>
       <div class="phase-body">
         <ol class="bus-steps">${c.etapes.map(e=>`<li>${esc(e)}</li>`).join("")}</ol>
-        ${c.vst?`<div class="plug-tags">${c.vst.map(v=>`<span class="tag">${esc(v)}</span>`).join("")}</div>`:""}
+        ${c.vst?`<div class="plug-tags">${c.vst.map(vstTag).join("")}</div>`:""}
         ${c.cible?`<div class="bus-cible">${icon("target",13)} ${esc(c.cible)}</div>`:""}
       </div>
     </div>`).join("");
@@ -709,7 +740,7 @@ views.buses = function(){
         <ul class="guide-list">${b.prerequis.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
         <div class="bus-sub">Chaîne</div>` : ""}
         <ol class="bus-steps">${b.chaine.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
-        <div class="plug-tags">${b.vst.map(v=>`<span class="tag">${esc(v)}</span>`).join("")}</div>
+        <div class="plug-tags">${b.vst.map(vstTag).join("")}</div>
         <div class="bus-cible">${icon("target",13)} ${esc(b.cible)}</div>
       </div>
     </div>`).join("");
@@ -837,7 +868,7 @@ views.recprocess = function(){
       </div>
       <div class="phase-body">
         <ol class="bus-steps">${obj.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
-        <div class="plug-tags">${obj.vst.map(v=>`<span class="tag">${esc(v)}</span>`).join("")}</div>
+        <div class="plug-tags">${obj.vst.map(vstTag).join("")}</div>
       </div>
     </div>`;
 
@@ -948,7 +979,7 @@ function buildCalc(bpm){
             <li><strong>Decay (queue)</strong> <span class="g-arrow">→</span> ≈ ${dec.toFixed(dec<1?2:1)} s <span style="color:var(--muted)">(${r.decayBeats} temps)</span></li>
             <li><strong>Astuce</strong> <span class="g-arrow">→</span> ${esc(r.note)}</li>
           </ul>
-          <div class="plug-tags"><span class="tag">${esc(r.plugin)}</span></div>
+          <div class="plug-tags">${vstTag(r.plugin)}</div>
         </div>
       </div>`;
   }).join("");
@@ -971,7 +1002,7 @@ function buildCalc(bpm){
             <li><strong>Réduction (GR)</strong> <span class="g-arrow">→</span> ${esc(c.gr)}</li>
             <li><strong>Astuce</strong> <span class="g-arrow">→</span> ${esc(c.note)}</li>
           </ul>
-          <div class="plug-tags"><span class="tag">${esc(c.plugin)}</span></div>
+          <div class="plug-tags">${vstTag(c.plugin)}</div>
         </div>
       </div>`;
   }).join("");
