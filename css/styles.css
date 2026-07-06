@@ -114,6 +114,11 @@ input[type=text],input[type=number],input[type=email],input[type=datetime-local]
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   box-shadow:0 0 0 3.5px rgba(108,140,255,.22)}
 textarea{resize:vertical;min-height:90px}
+select{appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ba1b4' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+.key-pick{display:flex;gap:8px}
+.key-pick select{flex:1;min-width:0}
 .type-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .type-card{background:rgba(255,255,255,.045);border:1.5px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;transition:.18s}
 .type-card:hover{border-color:var(--line2)}

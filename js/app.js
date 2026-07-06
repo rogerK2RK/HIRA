@@ -338,12 +338,44 @@ views.newproject = function(){
   renderWiz();
 };
 
+/* ---- Sélecteur de tonalité (note + mode) ---- */
+const KEY_NOTES = [
+  ["C","C"],["C#","C# / Db"],["D","D"],["D#","D# / Eb"],["E","E"],["F","F"],
+  ["F#","F# / Gb"],["G","G"],["G#","G# / Ab"],["A","A"],["A#","A# / Bb"],["B","B"]
+];
+const KEY_MODES = [["min","Mineur"],["maj","Majeur"]];
+function normNote(n){
+  const flats={Db:"C#",Eb:"D#",Gb:"F#",Ab:"G#",Bb:"A#"};
+  n=(n||"").trim(); return flats[n]||n;
+}
+function keyParts(k){
+  k=(k||"").trim();
+  const mode = /maj/i.test(k) ? "maj" : (/min/i.test(k) ? "min" : "");
+  const note = normNote(k.replace(/\s*(maj|min)\.?.*$/i,"").trim());
+  return { note, mode };
+}
+function keySelect(idBase, current){
+  const p = keyParts(current);
+  const notes = KEY_NOTES.map(([val,lbl])=>`<option value="${val}" ${p.note===val?"selected":""}>${lbl}</option>`).join("");
+  const modes = KEY_MODES.map(([v,l])=>`<option value="${v}" ${p.mode===v?"selected":""}>${l}</option>`).join("");
+  return `<div class="key-pick">
+    <select id="${idBase}-note" aria-label="Note"><option value="">Note…</option>${notes}</select>
+    <select id="${idBase}-mode" aria-label="Mode"><option value="">Mode…</option>${modes}</select>
+  </div>`;
+}
+function keyValue(idBase){
+  const n = (document.getElementById(idBase+"-note")||{}).value || "";
+  const m = (document.getElementById(idBase+"-mode")||{}).value || "";
+  if(!n) return "";
+  return (n + (m ? " "+m : "")).trim();
+}
+
 function wizCapture(){
   const v = id => { const e = document.getElementById(id); return e ? e.value : undefined; };
   if(wiz.step===2){
     const n=v("wz-name"); if(n!==undefined) wiz.name=n;
     const b=v("wz-bpm");  if(b!==undefined) wiz.bpm=b;
-    const k=v("wz-key");  if(k!==undefined) wiz.key=k;
+    if(document.getElementById("wz-key-note")) wiz.key = keyValue("wz-key");
   }
   if(wiz.step===3){
     const l=v("wz-lufs"); if(l!==undefined) wiz.lufs=l;
@@ -379,8 +411,8 @@ function renderWiz(){
         <input type="text" id="wz-name" value="${esc(wiz.name)}" placeholder="ex. Nuit blanche" />
       </div>
       <div class="field-inline">
-        <div class="form-row"><label>BPM</label><input type="number" id="wz-bpm" value="${esc(wiz.bpm)}" placeholder="ex. 140" /></div>
-        <div class="form-row"><label>Tonalité</label><input type="text" id="wz-key" value="${esc(wiz.key)}" placeholder="ex. A min" /></div>
+        <div class="form-row"><label>BPM</label><input type="number" id="wz-bpm" value="${esc(wiz.bpm)}" min="40" max="300" step="1" inputmode="numeric" placeholder="ex. 140" /></div>
+        <div class="form-row"><label>Tonalité</label>${keySelect("wz-key", wiz.key)}</div>
       </div>`;
   } else if(wiz.step===3){
     body = `
@@ -480,8 +512,8 @@ views.editproject = function(id){
           <input type="text" id="ep-name" value="${esc(proj.name)}" />
         </div>
         <div class="field-inline">
-          <div class="form-row"><label>BPM</label><input type="number" id="ep-bpm" value="${esc(proj.bpm)}" /></div>
-          <div class="form-row"><label>Tonalité</label><input type="text" id="ep-key" value="${esc(proj.key)}" /></div>
+          <div class="form-row"><label>BPM</label><input type="number" id="ep-bpm" value="${esc(proj.bpm)}" min="40" max="300" step="1" inputmode="numeric" placeholder="ex. 140" /></div>
+          <div class="form-row"><label>Tonalité</label>${keySelect("ep-key", proj.key)}</div>
         </div>
         <div class="form-row">
           <label>Cible de loudness (master)</label>
@@ -512,7 +544,7 @@ views.editproject = function(id){
       proj.name = name;
       proj.type = editType;
       proj.bpm  = document.getElementById("ep-bpm").value.trim();
-      proj.key  = document.getElementById("ep-key").value.trim();
+      proj.key  = keyValue("ep-key");
       proj.lufs = document.getElementById("ep-lufs").value;
       proj.ref  = document.getElementById("ep-ref").value.trim();
       proj.updated = Date.now();
