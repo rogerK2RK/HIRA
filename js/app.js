@@ -1115,6 +1115,17 @@ window.toggleCheck = function(projId, phaseId, idx, val){
   proj.updated = Date.now();
   upsertProject(proj);
 
+  // Célébration quand une phase (ou le projet entier) vient d'être terminé
+  if(val){
+    const ph = HIRA_DATA.phases.find(p => p.id === phaseId);
+    const c = proj.checks[phaseId] || [];
+    if(ph && ph.checklist.every((_, k) => c[k])){
+      toast(projectProgress(proj) >= 100
+        ? "🎉 Projet terminé — bravo !"
+        : "✓ Phase « " + ph.nom + " » terminée 🎉");
+    }
+  }
+
   // Re-render de la slide (MAJ stepper, compteur, bouton Suivant) en gardant le scroll
   const y = content.scrollTop;
   views.project(projId);

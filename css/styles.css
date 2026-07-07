@@ -297,8 +297,9 @@ tr:last-child td{border-bottom:none}
 .fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:55;
   width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;color:#fff;
   background:linear-gradient(135deg,var(--accent),var(--accent2));
-  box-shadow:0 12px 30px -8px rgba(108,140,255,.7);display:flex;align-items:center;justify-content:center;transition:transform .12s, filter .18s}
-.fab:hover{filter:brightness(1.08)}
+  box-shadow:0 12px 30px -8px rgba(108,140,255,.7);display:flex;align-items:center;justify-content:center;
+  transition:transform .16s cubic-bezier(.2,.7,.2,1), filter .18s, box-shadow .18s}
+.fab:hover{filter:brightness(1.08);transform:translateY(-2px) scale(1.04);box-shadow:0 18px 38px -8px rgba(108,140,255,.8)}
 .fab:active{transform:scale(.94)}
 
 /* Accès rapide (accueil) */
