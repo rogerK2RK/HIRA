@@ -427,14 +427,20 @@ tr:last-child td{border-bottom:none}
   .wnav .btn{flex:1;min-width:0}
   .wstep .wlbl{display:none}
 
-  /* Vue projet : icônes d'étapes fixées en haut de l'écran */
-  body.on-project .psteps{
-    position:sticky;top:0;z-index:45;
-    margin:0 -16px 14px;padding:10px 16px;
-    background:rgba(10,11,15,.82);
-    backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+  /* Vue projet : les icônes d'étapes passent DANS la barre du haut (logo | étapes | menu) */
+  body.on-project .psteps{display:none}
+  body.on-project .topbar{
+    background:rgba(10,11,15,.72);
+    backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);
     border-bottom:1px solid var(--line);
   }
+  .topbar-steps{display:none}
+  body.on-project .topbar-steps{
+    display:flex;align-items:center;gap:6px;flex:1;min-width:0;margin:0 10px;
+    overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+  .topbar-steps::-webkit-scrollbar{display:none}
+  .topbar-steps .pstep{width:30px;height:30px;flex:0 0 auto}
   /* Vue projet : barre Précédent/Suivant fixée en bas de l'écran (toujours visible) */
   .wnav.proj-nav{
     position:fixed;left:0;right:0;bottom:0;z-index:58;margin:0;

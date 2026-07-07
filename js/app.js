@@ -223,6 +223,10 @@ function navigate(view, param){
   const fab = document.getElementById("fab");
   if(fab) fab.style.display = (view === "newproject" || view === "project") ? "none" : "flex";
   document.body.classList.toggle("on-project", view === "project");
+  if(view !== "project"){
+    const tbSteps = document.getElementById("topbarSteps");
+    if(tbSteps) tbSteps.innerHTML = "";
+  }
 }
 
 /* ---- Tiroir de navigation (mobile) ---- */
@@ -684,6 +688,10 @@ views.project = function(id){
       <button class="btn secondary small" onclick="exportProject('${proj.id}')">${icon("download",15)} Exporter</button>
       <button class="btn danger small" onclick="confirmDelete('${proj.id}')">Supprimer</button>
     </div>`;
+
+  // Étapes dans la barre du haut (mobile) : même stepper, cliquable
+  const tbSteps = document.getElementById("topbarSteps");
+  if(tbSteps) tbSteps.innerHTML = stepper;
 
   // Auto-save des notes (debounce) — plus besoin de cliquer pour ne rien perdre
   const notesEl = document.getElementById("proj-notes");
@@ -1455,7 +1463,9 @@ if("serviceWorker" in navigator){
     const tb = document.querySelector(".topbar");
     if(!tb) return;
     const y = content.scrollTop;
-    if(y > lastY && y > 60) tb.classList.add("hide");
+    // Sur la vue projet, la barre (avec les étapes) reste toujours visible
+    if(document.body.classList.contains("on-project")) tb.classList.remove("hide");
+    else if(y > lastY && y > 60) tb.classList.add("hide");
     else tb.classList.remove("hide");
     lastY = y;
   }, { passive: true });
