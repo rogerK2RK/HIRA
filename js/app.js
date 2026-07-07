@@ -221,7 +221,8 @@ function navigate(view, param){
   (views[view] || views.dashboard)(param);
   closeDrawer();
   const fab = document.getElementById("fab");
-  if(fab) fab.style.display = (view === "newproject") ? "none" : "flex";
+  if(fab) fab.style.display = (view === "newproject" || view === "project") ? "none" : "flex";
+  document.body.classList.toggle("on-project", view === "project");
 }
 
 /* ---- Tiroir de navigation (mobile) ---- */
@@ -612,7 +613,7 @@ views.project = function(id){
     </details>` : "";
 
   const nav = `
-    <div class="wnav" style="margin-top:18px">
+    <div class="wnav proj-nav">
       ${!isFirst ? `<button class="btn secondary" onclick="projPhase(${projPhaseIdx-1})">${icon("arrow",15)} Précédent</button>` : `<span></span>`}
       ${!isLast
         ? `<button class="btn ${allDone?'':'secondary'}" onclick="projPhase(${projPhaseIdx+1})">Suivant ${icon("arrow",15)}</button>`

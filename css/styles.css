@@ -228,6 +228,7 @@ tr:last-child td{border-bottom:none}
 .wcard{margin-bottom:18px}
 .wnav{display:flex;justify-content:space-between;gap:12px}
 .wnav .btn{min-width:130px}
+.wnav.proj-nav{margin-top:18px}
 .recap > div{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--line)}
 .recap > div:last-child{border-bottom:none}
 .recap span{color:var(--muted);font-size:13px}
@@ -425,6 +426,25 @@ tr:last-child td{border-bottom:none}
   .row-actions{flex-wrap:wrap}
   .wnav .btn{flex:1;min-width:0}
   .wstep .wlbl{display:none}
+
+  /* Vue projet : icônes d'étapes fixées en haut de l'écran */
+  body.on-project .psteps{
+    position:sticky;top:0;z-index:45;
+    margin:0 -16px 14px;padding:10px 16px;
+    background:rgba(10,11,15,.82);
+    backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--line);
+  }
+  /* Vue projet : barre Précédent/Suivant fixée en bas de l'écran (toujours visible) */
+  .wnav.proj-nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:58;margin:0;
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    background:rgba(10,11,15,.9);
+    backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);
+    border-top:1px solid var(--line);
+  }
+  /* Espace en bas pour que le contenu ne passe pas sous la barre fixe */
+  body.on-project .content{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
 }
 @media (max-width:480px){
   .type-cards{grid-template-columns:1fr}
