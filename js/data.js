@@ -41,7 +41,7 @@ const HIRA_DATA = {
     {
       cat: "Logiciels",
       items: [
-        { nom: "FL Studio 2025", detail: "Production / Beatmaking", note: "Là où tu construis l'instru. Exporte tes stems/pistes en WAV 24 bits pour les rapatrier dans Luna." },
+        { nom: "FL Studio 2026", detail: "Production / Beatmaking", note: "Là où tu construis l'instru. Exporte tes stems/pistes en WAV 24 bits pour les rapatrier dans Luna. ⚠️ Sur Mac, tes Packs, Templates et presets mixeur sont stockés DANS l'app (/Applications/FL Studio 2026.app) : une mise à jour majeure remplace l'app et efface tout ce que tu y as ajouté. Sauvegarde-les ailleurs (voir la note Packs)." },
         { nom: "UAD LUNA", detail: "Enregistrement / Mix / Master", note: "Ta DAW principale pour rec, mix, master. Bonne nouvelle confirmée : la version GRATUITE offre les MÊMES fonctions que LUNA Pro, à une exception près — les Hardware Inserts (insérer du matériel analo/outboard dans le mixer, réservé au Pro). Surtout : LUNA free charge bien tes plugins tiers AU/VST3 (FabFilter, Waves, Valhalla, Kilohearts…) directement — pas besoin de tout faire dans FL. Profite aussi du moteur Neve Summing et des plugins UAD natifs inclus. (LUNA n'accepte que l'AU et le VST3, pas le VST2.)" }
       ]
     }
@@ -71,7 +71,19 @@ const HIRA_DATA = {
       "Waves CLA Bass (compression de basse dédiée)",
       "Waves Vocal Rider / Bass Rider (automation de niveau)",
       "Brainworx bx_glue (comp de bus type SSL — colle drums/mix)",
-      "iZotope Neutron Compressor, Kilohearts kHs Compressor / Dynamics"
+      "NI Supercharger GT (comp tube 1 bouton — épaissit voix, drums, basse très vite)",
+      "iZotope Neutron Compressor, Kilohearts kHs Compressor / Dynamics / Compactor"
+    ],
+    "Transitoires / Punch": [
+      "Cableguys ShaperBox 3 (LE couteau suisse rythmique : sculpte attaque/sustain, sidechain sans compresseur, volume/pan/filtre au pas — top sur kick, 808, hats)",
+      "NI Transient Master (attaque/sustain en 3 potards — punch immédiat sur drums)",
+      "Kilohearts kHs Transient Shaper (rapide, modulaire)",
+      "FabFilter Pro-C 2 en mode attaque lente (laisse passer le transitoire)"
+    ],
+    "Gate / Expandeur": [
+      "FabFilter Pro-G (gate/expandeur précis — nettoie une voix, resserre des drums)",
+      "Kilohearts kHs Gate (simple et rapide)",
+      "Waves C1 gate, NS1 (alternative douce sur voix)"
     ],
     "De-essing": [
       "FabFilter Pro-DS (ton de-esser n°1)",
@@ -101,9 +113,26 @@ const HIRA_DATA = {
     ],
     "Delay": [
       "Valhalla Delay (modes vintage/analog/tape)",
-      "FabFilter Timeless 3 (delay créatif modulable)",
+      "FabFilter Timeless 3 / Timeless 2 (delay créatif modulable)",
       "Waves H-Delay (slap/dub classique), CLA EchoSphere (écho vintage)",
+      "Valhalla FreqEcho (écho à décalage de fréquence — textures dub/psyché)",
       "NI Replika XT (multi-modes, diffusion/ducking), Kilohearts kHs Delay / Dual Delay"
+    ],
+    "Modulation (chorus / flanger / phaser)": [
+      "NI Flair (flanger moderne — mouvement sur synthés, guitares, backs)",
+      "NI Phasis (phaser — largeur et vie sur nappes, guitares, Rhodes)",
+      "NI Choral (chorus/chœurs — épaissit les backs et les synthés)",
+      "Valhalla UberMod / SpaceModulator (modulation + ambiances texturées)",
+      "Kilohearts kHs Chorus / Flanger / Phaser / Ensemble"
+    ],
+    "Filtres / Sound design": [
+      "FabFilter Volcano 3 / Volcano 2 (filtre multimode modulable — sweeps, mouvement)",
+      "FabFilter Simplon (filtre simple 2 bandes), FabFilter Micro (mini filtre rapide)",
+      "NI Freak (ring mod / décalage de fréquence — textures métalliques, robotiques)",
+      "Valhalla Shimmer (réverb pitchée — nappes éthérées)",
+      "Kilohearts kHs Filter / Ladder Filter / Comb Filter / Formant Filter / Nonlinear Filter",
+      "Kilohearts kHs Bitcrush / Distortion / Ring Mod / Frequency Shifter / Phase Distortion",
+      "Kilohearts kHs Pitch Shifter / Resonator / Tape Stop / Reverser / Trance Gate (effets rythmiques)"
     ],
     "Nettoyage voix": [
       "iZotope RX 12/11 (LA référence débruitage : Voice De-noise, De-click, De-hum, De-reverb, De-clip, Repair Assistant)",
@@ -143,12 +172,18 @@ const HIRA_DATA = {
       "FabFilter Pro-L 2 (limiteur de master n°1 + mesure LUFS/True Peak)",
       "iZotope Ozone 12/11 Elements (Maximizer + assistant de master IA)",
       "Waves L2 / L3 / L4 Ultramaximizer",
-      "Waves WLM Plus (mètre de loudness LUFS de référence)"
+      "Waves WLM Plus (mètre de loudness LUFS de référence)",
+      "Kilohearts kHs Limiter / kHs Clipper (écrêtage rapide avant limiteur — gagne du volume sur 808/drums)"
     ],
     "Mesure / Analyse": [
       "iZotope Insight 2 (metering complet : LUFS, True Peak, corrélation, spectre — parfait pour tes cibles master)",
       "FabFilter Pro-Q (analyseur temps réel), Voxengo SPAN (gratuit)",
       "Car Test (vérifier le mix façon autoradio / petites enceintes)"
+    ],
+    "Utilitaires (gain / routing)": [
+      "iZotope Relay (gain, trim, largeur — à mettre en tête de piste pour ton gain staging à -18 dBFS)",
+      "Kilohearts kHs Gain (gain propre), kHs Channel Mixer (routing L/R, M/S)",
+      "Waves StudioRack (chaînes de plugins enregistrables et rappelables)"
     ],
     "Imaging / Stéréo": [
       "Waves S1 Stereo Imager, Center, B360",
@@ -160,14 +195,34 @@ const HIRA_DATA = {
       "Waves CLA Nx / Nx (simule une vraie pièce sur casque — utile avec ton DT1990)",
       "Headphone Lab (correction/simulation casque)"
     ],
-    "Synthés / Instruments": [
-      "Omnisphere, Kontakt 7 & 8 (+ Kontakt full), Arturia Analog Lab V",
-      "NI Massive X (synthé moderne — basses, leads), NI Battery 4 (sampler drums/808)",
-      "Xpand!2, Lounge Lizard EP-4, EP-1, LABS",
-      "Afroplug : Amavibe, Percussions, LogDrums",
+    "INSTRUMENTS · Synthés": [
+      "Omnisphere (+ FX-Omnisphere) — LA banque de sons XXL : nappes, textures, basses",
+      "NI Massive X (synthé moderne — basses, leads, growls)",
+      "Arturia Analog Lab V (tous les classiques analo : Jupiter, Juno, CS-80, Rhodes…)",
+      "Roland ZENOLOGY (moteur ZEN-Core : synthés Roland, JUNO/JUPITER, kits — très bon sur afrobeat/pop)",
+      "FabFilter Twin 3 / Twin 2 (synthé modulable — basses et leads précis)",
+      "FabFilter One (oscillateur simple — sub/basse sinus propre pour renforcer une 808)",
       "Ultramaster KR-106 (boîte à rythmes / synthé vintage)",
-      "UAD Electra 88 (piano électrique Rhodes), UAD PolyMAX (synthé poly analo)",
-      "NI Guitar Rig 7, UAD Enigmatic '82 & Showtime (amplis guitare)"
+      "UAD PolyMAX (synthé poly analo)"
+    ],
+    "INSTRUMENTS · Samplers / Banques": [
+      "Kontakt 8 / 7 (+ Kontakt full) — le lecteur de banques standard",
+      "FFOSSO (Orchestral Tools — textures hybrides, pads, boucles mélodiques organiques)",
+      "Crow Hill Vaults (instruments échantillonnés rares : basses, guitares, harmonium, synthés vintage)",
+      "Splice INSTRUMENT (banque Splice intégrée)",
+      "Spitfire LABS (gratuit : pianos, cordes, guitares, textures)",
+      "Xpand!2 (multi-instrument rapide pour maquetter)"
+    ],
+    "INSTRUMENTS · Drums / 808 / Percussions": [
+      "NI Battery 4 (sampler drums/808 — ton kit de base)",
+      "Afroplug : Amavibe Lite, Percussions, LogDrums (afrobeat/amapiano — log drums, shakers, congas)",
+      "Dixon Beats DB1 (émulation Casio SK-1 : sons lo-fi crasseux, vinyle/wobble — boom-bap, RnB alternatif)"
+    ],
+    "INSTRUMENTS · Claviers / Guitares": [
+      "Lounge Lizard EP-4 (Rhodes/Wurlitzer modélisés — très bon en RnB)",
+      "UAD Electra 88 (piano électrique Rhodes), EP-1",
+      "NI Guitar Rig 7 (amplis + effets guitare)",
+      "UAD Enigmatic '82 & Showtime (amplis guitare)"
     ]
   },
 
@@ -229,7 +284,7 @@ const HIRA_DATA = {
         { t: "Stems exportés en WAV 24 bits", d: "Une piste par élément (44.1/48 kHz) pour pouvoir mixer dans Luna." },
         { t: "Projet FL sauvegardé + copie", d: "Garde le projet avec le MIDI intact, plus une sauvegarde de secours." }
       ],
-      plugins: ["EQ", "Compression", "Saturation / Couleur", "Synthés / Instruments"]
+      plugins: ["EQ", "Compression", "Saturation / Couleur", "INSTRUMENTS · Synthés"]
     },
     {
       id: "rec",
@@ -243,7 +298,7 @@ const HIRA_DATA = {
         "Filtre anti-pop obligatoire + distance ~ une paume du micro. Recule un peu sur les 'P' et 'B'.",
         "Casque FERMÉ (DT770) au tracking pour éviter la repisse. Donne-toi une balance confortable (voix bien présente).",
         "Compression légère à la prise via le bouton 76 du Volt (2-4 dB de réduction max), OU rien et tu compresses au mix.",
-        "Piège ARM (monitoring temps réel LUNA) : si tu actives l'Accelerated Realtime Monitoring pour t'entendre sans latence, LUNA DÉSACTIVE les plugins tiers AU/VST3 (FabFilter, Waves) sur la piste armée — seuls les UAD natifs restent actifs en monitoring. Pour t'entendre via une chaîne FabFilter/Waves au tracking, laisse l'ARM OFF et baisse le buffer (64/128). Sinon, ARM ON + chaîne UAD native (ex. Century Channel Strip) pour zéro latence.",
+        "Monitoring LUNA avec le Volt 276 : l'ARM (Accelerated Realtime Monitoring) N'EST PAS DISPONIBLE chez toi — il exige une interface Apollo Thunderbolt avec DSP UAD. Avec un Volt, LUNA tourne en mode Core Audio : pas d'ARM, pas d'inserts Unison, pas d'UAD Record FX. Ta méthode = BUFFER BAS (32-128 samples) au tracking pour t'entendre via ta chaîne FabFilter/Waves, puis remonte le buffer (256/512) au mix. Alternative sans latence du tout : monitoring direct au casque via le Volt (bouton Direct), la chaîne de plugins n'est alors pas entendue.",
         "Enregistre plusieurs prises (3-5) + des doubles pour les refrains et les ad-libs."
       ],
       checklist: [
@@ -252,7 +307,7 @@ const HIRA_DATA = {
         { t: "Gain réglé : pics ≤ -6 dBFS", d: "Aucune LED rouge / clip. Un clip ne se rattrape pas au mix." },
         { t: "Anti-pop + bonne distance", d: "Une paume de distance, recule un peu sur les P et les B." },
         { t: "Casque fermé (DT770), balance OK", d: "Fermé = pas de repisse dans le micro ; voix bien présente dans le casque." },
-        { t: "Mode de monitoring choisi", d: "ARM ON + chaîne UAD native (zéro latence) OU ARM OFF + buffer bas (64/128) pour t'entendre via FabFilter." },
+        { t: "Mode de monitoring choisi", d: "Buffer bas (32-128) pour t'entendre via ta chaîne FabFilter/Waves, OU monitoring direct au casque via le Volt (sans plugins). L'ARM n'existe pas avec un Volt — il faut un Apollo." },
         { t: "Pièce calme (fond < -60 dBFS)", d: "Coupe les sources de bruit : pas de souffle ni de ronflette anormale." },
         { t: "Lead + doubles + ad-libs enregistrés", d: "Prévois 3-5 prises et des doubles pour avoir de la matière au mix." },
         { t: "Meilleures prises repérées", d: "Marque/nomme les bonnes prises tout de suite : gain de temps à l'édition." }
@@ -488,6 +543,78 @@ const HIRA_DATA = {
       ],
       vst: ["Pro-Q 4", "Waves Tune Real-Time", "LA-2A", "Pro-DS", "Kramer Tape / RC-20", "UAD Pure Plate / Valhalla Plate + Delay", "Vocal Rider"],
       cible: "Voix chaude et aérée qui flotte sur le groove · sends généreux"
+    },
+    {
+      nom: "🛰️ VICTONY — Lead falsetto + blocs choraux",
+      contexte: "Afrobeats mélodique façon Victony (Soweto, Stubborn). Signature = CONTRASTE : lead centré, étroit et plutôt SEC, contre des empilements choraux très larges et noyés de réverb. L'autotune est assumé et audible (outil de phrasé, pas correction). SM7B si ta pièce est vive, NT1-A si elle est traitée. NB : caractérisation à l'oreille — Victony ne publie pas sa chaîne.",
+      etapes: [
+        "Coupe-bas 80-100 Hz (Pro-Q 4) — le falsetto n'a rien sous 100 Hz, laisse la place à la 808",
+        "Auto-Tune Artist : Retune Speed 0-10 (RAPIDE = paliers audibles, c'est voulu), Humanize 0, gamme du morceau. C'est l'effet, ne l'adoucis pas",
+        "Creux léger 250-350 Hz (-2 dB) pour désencombrer le nasal du médium",
+        "1176 rapide (attack fast, release fast, 4-6 dB GR) — le mordant rap dans le placement rythmique",
+        "Pro-DS léger (le falsetto siffle vite après autotune rapide)",
+        "Présence +2-3 dB vers 3-4 kHz (Pro-Q 4), puis Fresh Air pour l'aigu aérien",
+        "LEAD : reverb COURTE seulement (Pure Plate ~0.8-1.2 s, mix 8-12 %) + delay ping-pong 1/8 (Valhalla Delay, feedback bas, ~15 %). Le lead doit rester DEVANT",
+        "BLOCS CHORAUX (pistes séparées) : 3-4 voix doublées + doublage à l'octave, panoramique large (L80/R80), Waves Doubler ou NI Choral, puis reverb LONGUE (VintageVerb 2.5-4 s, mix 25-35 %)",
+        "Sur le bus chœurs : coupe-bas 200 Hz + creux 2-4 kHz pour qu'ils n'entrent pas en conflit avec le lead"
+      ],
+      vst: ["Pro-Q 4", "Antares Auto-Tune Artist", "UAD 1176", "Pro-DS", "Fresh Air", "UAD Pure Plate", "Valhalla Delay", "Waves Doubler / NI Choral", "Valhalla VintageVerb"],
+      cible: "Lead sec et centré · chœurs larges et noyés — le contraste EST l'effet"
+    },
+    {
+      nom: "💔 CKAY — Emo-afrobeats intimiste",
+      contexte: "« Emo-Afrobeats » (terme de CKay lui-même) : gammes mineures, synthés chauds et ambiants, écriture mélancolique. Voix DOUCE, proche du micro, quasi murmurée, peu de projection. Beaucoup plus de réverb que la moyenne afrobeats — c'est ça la couleur. Autotune discret (glacis, pas effet). NT1-A idéal, chant proche.",
+      etapes: [
+        "Coupe-bas DOUX 70-80 Hz seulement (Pro-Q 4) — garde la chaleur de proximité, c'est l'intimité du morceau",
+        "RX 12 De-plosive / De-click : chant proche = plosives et bruits de bouche, nettoie AVANT de compresser",
+        "Auto-Tune Artist ou Waves Tune Real-Time : Retune LENT (25-40 ms), Humanize 15-25 — la justesse sans l'artefact",
+        "Compression EN DEUX ÉTAGES (clé de l'intimité) : LA-2A doux 2-3 dB GR, puis Pro-C 2 ratio 2:1, 2-3 dB GR. Jamais un seul comp qui écrase",
+        "Chaleur bas-médium : léger +1-2 dB vers 200-250 Hz, ou UAD Verve / Kramer Tape en dosage subtil",
+        "Pro-DS modéré, puis Fresh Air discret (le murmure a besoin d'un peu d'air, pas de brillance)",
+        "RÉVERB GÉNÉREUSE — c'est la signature : Valhalla VintageVerb plaque 2-3 s, mix 20-30 %, pre-delay 20-40 ms pour garder l'intelligibilité",
+        "Delay 1/4 pointé (Valhalla Delay) avec feedback qui TIENT dans les silences — les queues font la mélancolie",
+        "DOUBLAGES REFRAIN hard-pannés L100/R100 (deux vraies prises, pas un copier-coller), volume -6 à -8 dB sous le lead",
+        "Motif vocal court en hook (le « ah ah ah ») : traite-le comme un instrument — filtre passe-bande + reverb longue"
+      ],
+      vst: ["Pro-Q 4", "iZotope RX 12", "Antares Auto-Tune Artist", "UAD LA-2A", "Pro-C 2", "UAD Verve / Kramer Tape", "Pro-DS", "Fresh Air", "Valhalla VintageVerb", "Valhalla Delay"],
+      cible: "Voix intime et proche, noyée dans une réverb longue · mineur et mélancolie"
+    },
+    {
+      nom: "🌾 MAJEEED — Afropop / amapiano soulful",
+      contexte: "Voix la plus CHAUDE des trois : médium-grave charnu, léger voile rauque, phrasé posé et paresseux (typique amapiano). Ancien songwriter pour Seyi Shay — l'écriture prime sur la démonstration vocale. Autotune LÉGER : la texture naturelle de la voix est l'atout, ne la lisse pas. Voix souvent placée un peu EN ARRIÈRE, contrairement à l'afrobeats frontal. SM7B parfait.",
+      etapes: [
+        "Coupe-bas 70-85 Hz — préserve le corps du médium-grave, c'est sa signature",
+        "Auto-Tune Artist : Retune TRÈS LENT (40-60 ms), Humanize 25-35. But = justesse discrète, on doit entendre le grain rauque",
+        "Creux chirurgical étroit 300-400 Hz si ça boue (Pro-Q 4, Q serré) — mais NE dégraisse pas le bas-médium",
+        "LA-2A seul, 3-4 dB GR, doux et optique. Pas de 1176 : le phrasé paresseux n'a pas besoin de mordant",
+        "Saturation chaude en dosage SUBTIL : UAD Verve ou RC-20 (drive bas) — accentue le voile rauque sans le durcir",
+        "Pro-DS léger seulement (voix chaude = peu de sibilance)",
+        "PAS de Fresh Air agressif ici — un léger shelf +1 dB à 10 kHz suffit. La brillance tuerait le côté soulful",
+        "ESPACE AMAPIANO : reverb longue (VintageVerb ou Aurora, 2.5-3.5 s, mix 20-25 %) + delay calé sur les log drums pour remplir les vides entre les percussions",
+        "Place la voix LÉGÈREMENT EN RETRAIT (-1 à -2 dB vs afrobeats classique) — le groove et les log drums respirent devant",
+        "Harmonies R&B serrées (tierces/quintes) sur les refrains, PAS de blocs gospel façon Victony : Waves Harmony ou vraies prises"
+      ],
+      vst: ["Pro-Q 4", "Antares Auto-Tune Artist", "UAD LA-2A", "UAD Verve / RC-20", "Pro-DS", "Valhalla VintageVerb / iZotope Aurora", "Valhalla Delay", "Waves Harmony"],
+      cible: "Voix chaude, texturée, légèrement en retrait · l'espace amapiano autour"
+    },
+    {
+      nom: "🇫🇷 RNBOI — R&B/rap FR autotuné (hors afro)",
+      contexte: "⚠️ RNBOI (Samy Schmitt Fahli) est FRANÇAIS, R&B/rap — PAS afrobeats. Premier artiste signé sur le label d'Aya Nakamura, Flamme du morceau R&B 2025. Esthétique : « rap autotuné moody + R&B mainstream ». À l'opposé des trois chaînes ci-dessus : mix DENSE et COMPRESSÉ, réverbs COURTES, très centré. Autotune marqué comme texture. SM7B.",
+      etapes: [
+        "Coupe-bas 85-100 Hz + creux 200-300 Hz : le mix est dense, il faut faire de la place",
+        "Auto-Tune Artist : Retune RAPIDE (0-15 ms), Humanize 0-10 — texture assumée, dans la lignée R&B FR post-Aya",
+        "Compression SÉRIEUSE, deux étages : 1176 (fast/fast, 4-6 dB) puis Pro-C 2 (ratio 3:1, 3-4 dB). La densité est le style",
+        "RVox ou Vocal Rider pour un niveau ultra constant — la voix ne doit jamais bouger",
+        "Présence marquée 3-5 kHz (+3 dB) — la voix doit percer un mix chargé",
+        "Pro-DS ferme (compression forte + autotune rapide = beaucoup de sibilance)",
+        "Saturation Saturn 2 (bande médium) pour la densité et la présence dans les petits haut-parleurs",
+        "RÉVERBS COURTES seulement : plate 0.6-1 s, mix 8-12 %. Pas de queues longues, ça diluerait la densité",
+        "Delay slap court (H-Delay 60-90 ms) ou 1/8 très sec, feedback minimal",
+        "DOUBLAGES SERRÉS quasi permanents sur le lead (pas hard-pannés : L30/R30) — épaisseur plutôt que largeur",
+        "Bus voix : léger clipper (kHs Clipper) avant le limiteur pour gagner en niveau sans pomper"
+      ],
+      vst: ["Pro-Q 4", "Antares Auto-Tune Artist", "UAD 1176", "Pro-C 2", "Waves RVox", "Pro-DS", "Saturn 2", "Waves H-Delay", "kHs Clipper"],
+      cible: "Voix dense, compressée, centrée et frontale · réverbs courtes"
     },
     {
       nom: "💜 RnB — Lead (chant principal)",
@@ -965,7 +1092,7 @@ const HIRA_DATA = {
       "En SEND (non enregistré) : un peu de reverb/delay juste pour que l'artiste se sente bien.",
       "Enregistre la voix À SEC : pics ≈ -12 à -6 dBFS, moyenne ~-18 dBFS."
     ],
-    recMonitorTip: "Zéro latence dans LUNA : ARM ON + chaîne UAD native (LA-2A, Century, Topline Vocal Tune pour l'autotune de monitoring). Pour t'entendre via FabFilter/Waves, laisse l'ARM OFF et baisse le buffer (64/128).",
+    recMonitorTip: "Avec ton Volt 276, LUNA tourne en Core Audio : pas d'ARM (réservé aux Apollo Thunderbolt). Pour t'entendre via ta chaîne FabFilter/Waves au tracking, baisse le buffer à 32-128 samples. Pour zéro latence absolue, utilise le monitoring direct du Volt (sans plugins).",
     genres: {
       rap: {
         nom: "Rap", emoji: "🎤", mic: "SM7B (+ FetHead)",
