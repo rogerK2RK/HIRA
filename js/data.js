@@ -1069,6 +1069,85 @@ const HIRA_DATA = {
   },
 
   /* ----------------------------------------------------------------------
+     PLAN DE RELANCE — Chaîne YouTube "Rog One - Beats" + Instagram
+     Contexte : 463 abonnés, inactif depuis +1 an, pas encore de vente,
+     anonymat souhaité (pas de visage à l'écran).
+     ---------------------------------------------------------------------- */
+  growth: {
+    intro: "Plan de relance de la chaîne YouTube Rog One - Beats et du compte Instagram. Objectif : transformer 463 abonnés dormants en audience active, et commencer à vendre. L'anonymat n'est PAS un handicap ici — dans le type beat, la découverte se fait par la RECHERCHE, pas par la personnalité.",
+
+    principes: [
+      { t: "Garde la chaîne, ne recommence pas à zéro", d: "463 abonnés = un actif réel : historique, preuve sociale, ancienneté. Une nouvelle chaîne repartirait sans rien. Le coût d'un an d'inactivité est réel, mais bien inférieur à celui d'un redémarrage." },
+      { t: "Tes 2-3 premières vidéos vont faire peu de vues", d: "Après un an d'arrêt ton audience est froide et YouTube doit re-tester ta chaîne. C'EST NORMAL. La majorité des gens abandonnent exactement là. Tiens 8 semaines et tu passes devant eux." },
+      { t: "La recherche > l'algorithme", d: "Une chaîne de beats ne vit pas des recommandations mais des requêtes tapées : « Victony type beat ». Ton titre est ton référencement. C'est 80 % du jeu." },
+      { t: "Le stock d'avance est le point critique", d: "Produis 6 beats AVANT de relancer. C'est ce qui t'évite de sauter une semaine faute d'inspiration — et sauter une semaine, c'est exactement comme ça que ça s'est arrêté la première fois." },
+      { t: "La régularité bat la qualité", d: "2 uploads/semaine à heure fixe pendant 3 mois > 1 chef-d'œuvre par mois." }
+    ],
+
+    identite: {
+      pfp: [
+        "Monogramme « R1 » en typo grasse géométrique — PAS de visage (anonymat conservé)",
+        "Blanc sur fond couleur sombre et saturé : bordeaux profond, bleu nuit ou vert forêt",
+        "Un seul aplat : aucun dégradé, aucune ombre, aucun contour",
+        "À BANNIR : casque, waveform, note de musique, micro — tout le monde les utilise, tu deviens invisible",
+        "TEST OBLIGATOIRE : réduis à 48 px (taille réelle dans les commentaires et la recherche). Si « R1 » n'est pas net, c'est raté"
+      ],
+      banniere: [
+        "Ligne 1 : ROG ONE — Afrobeat · Amapiano · RnB",
+        "Ligne 2 : Nouveaux beats mardi & vendredi",
+        "Ligne 3 : le lien BeatStars",
+        "Zone sûre : le centre uniquement — les bords sont rognés différemment sur mobile, TV et desktop"
+      ],
+      miniatures: [
+        "Cohérence AVANT beauté : même gabarit à chaque vidéo",
+        "Photo de l'artiste référent + nom du beat en gros + logo toujours dans le même coin",
+        "On doit reconnaître une de tes vidéos sans lire le nom de la chaîne",
+        "Lisible en petit : teste à la taille d'une miniature mobile"
+      ]
+    },
+
+    monetisation: [
+      "PRIORITÉ N°1, AVANT DE PUBLIER QUOI QUE CE SOIT : ouvre un compte BeatStars gratuit (0 €, jusqu'à 10 beats).",
+      "Sans ça, chaque vue est perdue — les gens qui aiment ton beat n'ont aucun moyen de l'acheter.",
+      "Le lien va à TROIS endroits : la bannière YouTube, la bio Instagram, et la PREMIÈRE LIGNE de chaque description de vidéo.",
+      "Ça se fait en une heure. Tant que ce n'est pas fait, ne relance pas la chaîne."
+    ],
+
+    titres: {
+      formule: "[Artiste] Type Beat - \"Nom\" | Afrobeat Instrumental 2026",
+      note: "Le nom de l'artiste EST le mot-clé de recherche. C'est lui qui te rend trouvable.",
+      cibles: [
+        "✅ VISE : Victony, CKay, Majeeed, Rema, Omah Lay, Joeboy — demande réelle, peu de concurrence francophone",
+        "❌ ÉVITE : Burna Boy, Wizkid, Davido — saturé, tu n'apparaîtras jamais dans les résultats",
+        "Tu as déjà les chaînes vocales Victony / CKay / Majeeed dans l'onglet Chaînes types : produis les beats qui vont avec, tu gagnes du temps sur les deux tableaux"
+      ]
+    },
+
+    instagram: [
+      "Rôle réel d'Instagram : preuve sociale et CONTACT avec les artistes (les placements se font en DM). Ce n'est pas une machine à abonnés YouTube.",
+      "Format : Reels de 15-25 s, vertical. Le DROP direct, jamais l'intro — le hook dans les 2 premières secondes (log drum, 808).",
+      "Sans visage : plan en PLONGÉE sur tes mains sur les pads et faders du contrôleur. C'est LE format faceless qui marche.",
+      "Variante : screen recording de la playlist FL qui défile pendant que le beat tourne.",
+      "Fallback quand tu n'as rien filmé : waveform animée + texte en overlay.",
+      "Texte en overlay systématique : « Afrobeat type beat — lien en bio ».",
+      "Rythme : 3 Reels/semaine, dont au moins 1 recyclé d'un beat YouTube existant."
+    ],
+
+    planning: [
+      { sem: "Semaine 1", titre: "Préparation — on ne publie RIEN", actions: ["Compte BeatStars gratuit créé + lien en place", "Nouvelle photo de profil (monogramme R1) + bannière", "PRODUIS 6 BEATS D'AVANCE sans rien publier"] },
+      { sem: "Semaine 2", titre: "Relance", actions: ["2 uploads : mardi + vendredi", "Titres au format [Artiste] Type Beat", "Miniatures au gabarit unique", "Lien BeatStars en 1re ligne de description"] },
+      { sem: "Semaines 3 à 8", titre: "Tenir le rythme", actions: ["2 uploads/semaine, SANS EXCEPTION", "3 Reels Instagram/semaine", "DM à 10 artistes afro émergents/semaine", "Ne juge pas les résultats avant la semaine 8"] }
+    ],
+
+    semaineType: [
+      { jour: "Lundi-Mardi", quoi: "Produire 2 beats finis (utilise tes chaînes HIRA pour aller vite)" },
+      { jour: "Mercredi", quoi: "Miniatures + upload programmé" },
+      { jour: "Jeudi-Vendredi", quoi: "3 Reels + DM à 10 artistes afro émergents" },
+      { jour: "Week-end", quoi: "Off — la régularité tient sur la durée, pas sur l'acharnement" }
+    ]
+  },
+
+  /* ----------------------------------------------------------------------
      PROCESS REC SUR PROD (achetée / YouTube) — par genre
      Chaque genre a : channel REC (tracking), channel MIX (lead/ad-libs/backs)
      et des réglages de simulateur (autotune / reverb / delay).

@@ -287,7 +287,8 @@ views.dashboard = function(){
         {v:"guide",      ic:"book",   l:"Conseils"},
         {v:"gear",       ic:"sliders",l:"Matériel"},
         {v:"plugins",    ic:"grid",   l:"Plugins"},
-        {v:"studio",     ic:"building",l:"Monter le studio"}
+        {v:"studio",     ic:"building",l:"Monter le studio"},
+        {v:"growth",     ic:"share",  l:"Plan de relance"}
       ].map(c => `<button class="cta" onclick="navigate('${c.v}')">${icon(c.ic,26)}<span>${c.l}</span></button>`).join("")}
     </div>
     <h3 style="margin-bottom:14px;font-size:15px;color:var(--muted)">Projets récents</h3>
@@ -1080,6 +1081,58 @@ views.gear = function(){
 };
 
 /* ---- Plugins ---- */
+views.growth = function(){
+  const g = HIRA_DATA.growth;
+  const li = a => a.map(x=>`<li>${esc(x)}</li>`).join("");
+
+  const principes = g.principes.map(p=>`
+    <div class="card"><h4>${esc(p.t)}</h4><p style="font-size:13px;color:var(--muted)">${esc(p.d)}</p></div>`).join("");
+
+  const planning = g.planning.map(p=>`
+    <div class="card">
+      <h4>${esc(p.sem)} — ${esc(p.titre)}</h4>
+      <ul>${li(p.actions)}</ul>
+    </div>`).join("");
+
+  const semaine = g.semaineType.map(s=>`
+    <tr><td style="white-space:nowrap;font-weight:600">${esc(s.jour)}</td><td>${esc(s.quoi)}</td></tr>`).join("");
+
+  content.innerHTML = `
+    <div class="page-head"><h1>${icon("share",22)} Plan de relance</h1>
+      <p>${esc(g.intro)}</p></div>
+
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <h4>${icon("target",16)} Priorité n°1 — à faire AVANT de publier</h4>
+      <ul>${li(g.monetisation)}</ul>
+    </div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les principes</h3>
+    <div class="grid grid-2">${principes}</div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Identité visuelle</h3>
+    <div class="grid grid-2">
+      <div class="card"><h4>Photo de profil (sans visage)</h4><ul>${li(g.identite.pfp)}</ul></div>
+      <div class="card"><h4>Bannière</h4><ul>${li(g.identite.banniere)}</ul></div>
+      <div class="card"><h4>Miniatures</h4><ul>${li(g.identite.miniatures)}</ul></div>
+    </div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Titres — 80 % du jeu</h3>
+    <div class="card">
+      <p style="font-family:monospace;font-size:13px;background:rgba(255,255,255,.05);padding:10px;border-radius:6px">${esc(g.titres.formule)}</p>
+      <p style="font-size:13px;color:var(--muted);margin:10px 0">${esc(g.titres.note)}</p>
+      <ul>${li(g.titres.cibles)}</ul>
+    </div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Instagram</h3>
+    <div class="card"><ul>${li(g.instagram)}</ul></div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les 8 prochaines semaines</h3>
+    <div class="grid grid-2">${planning}</div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Semaine type</h3>
+    <div class="card"><table style="width:100%;border-collapse:collapse;font-size:13px">${semaine}</table></div>`;
+};
+
 views.plugins = function(){
   const groups = Object.entries(HIRA_DATA.plugins).map(([cat, list]) => `
     <div class="card plug-group">
@@ -1413,7 +1466,7 @@ window.syncLogout = async function(){
 window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", sync:"cloud" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", growth:"share", sync:"cloud" };
 document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";
