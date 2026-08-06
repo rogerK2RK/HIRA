@@ -44,6 +44,12 @@ const HIRA_DATA = {
         { nom: "FL Studio 2026", detail: "Production / Beatmaking", note: "Là où tu construis l'instru. Exporte tes stems/pistes en WAV 24 bits pour les rapatrier dans Luna. ⚠️ Sur Mac, tes Packs, Templates et presets mixeur sont stockés DANS l'app (/Applications/FL Studio 2026.app) : une mise à jour majeure remplace l'app et efface tout ce que tu y as ajouté. Sauvegarde-les ailleurs (voir la note Packs)." },
         { nom: "UAD LUNA", detail: "Enregistrement / Mix / Master", note: "Ta DAW principale pour rec, mix, master. Bonne nouvelle confirmée : la version GRATUITE offre les MÊMES fonctions que LUNA Pro, à une exception près — les Hardware Inserts (insérer du matériel analo/outboard dans le mixer, réservé au Pro). Surtout : LUNA free charge bien tes plugins tiers AU/VST3 (FabFilter, Waves, Valhalla, Kilohearts…) directement — pas besoin de tout faire dans FL. Profite aussi du moteur Neve Summing et des plugins UAD natifs inclus. (LUNA n'accepte que l'AU et le VST3, pas le VST2.)" }
       ]
+    },
+    {
+      cat: "Contrôleur",
+      items: [
+        { nom: "Novation Launch Control XL 3", detail: "8 faders + 24 encodeurs + 16 boutons + écran OLED", note: "Surface de contrôle (PAS de clavier). Pour mixer et naviguer DANS FL Studio, ta priorité. SETUP FL : Options → MIDI settings → Refresh device list → sélectionne-le en Input ET Output → Controller type « Novation Launch Control XL 3 » (si absent : bouton « Update MIDI scripts »). Deux modes sur le boîtier : DAW Mixer (mixette) et DAW Control (Channel Rack). ⚠️ Mets à jour le firmware AVANT usage via l'app Components — dans CHROME, pas Safari (Safari ne gère pas le Web MIDI). Faders NON motorisés → mode « pickup » : tu dois rattraper la valeur en changeant de piste. Ne pilote PAS LUNA (il parle HUI, LUNA ne comprend que MCU)." }
+      ]
     }
   ],
 
@@ -132,7 +138,8 @@ const HIRA_DATA = {
       "Valhalla Shimmer (réverb pitchée — nappes éthérées)",
       "Kilohearts kHs Filter / Ladder Filter / Comb Filter / Formant Filter / Nonlinear Filter",
       "Kilohearts kHs Bitcrush / Distortion / Ring Mod / Frequency Shifter / Phase Distortion",
-      "Kilohearts kHs Pitch Shifter / Resonator / Tape Stop / Reverser / Trance Gate (effets rythmiques)"
+      "Kilohearts kHs Pitch Shifter / Resonator / Tape Stop / Reverser / Trance Gate (effets rythmiques)",
+      "Dezert Audio FREQ-FX (multi-effet modulaire 8 modules : Drive, Lofi, Chop/stutter, Vibe, Grain granulaire, Delay, Scan, Space — sound design et textures sur voix, mélodies, drums)"
     ],
     "Nettoyage voix": [
       "iZotope RX 12/11 (LA référence débruitage : Voice De-noise, De-click, De-hum, De-reverb, De-clip, Repair Assistant)",
@@ -161,7 +168,8 @@ const HIRA_DATA = {
       "Waves UltraPitch (harmonies/pitch, 6 voix), Waves OVox (vocoder / synth vocal)",
       "iZotope VocalSynth 2 (vocoder, talkbox, harmonies, textures modernes)",
       "Vocodine (vocodeur), LeVoix (traitement voix)",
-      "NI Choral (chœurs/épaississeur), pour élargir les backs"
+      "NI Choral (chœurs/épaississeur), pour élargir les backs",
+      "Afroplug Voxplug (instrument : 16 ad-libs / chops vocaux prêts à poser — ah, oh, hey, chants pour backgrounds et ad-libs afro)"
     ],
     "Multibande / Dynamique avancée": [
       "FabFilter Pro-MB (compression multibande chirurgicale)",
@@ -200,6 +208,7 @@ const HIRA_DATA = {
       "NI Massive X (synthé moderne — basses, leads, growls)",
       "Arturia Analog Lab V (tous les classiques analo : Jupiter, Juno, CS-80, Rhodes…)",
       "Roland ZENOLOGY (moteur ZEN-Core : synthés Roland, JUNO/JUPITER, kits — très bon sur afrobeat/pop)",
+      "Korg TRITON (LA workstation du RnB/hip-hop 2000s — pianos, leads, cloches, pads : sonorités signature RnB, afro-soul, gospel)",
       "FabFilter Twin 3 / Twin 2 (synthé modulable — basses et leads précis)",
       "FabFilter One (oscillateur simple — sub/basse sinus propre pour renforcer une 808)",
       "Ultramaster KR-106 (boîte à rythmes / synthé vintage)",
@@ -213,14 +222,23 @@ const HIRA_DATA = {
       "Spitfire LABS (gratuit : pianos, cordes, guitares, textures)",
       "Xpand!2 (multi-instrument rapide pour maquetter)"
     ],
+    "INSTRUMENTS · Basses": [
+      "IK MODO BASS 2 (modélisation physique, pas d'échantillons — jusqu'à 22 basses dont fretless et contrebasses, tout paramétrable : LA basse la plus réaliste et jouable, ton n°1)",
+      "Toontrack EZbass (basse échantillonnée + écriture assistée : génère des basslines à partir d'une grille d'accords, Audio Tracker convertit un audio en MIDI — parfait quand tu ne joues pas de basse)",
+      "Ample Bass P (ABP — Fender Precision électrique, doigt : le standard rap/RnB/afro)",
+      "Ample Bass Upright (ABU — contrebasse acoustique : neo-soul, RnB jazzy, afro organique)",
+      "FabFilter One (sub/basse sinus propre pour renforcer une 808), NI Massive X (synth bass, 808)"
+    ],
     "INSTRUMENTS · Drums / 808 / Percussions": [
       "NI Battery 4 (sampler drums/808 — ton kit de base)",
       "Afroplug : Amavibe Lite, Percussions, LogDrums (afrobeat/amapiano — log drums, shakers, congas)",
+      "Afroplug Afrowave Lite (GRATUIT — rompler afro : kits batterie afrobeats, percus, shakers + guitares/pianos prêts à mixer)",
       "Dixon Beats DB1 (émulation Casio SK-1 : sons lo-fi crasseux, vinyle/wobble — boom-bap, RnB alternatif)"
     ],
     "INSTRUMENTS · Claviers / Guitares": [
       "Lounge Lizard EP-4 (Rhodes/Wurlitzer modélisés — très bon en RnB)",
       "UAD Electra 88 (piano électrique Rhodes), EP-1",
+      "Ample Guitar : AGLP (Les Paul), AGTC (Telecaster), AGRB (Rickenbacker 330), AGSH (semi-hollow ES-335, fingerstyle jazz/blues), AG12 (acoustique 12 cordes) — guitares échantillonnées réalistes",
       "NI Guitar Rig 7 (amplis + effets guitare)",
       "UAD Enigmatic '82 & Showtime (amplis guitare)"
     ]
@@ -238,6 +256,54 @@ const HIRA_DATA = {
     { etape: "Master — Apple Music", cible: "-16 LUFS · TP ≤ -1 dBTP", note: "Apple cible un peu plus bas. -14 marche aussi, mais -16 = rendu le plus 'safe'." },
     { etape: "Master — 'Loud' / Club / Trap", cible: "-9 à -7 LUFS · TP ≤ -1 dBTP", note: "Plus fort = plus de compression/limitation. Attention à ne pas tuer la dynamique et les transitoires (kick). Compare toujours au même volume qu'une ref commerciale." }
   ],
+
+  /* ----------------------------------------------------------------------
+     RÉFÉRENCES D'ÉCOUTE — morceaux commerciaux à A/B pour t'inspirer
+     Choisis pour la qualité reconnue de leur mix/master (pas des mesures).
+     À écouter sur Spotify/YouTube (streaming HQ, pas un rip 128 kbps).
+     ---------------------------------------------------------------------- */
+  references: {
+    methode: [
+      "Écoute la version STREAMING de qualité (Spotify Very High / YouTube Music), pas un rip 128 kbps qui fausse tout.",
+      "Importe le morceau sur une piste à part dans ta session pour l'A/B.",
+      "ÉGALISE le volume perçu (ta prod ≈ la ref) — sinon 'plus fort' passe pour 'meilleur', c'est un piège.",
+      "Compare UNE chose à la fois : le bas, la voix, la largeur stéréo, l'air (aigus).",
+      "Compare un MIX à un mix : bypasse ton limiteur/master avant l'A/B.",
+      "⚠️ Spotify/YouTube/Apple normalisent ≈ -14 LUFS : ne juge pas le loudness au volume brut du fichier — vise l'équilibre tonal et la punch (voir onglet Cibles dB/LUFS)."
+    ],
+    genres: [
+      { genre: "Afrobeats / Afropop", tracks: [
+        { t: "Wizkid – Essence (ft. Tems)", ecoute: "LA référence : voix soyeuse, grave rond, énormément d'espace" },
+        { t: "Rema – Calm Down", ecoute: "Afropop moderne ultra-propre, voix bien devant" },
+        { t: "Burna Boy – Last Last", ecoute: "Grave puissant et maîtrisé — leçon de low-end" },
+        { t: "Asake – Lonely At The Top", ecoute: "Empilements vocaux, énergie, cohésion" }
+      ]},
+      { genre: "Amapiano", tracks: [
+        { t: "Tyla – Water", ecoute: "Production crossover exemplaire : log drums, sub, voix aérée" },
+        { t: "Uncle Waffles – Tanzania", ecoute: "Placement des percus et gestion de l'espace" }
+      ]},
+      { genre: "RnB", tracks: [
+        { t: "SZA – Snooze (SOS)", ecoute: "Référence mix RnB moderne, voix intime et présente" },
+        { t: "Brent Faiyaz – Dead Man Walking", ecoute: "Profondeur, dynamique, ambiances" },
+        { t: "Giveon – Heartbreak Anniversary", ecoute: "Voix grave chaude, réverbe maîtrisée" },
+        { t: "Chris Brown – Residuals", ecoute: "Tu as ses stems dans ton dossier FL : dissèque une chaîne voix RnB pro" }
+      ]},
+      { genre: "Rap / Trap", tracks: [
+        { t: "Kendrick Lamar – HUMBLE.", ecoute: "Punch, clarté, 808 propre" },
+        { t: "Drake – God's Plan", ecoute: "Voix commerciale, équilibre pensé pour le streaming" },
+        { t: "Travis Scott – SICKO MODE", ecoute: "Largeur et effets (mix complexe, pour l'inspiration)" }
+      ]},
+      { genre: "Drill", tracks: [
+        { t: "Central Cee – Sprinter", ecoute: "UK drill très propre, voix qui perce le mix" },
+        { t: "Pop Smoke – Dior", ecoute: "Grave et agressivité maîtrisés" }
+      ]},
+      { genre: "Mastering — loudness / bas / équilibre", tracks: [
+        { t: "The Weeknd – Blinding Lights", ecoute: "Master pop de référence : fort mais pas écrasé" },
+        { t: "Billie Eilish – bad guy", ecoute: "Référence de SUB — teste tes basses dessus" },
+        { t: "Daft Punk – Get Lucky", ecoute: "Master DYNAMIQUE, pas sur-limité : ça respire" }
+      ]}
+    ]
+  },
 
   /* ----------------------------------------------------------------------
      TRAMES DE PROJET (les phases + checklists)

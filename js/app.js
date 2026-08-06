@@ -288,6 +288,7 @@ views.dashboard = function(){
         {v:"gear",       ic:"sliders",l:"Matériel"},
         {v:"plugins",    ic:"grid",   l:"Plugins"},
         {v:"studio",     ic:"building",l:"Monter le studio"},
+        {v:"references", ic:"headphones",l:"Références d'écoute"},
         {v:"growth",     ic:"share",  l:"Plan de relance"}
       ].map(c => `<button class="cta" onclick="navigate('${c.v}')">${icon(c.ic,26)}<span>${c.l}</span></button>`).join("")}
     </div>
@@ -1081,6 +1082,32 @@ views.gear = function(){
 };
 
 /* ---- Plugins ---- */
+views.references = function(){
+  const r = HIRA_DATA.references;
+  const li = a => a.map(x=>`<li>${esc(x)}</li>`).join("");
+
+  const genres = r.genres.map(g=>`
+    <div class="card">
+      <h4>${esc(g.genre)}</h4>
+      <ul style="list-style:none;padding:0">${g.tracks.map(tr=>`
+        <li style="margin-bottom:10px">
+          <div style="font-weight:600">${esc(tr.t)}</div>
+          <div style="font-size:12px;color:var(--muted)">→ ${esc(tr.ecoute)}</div>
+        </li>`).join("")}</ul>
+    </div>`).join("");
+
+  content.innerHTML = `
+    <div class="page-head"><h1>${icon("headphones",22)} Références d'écoute</h1>
+      <p>Des morceaux commerciaux réputés pour la qualité de leur mix/master, à écouter (Spotify/YouTube) pour t'inspirer et A/B tes prods. Le n°1 de chaque genre est le plus parlant.</p></div>
+
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <h4>${icon("lightbulb",16)} Comment s'en servir (sinon ça ne sert à rien)</h4>
+      <ul>${li(r.methode)}</ul>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:18px">${genres}</div>`;
+};
+
 views.growth = function(){
   const g = HIRA_DATA.growth;
   const li = a => a.map(x=>`<li>${esc(x)}</li>`).join("");
@@ -1466,7 +1493,7 @@ window.syncLogout = async function(){
 window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", growth:"share", sync:"cloud" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", references:"headphones", growth:"share", sync:"cloud" };
 document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";
