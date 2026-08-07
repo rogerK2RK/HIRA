@@ -308,6 +308,15 @@ const HIRA_DATA = {
         { t: "The Weeknd – Blinding Lights", ecoute: "Master pop de référence : fort mais pas écrasé" },
         { t: "Billie Eilish – bad guy", ecoute: "Référence de SUB — teste tes basses dessus" },
         { t: "Daft Punk – Get Lucky", ecoute: "Master DYNAMIQUE, pas sur-limité : ça respire" }
+      ]},
+      { genre: "🏆 Grammy Best Engineered Album (mix/master) — par année", tracks: [
+        { t: "2026 · Pino Palladino & Blake Mills – That Wasn't A Dream", ecoute: "Prise analo, basse organique (Pino Palladino !), dynamique préservée — masterclass de son naturel. Master : Patricia Sullivan" },
+        { t: "2025 · Peter Gabriel – i/o", ecoute: "Mix Tchad Blake : art-pop d'une profondeur et d'un détail immenses, placement 3D des éléments" },
+        { t: "2024 · Victoria Monét – JAGUAR II ★ (ta veine)", ecoute: "RnB/funk moderne : voix, groove et low-end impeccables. LA référence à disséquer pour ton style. Master : Colin Leonard" },
+        { t: "2023 · Harry Styles – Harry's House", ecoute: "Pop chaude et organique, basse ronde, mix aéré et vivant" },
+        { t: "2022 · Tony Bennett & Lady Gaga – Love For Sale", ecoute: "Jazz : prise acoustique naturelle, dynamique intacte — l'opposé du sur-compressé. Master : Greg Calbi & Steve Fallone" },
+        { t: "2021 · Beck – Hyperspace", ecoute: "Pop électronique léchée, espace stéréo et transitions soignées" },
+        { t: "2020 · Billie Eilish – When We All Fall Asleep, Where Do We Go?", ecoute: "Sub extrême, silences, voix ultra-proche : prod 'chambre' devenue référence mondiale. Master : John Greenham" }
       ]}
     ]
   },
