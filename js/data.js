@@ -276,7 +276,10 @@ const HIRA_DATA = {
         { t: "Wizkid – Essence (ft. Tems)", ecoute: "LA référence : voix soyeuse, grave rond, énormément d'espace" },
         { t: "Rema – Calm Down", ecoute: "Afropop moderne ultra-propre, voix bien devant" },
         { t: "Burna Boy – Last Last", ecoute: "Grave puissant et maîtrisé — leçon de low-end" },
-        { t: "Asake – Lonely At The Top", ecoute: "Empilements vocaux, énergie, cohésion" }
+        { t: "Asake – Lonely At The Top", ecoute: "Empilements vocaux, énergie, cohésion" },
+        { t: "Victony – SLICK ★", ecoute: "TON COUP DE CŒUR : basse légère et propre qui laisse respirer la voix, prod épurée. Écoute comment le bas ne rentre jamais en conflit avec le lead" },
+        { t: "Tems – Free Mind (suggestion)", ecoute: "Voix chaude et grave, mix aéré et soul — référence de texture vocale" },
+        { t: "Omah Lay – soso (suggestion)", ecoute: "Afro moody, bas rond et profond, ambiance mélancolique bien tenue" }
       ]},
       { genre: "Amapiano", tracks: [
         { t: "Tyla – Water", ecoute: "Production crossover exemplaire : log drums, sub, voix aérée" },
@@ -286,7 +289,9 @@ const HIRA_DATA = {
         { t: "SZA – Snooze (SOS)", ecoute: "Référence mix RnB moderne, voix intime et présente" },
         { t: "Brent Faiyaz – Dead Man Walking", ecoute: "Profondeur, dynamique, ambiances" },
         { t: "Giveon – Heartbreak Anniversary", ecoute: "Voix grave chaude, réverbe maîtrisée" },
-        { t: "Chris Brown – Residuals", ecoute: "Tu as ses stems dans ton dossier FL : dissèque une chaîne voix RnB pro" }
+        { t: "Chris Brown – Residuals", ecoute: "Tu as ses stems dans ton dossier FL : dissèque une chaîne voix RnB pro" },
+        { t: "Daniel Caesar – Best Part (ft. H.E.R.) ★", ecoute: "TON COUP DE CŒUR : RnB épuré, guitare + deux voix intimes, mix minimaliste où chaque élément a sa place. Grammy Best R&B Performance" },
+        { t: "Daniel Caesar – Get You (suggestion)", ecoute: "Basse ronde et chaude, voix doublée soul — belle leçon de low-end RnB" }
       ]},
       { genre: "Rap / Trap", tracks: [
         { t: "Kendrick Lamar – HUMBLE.", ecoute: "Punch, clarté, 808 propre" },
