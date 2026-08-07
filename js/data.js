@@ -297,7 +297,8 @@ const HIRA_DATA = {
       { genre: "Rap / Trap", tracks: [
         { t: "Kendrick Lamar – HUMBLE.", ecoute: "Punch, clarté, 808 propre" },
         { t: "Drake – God's Plan", ecoute: "Voix commerciale, équilibre pensé pour le streaming" },
-        { t: "Travis Scott – SICKO MODE", ecoute: "Largeur et effets (mix complexe, pour l'inspiration)" }
+        { t: "Travis Scott – SICKO MODE", ecoute: "Largeur et effets (mix complexe, pour l'inspiration)" },
+        { t: "Drake – NOKIA ★", ecoute: "TON COUP DE CŒUR : bass beat club + synthés brillants (sample sonnerie Nokia). Master commercial ultra-punchy — meilleure vente 2025. Écoute la clarté du bas malgré le volume" }
       ]},
       { genre: "Drill", tracks: [
         { t: "Central Cee – Sprinter", ecoute: "UK drill très propre, voix qui perce le mix" },
