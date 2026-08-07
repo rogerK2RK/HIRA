@@ -291,7 +291,8 @@ const HIRA_DATA = {
         { t: "Giveon – Heartbreak Anniversary", ecoute: "Voix grave chaude, réverbe maîtrisée" },
         { t: "Chris Brown – Residuals", ecoute: "Tu as ses stems dans ton dossier FL : dissèque une chaîne voix RnB pro" },
         { t: "Daniel Caesar – Best Part (ft. H.E.R.) ★", ecoute: "TON COUP DE CŒUR : RnB épuré, guitare + deux voix intimes, mix minimaliste où chaque élément a sa place. Grammy Best R&B Performance" },
-        { t: "Daniel Caesar – Get You (suggestion)", ecoute: "Basse ronde et chaude, voix doublée soul — belle leçon de low-end RnB" }
+        { t: "Daniel Caesar – Get You (suggestion)", ecoute: "Basse ronde et chaude, voix doublée soul — belle leçon de low-end RnB" },
+        { t: "H.E.R. – Hard Place ★", ecoute: "TON COUP DE CŒUR : ballade soul, instrus live, gros crescendo vocal. Écoute la DYNAMIQUE — le mix respire du couplet intime au climax puissant sans jamais saturer" }
       ]},
       { genre: "Rap / Trap", tracks: [
         { t: "Kendrick Lamar – HUMBLE.", ecoute: "Punch, clarté, 808 propre" },
