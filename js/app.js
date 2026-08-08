@@ -293,6 +293,7 @@ views.dashboard = function(){
         {v:"gear",       ic:"sliders",l:"Matériel"},
         {v:"plugins",    ic:"grid",   l:"Plugins"},
         {v:"studio",     ic:"building",l:"Monter le studio"},
+        {v:"shortcuts",  ic:"wrench",  l:"Raccourcis FL"},
         {v:"references", ic:"headphones",l:"Références d'écoute"},
         {v:"growth",     ic:"share",  l:"Plan de relance"}
       ].map(c => `<button class="cta" onclick="navigate('${c.v}')">${icon(c.ic,26)}<span>${c.l}</span></button>`).join("")}
@@ -1091,6 +1092,27 @@ views.gear = function(){
 };
 
 /* ---- Plugins ---- */
+views.shortcuts = function(){
+  const s = HIRA_DATA.shortcuts;
+  const groups = s.groups.map(g=>`
+    <div class="card">
+      <h4>${esc(g.cat)}</h4>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        ${g.items.map(it=>`<tr>
+          <td style="white-space:nowrap;font-weight:700;padding:5px 12px 5px 0;vertical-align:top;color:var(--accent)">${esc(it.k)}</td>
+          <td style="padding:5px 0;color:var(--muted)">${esc(it.d)}</td>
+        </tr>`).join("")}
+      </table>
+    </div>`).join("");
+  content.innerHTML = `
+    <div class="page-head"><h1>${icon("wrench",22)} Raccourcis FL Studio (Mac)</h1>
+      <p>Les raccourcis clés pour aller vite dans FL sur Mac, classés par usage.</p></div>
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <p style="margin:0">${icon("lightbulb",16)} ${esc(s.regle)}</p>
+    </div>
+    <div class="grid grid-2" style="margin-top:18px">${groups}</div>`;
+};
+
 views.references = function(){
   const r = HIRA_DATA.references;
   const li = a => a.map(x=>`<li>${esc(x)}</li>`).join("");
@@ -1513,7 +1535,7 @@ window.syncLogout = async function(){
 window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", references:"headphones", growth:"share", sync:"cloud" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", shortcuts:"wrench", references:"headphones", growth:"share", sync:"cloud" };
 document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";

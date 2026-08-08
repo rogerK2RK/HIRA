@@ -1,5 +1,5 @@
 /* HIRA — Service Worker (offline-first) */
-const CACHE = "hira-v23";
+const CACHE = "hira-v24";
 const ASSETS = [
   "./", "./index.html", "./css/styles.css",
   "./js/data.js", "./js/app.js", "./manifest.json",

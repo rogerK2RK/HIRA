@@ -322,6 +322,61 @@ const HIRA_DATA = {
   },
 
   /* ----------------------------------------------------------------------
+     RACCOURCIS FL STUDIO (macOS)
+     Règle d'or Mac : dans tout tuto Windows, Ctrl → ⌘ Cmd, Alt → ⌥ Opt.
+     ---------------------------------------------------------------------- */
+  shortcuts: {
+    regle: "RÈGLE D'OR sur Mac : dans n'importe quel tuto Windows, remplace Ctrl par ⌘ (Cmd) et Alt par ⌥ (Opt). ⚠️ ⌘Q peut être capté par macOS (Quitter) : si un raccourci ⌘ ne répond pas, passe par le menu Outils du Piano roll (l'icône clé à molette en haut à gauche).",
+    groups: [
+      { cat: "Générer / créer une mélodie", items: [
+        { k: "⌥E", d: "Riff Machine — génère une mélodie ou une variation (scale, rythme, longueur réglables)" },
+        { k: "clic droit sur l'icône Outils", d: "Chord Progression Tool — génère une suite d'accords (FL 2026.1.3+)" },
+        { k: "⌥A", d: "Arpeggiate — transforme un accord en arpège" },
+        { k: "⌥R", d: "Randomize — crée/randomise des notes (pan, vélocité, pitch, sur une gamme)" },
+        { k: "⌥S", d: "Strum — gratte/décale un accord dans le temps (feel guitare/harpe)" },
+        { k: "⌥F", d: "Flam — dédouble les notes pour un effet roulé" }
+      ]},
+      { cat: "Éditer les notes (Piano roll)", items: [
+        { k: "⌘L", d: "Quick Legato — RALLONGE chaque note jusqu'au début de la suivante (ce que tu cherchais)" },
+        { k: "⌘Q", d: "Quick Quantize — aligne les notes sur la grille (les 'met sur les lignes')" },
+        { k: "⌥Q", d: "Quantize — quantisation avec options (force, swing, début seul…)" },
+        { k: "⌘B", d: "Duplique les notes / le motif sélectionné juste après" },
+        { k: "⌘C / ⌘V", d: "Copier / Coller les notes" },
+        { k: "⌘A", d: "Tout sélectionner" },
+        { k: "⌘G", d: "Glue — colle les notes sélectionnées en une seule" },
+        { k: "⌥U", d: "Chop — découpe les notes (hachures rythmiques, hi-hats)" },
+        { k: "⌥X", d: "Scale Levels — édite/incline les vélocités en masse" },
+        { k: "⌥O", d: "LFO — dessine une modulation sur les notes" },
+        { k: "Suppr / ⌫", d: "Supprime les notes sélectionnées" },
+        { k: "⌘Z / ⌘⇧Z", d: "Annuler / Rétablir" }
+      ]},
+      { cat: "Convertir en audio / exporter", items: [
+        { k: "clic droit sur le pattern (Playlist) → Render as audio clip", d: "Convertit ta mélodie MIDI en WAV (audio clip) directement dans le projet. PAS de raccourci par défaut" },
+        { k: "clic droit sur le nom du pattern → Render and replace", d: "Remplace le pattern par sa version audio (gèle le son)" },
+        { k: "File → Export → WAV file", d: "Exporte tout le morceau (ou la sélection de la Playlist) en WAV" }
+      ]},
+      { cat: "Outils Piano roll (une seule touche)", items: [
+        { k: "P", d: "Crayon (Draw) — poser une note" },
+        { k: "B", d: "Pinceau (Paint) — poser des notes en série" },
+        { k: "E", d: "Sélection" },
+        { k: "D", d: "Gomme (Delete)" },
+        { k: "C", d: "Découpe (Slice)" },
+        { k: "T", d: "Mute (rendre une note muette)" }
+      ]},
+      { cat: "Navigation & lecture", items: [
+        { k: "Espace", d: "Lecture / Stop" },
+        { k: "L", d: "Bascule mode Motif (Pattern) ↔ Chanson (Song)" },
+        { k: "F5", d: "Playlist" },
+        { k: "F6", d: "Channel Rack" },
+        { k: "F7", d: "Piano roll" },
+        { k: "F9", d: "Mixer" },
+        { k: "F12", d: "Fermer toutes les fenêtres" },
+        { k: "⌘S", d: "Enregistrer le projet" }
+      ]}
+    ]
+  },
+
+  /* ----------------------------------------------------------------------
      TRAMES DE PROJET (les phases + checklists)
      Le champ "icon" prend un NOM d'icône (pas un emoji). Noms dispo :
      lightbulb, piano, mic, scissors, sliders, flag, share, music, target,
