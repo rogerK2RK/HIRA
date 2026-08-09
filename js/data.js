@@ -353,9 +353,9 @@ const HIRA_DATA = {
         { k: "⌘Z / ⌘⇧Z", d: "Annuler / Rétablir" }
       ]},
       { cat: "Convertir en audio / exporter", items: [
-        { k: "clic droit sur le pattern (Playlist) → Render as audio clip", d: "Convertit ta mélodie MIDI en WAV (audio clip) directement dans le projet. PAS de raccourci par défaut" },
-        { k: "clic droit sur le nom du pattern → Render and replace", d: "Remplace le pattern par sa version audio (gèle le son)" },
-        { k: "File → Export → WAV file", d: "Exporte tout le morceau (ou la sélection de la Playlist) en WAV" }
+        { k: "clic droit", d: "Sur le pattern dans la Playlist → « Render as audio clip » : convertit ta mélodie MIDI en WAV directement dans le projet (pas de raccourci par défaut)" },
+        { k: "clic droit", d: "Sur le pattern → « Render and replace » : remplace le pattern par sa version audio (gèle le son)" },
+        { k: "menu File", d: "File → Export → WAV file : exporte tout le morceau (ou la sélection Playlist) en WAV" }
       ]},
       { cat: "Outils Piano roll (une seule touche)", items: [
         { k: "P", d: "Crayon (Draw) — poser une note" },

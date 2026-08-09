@@ -1097,12 +1097,12 @@ views.shortcuts = function(){
   const groups = s.groups.map(g=>`
     <div class="card">
       <h4>${esc(g.cat)}</h4>
-      <table style="width:100%;border-collapse:collapse;font-size:13px">
-        ${g.items.map(it=>`<tr>
-          <td style="white-space:nowrap;font-weight:700;padding:5px 12px 5px 0;vertical-align:top;color:var(--accent)">${esc(it.k)}</td>
-          <td style="padding:5px 0;color:var(--muted)">${esc(it.d)}</td>
-        </tr>`).join("")}
-      </table>
+      <div class="sc-list">
+        ${g.items.map(it=>`<div class="sc-row">
+          <span class="sc-key">${esc(it.k)}</span>
+          <span class="sc-desc">${esc(it.d)}</span>
+        </div>`).join("")}
+      </div>
     </div>`).join("");
   content.innerHTML = `
     <div class="page-head"><h1>${icon("wrench",22)} Raccourcis FL Studio (Mac)</h1>
