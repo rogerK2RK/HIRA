@@ -220,6 +220,8 @@ const HIRA_DATA = {
       "Crow Hill Vaults (instruments échantillonnés rares : basses, guitares, harmonium, synthés vintage)",
       "Splice INSTRUMENT (banque Splice intégrée)",
       "Spitfire LABS (gratuit : pianos, cordes, guitares, textures)",
+      "DecentSampler (GRATUIT — lecteur de banques .dspreset : immense bibliothèque communautaire gratuite, alternative légère à Kontakt)",
+      "Crow Hill Pocket Strings (cordes échantillonnées chaudes et intimes — nappes et lignes mélancoliques ; même éditeur que ton Vaults)",
       "Xpand!2 (multi-instrument rapide pour maquetter)"
     ],
     "INSTRUMENTS · Basses": [
