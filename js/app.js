@@ -295,7 +295,8 @@ views.dashboard = function(){
         {v:"studio",     ic:"building",l:"Monter le studio"},
         {v:"shortcuts",  ic:"wrench",  l:"Raccourcis FL"},
         {v:"references", ic:"headphones",l:"Références d'écoute"},
-        {v:"growth",     ic:"share",  l:"Plan de relance"}
+        {v:"growth",     ic:"share",  l:"Plan de relance"},
+        {v:"million",    ic:"flag",   l:"Objectif 1M"}
       ].map(c => `<button class="cta" onclick="navigate('${c.v}')">${icon(c.ic,26)}<span>${c.l}</span></button>`).join("")}
     </div>
     <h3 style="margin-bottom:14px;font-size:15px;color:var(--muted)">Projets récents</h3>
@@ -1092,6 +1093,60 @@ views.gear = function(){
 };
 
 /* ---- Plugins ---- */
+views.million = function(){
+  const m = HIRA_DATA.million;
+  const li = a => a.map(x=>`<li>${esc(x)}</li>`).join("");
+
+  const principes = m.principes.map(p=>`
+    <div class="card"><h4>${esc(p.t)}</h4><p style="font-size:13px;color:var(--muted)">${esc(p.d)}</p></div>`).join("");
+
+  const paliers = m.paliers.map(p=>`
+    <div class="card">
+      <h4>${esc(p.palier)} — ${esc(p.titre)}</h4>
+      <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(p.focus)}</div>
+      <ul>${li(p.actions)}</ul>
+    </div>`).join("");
+
+  const formats = m.formats.map(f=>`
+    <div class="card">
+      <h4>${esc(f.nom)}</h4>
+      <div style="font-size:12px;color:var(--muted);margin:4px 0"><b>Rôle :</b> ${esc(f.role)}</div>
+      <div style="font-size:12px;color:var(--muted)"><b>Voix :</b> ${esc(f.voix)}</div>
+    </div>`).join("");
+
+  const metriques = m.metriques.map(x=>`
+    <div class="sc-row"><span class="sc-key">${esc(x.k)}</span><span class="sc-desc">${esc(x.d)}</span></div>`).join("");
+
+  content.innerHTML = `
+    <div class="page-head"><h1>${icon("flag",22)} Objectif 1 million d'abonnés</h1>
+      <p>${esc(m.intro)}</p></div>
+
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <p style="margin:0">${icon("lightbulb",16)} ${esc(m.regleDor)}</p>
+    </div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les principes</h3>
+    <div class="grid grid-2">${principes}</div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Le plan, palier par palier</h3>
+    <div class="grid grid-2">${paliers}</div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Tes formats de contenu (faceless)</h3>
+    <div class="grid grid-2">${formats}</div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Rester sans visage / sans voix</h3>
+    <div class="card"><ul>${li(m.faceless)}</ul></div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les métriques à suivre</h3>
+    <div class="card"><div class="sc-list">${metriques}</div></div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les erreurs qui tuent une chaîne de beats</h3>
+    <div class="card"><ul>${li(m.erreurs)}</ul></div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Chiffres à connaître par cœur</h3>
+    <div class="card"><ul>${li(m.chiffres)}</ul></div>`;
+};
+
 views.shortcuts = function(){
   const s = HIRA_DATA.shortcuts;
   const groups = s.groups.map(g=>`
@@ -1535,7 +1590,7 @@ window.syncLogout = async function(){
 window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", shortcuts:"wrench", references:"headphones", growth:"share", sync:"cloud" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", shortcuts:"wrench", references:"headphones", growth:"share", million:"flag", sync:"cloud" };
 document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";

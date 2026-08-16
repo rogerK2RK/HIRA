@@ -1287,6 +1287,103 @@ const HIRA_DATA = {
   },
 
   /* ----------------------------------------------------------------------
+     OBJECTIF 1 MILLION D'ABONNÉS — plan beatmaker faceless (voix IA OK)
+     Distillé et adapté du guide "YouTube Pour les Nuls" (méthode Vexian).
+     ---------------------------------------------------------------------- */
+  million: {
+    intro: "Plan pour faire grossir la chaîne Rog One - Beats jusqu'à de très gros paliers d'abonnés — SANS montrer ton visage ni parler (voix IA quand il faut parler). Les chiffres sont ceux du guide et de l'écosystème YouTube 2026 : à revérifier sur les pages officielles.",
+
+    regleDor: "LA RÈGLE D'OR : tes TYPE BEATS te ramènent des VUES et des VENTES (les gens tapent « Victony type beat » et achètent sur BeatStars) — mais ils convertissent MAL en abonnés. Ce qui fait les ABONNÉS, c'est le contenu ÉDUCATIF (tuto : « valeur reçue → merci → je m'abonne »). Il te faut donc DEUX moteurs : type beats (recherche/ventes) + tutos beatmaking (abonnés). La plupart des beatmakers ne font que le premier et plafonnent.",
+
+    principes: [
+      { t: "Deux raisons de te regarder", d: "On ouvre YouTube pour APPRENDRE ou pour RESSENTIR. Tes tutos = apprendre (moteur d'abonnés). Tes cook-ups / type beats = ressentir + résoudre un besoin. Chaque vidéo doit servir clairement l'une des deux." },
+      { t: "Le titre EST l'idée", d: "Pour un type beat, le titre est ton référencement : « [Artiste] Type Beat - \"Nom\" ». Le nom de l'artiste est le mot-clé que les gens tapent. Pas de nom cherchable = invisible." },
+      { t: "La cadence déclenche la boule de neige", d: "2-3 vidéos/semaine à horaire fixe pendant 6 mois : c'est la recette quasi infaillible des 1000 premiers abonnés. Chaque upload agrandit l'audience que YouTube te trouve. Publier 1×/mois = repartir de zéro à chaque fois." },
+      { t: "Marie-toi à la chaîne, pas à la vidéo", d: "Un beat qui floppe est une DONNÉE (ouvre la rétention : à quelle seconde ils décrochent ?), pas un échec. 10 flops analysés font un meilleur beatmaker." },
+      { t: "Le matériel ne te bloque pas", d: "Le Launch Control arrive, tant mieux — mais tu peux déjà tout faire. Ce qui compte c'est de PUBLIER et d'obtenir des retours réels (vues, rétention), pas d'attendre le setup parfait." }
+    ],
+
+    paliers: [
+      { palier: "0 → 1 000", titre: "Fondation", focus: "Éducatif + cadence", actions: [
+        "Choisis TON angle (positionnement) : pas « encore un beatmaker » mais « le beatmaker afro qui t'apprend à faire des hits Victony/CKay/amapiano ».",
+        "Lance les 2 moteurs : 2 type beats/semaine + 1 tuto/semaine (voix IA sur screen FL).",
+        "Publie malgré l'imperfection. Stock de 6 beats d'avance (voir onglet Plan de relance).",
+        "BeatStars en place AVANT de publier (lien en 1re ligne de chaque description)."
+      ]},
+      { palier: "1 000 → 10 000", titre: "Itérer", focus: "Veille + collab + fidélité", actions: [
+        "Tableau de veille : les 20 % de beatmakers afro les plus performants. Repère les OUTLIERS (vidéo qui explose vs la moyenne de ses 5 dernières).",
+        "Remixe, ne copie pas : reprends l'IDÉE d'un outlier + un modificateur (autre artiste, autre angle, saison).",
+        "Collabore : envoie tes beats à des artistes émergents (Mavo, FOLA, Priesst…), réagis/analyse un gros beatmaker (ancrage).",
+        "Capital confiance > taille : vise l'AVPV (vidéos vues par spectateur). Une petite audience fidèle bat une grande audience volage.",
+        "Consistance ×3 : quantité + type (reste afro/RnB, ne pars pas en lofi/drill au hasard) + cadrage (même promesse)."
+      ]},
+      { palier: "10 000 → 100 000", titre: "Évoluer", focus: "Parcours + watch time", actions: [
+        "Parcours du spectateur : écran de fin → LA vidéo la plus cohérente (un tuto afro renvoie vers un autre tuto afro, pas vers un beat drill).",
+        "Joue le WATCH TIME et le temps de session : vidéos qui tiennent (cook-ups rythmés, tutos structurés), playlists.",
+        "Niches adjacentes : regarde les beatmakers trap/amapiano/afro-US pour piquer des FORMATS qui marchent ailleurs.",
+        "CTA d'abonnement APRÈS la valeur (après le meilleur moment du beat/tuto), JAMAIS en intro.",
+        "Vers 50k : délègue le maillon faible (miniatures d'abord, ~5-20 € ; montage ensuite)."
+      ]},
+      { palier: "100 000 → 1 000 000", titre: "Conquête", focus: "Positionnement + vecteurs", actions: [
+        "Positionnement chirurgical : occupe une case que personne n'occupe (« le tuto afrobeat le plus clair de YouTube », un style de beat signature).",
+        "Matrice — 4 façons de gagner : PREMIER (un format neuf), MIEUX (qualité max), DIFFÉRENT (esthétique unique), PLUS (volume). Faceless → mise sur DIFFÉRENT + PLUS.",
+        "TAM : viser 1M d'abonnés = pouvoir toucher 50-100M de personnes. Les producteurs/beatmakers du monde entier + le doublage auto YouTube (voix IA multilingue) élargissent énormément ton marché.",
+        "Vecteurs viraux : « beat avec UNIQUEMENT les plugins stock », « j'ai fait un hit afro en 5 min », « 1$ vs 1000$ de samples ».",
+        "Présence à l'esprit : un nouvel artiste afro explose ? Sors un beat/tuto dans son style DANS LES 2 SEMAINES du pic — le timing est l'ingrédient actif."
+      ]},
+      { palier: "1M → 10M", titre: "La folie douce", focus: "Mondialiser + rester humain", actions: [
+        "Mondialise : doublage auto YouTube + voix IA en plusieurs langues, c'est ton levier n°1 quand le marché francophone sature.",
+        "Reste « une personne », pas « une idée » — même sans visage : identité visuelle constante, une voix IA récurrente et reconnaissable, une personnalité qui transparaît dans les choix. Le public soutient quelqu'un, pas un logo froid."
+      ]}
+    ],
+
+    formats: [
+      { nom: "[Artiste] Type Beat", role: "Moteur de RECHERCHE + VENTES (BeatStars)", voix: "Aucune voix — 100 % faceless" },
+      { nom: "Tuto « Comment faire un beat type [Artiste] »", role: "Moteur d'ABONNÉS (le plus important)", voix: "Voix IA sur screen recording FL" },
+      { nom: "Cook-up faceless", role: "Vibe / divertissement / fidélité", voix: "Aucune — caméra en plongée sur les mains + pads/Launch Control, ou timelapse" },
+      { nom: "Défis à vecteur viral", role: "Portée / nouveaux spectateurs", voix: "Texte à l'écran + voix IA optionnelle" },
+      { nom: "Réaction / tendance (présence à l'esprit)", role: "Capter une attention déjà chaude", voix: "Voix IA ou texte — beat dans le style d'un artiste qui buzz" }
+    ],
+
+    faceless: [
+      "Voix IA (type ElevenLabs) pour les tutos : c'est ce qui débloque le moteur d'abonnés sans que tu parles. Garde TOUJOURS la même voix/le même ton : c'est ton « personnage ».",
+      "Le hook des 7 premières secondes SANS parler : mets le DROP direct (log drum, 808) + une phrase en texte à l'écran (« Afro type beat — Victony »). Jamais d'intro molle.",
+      "Ta « sauce » sans visage = identité visuelle ultra-constante : mêmes couleurs, logo R1 au même coin, même typo de miniatures, même style de montage rythmé.",
+      "Cook-up : filme tes mains sur le Launch Control / le clavier en plongée. C'est LE format faceless qui marche, et ton contrôleur devient un outil de contenu.",
+      "Miniatures : cohérence avant beauté — photo de l'artiste référent + nom du beat en gros + ton logo. On doit te reconnaître sans lire le nom de la chaîne."
+    ],
+
+    metriques: [
+      { k: "CTR", d: "Taux de clic (miniature + titre). Vise à améliorer le packaging, pas juste le beat." },
+      { k: "AVD", d: "Durée moyenne de visionnage — le beat/tuto doit accrocher vite et tenir. Ouvre la courbe de rétention sur chaque flop." },
+      { k: "AVPV", d: "Vidéos vues par spectateur = ta fidélité. Le vrai thermomètre du capital confiance." },
+      { k: "Watch time", d: "Temps total de visionnage = indicateur avancé du succès, lié au temps de session que YouTube adore." },
+      { k: "Abonnés", d: "Le trophée, pas le match. Le match se joue en heures de visionnage de qualité — les abonnés en sont le sous-produit." }
+    ],
+
+    erreurs: [
+      "Ne faire QUE des type beats (0 tuto) → beaucoup de vues, peu d'abonnés. C'est l'erreur n°1 du beatmaker.",
+      "Publier 1×/mois → YouTube ne cartographie jamais ton audience.",
+      "Mélanger les genres au hasard (afro, drill, lofi, boom-bap…) → aucune cohérence, l'algorithme ne sait pas à qui te montrer.",
+      "Copier à l'identique la vidéo d'un gros beatmaker → il gagne sur son terrain. Remixe avec un modificateur.",
+      "Mettre le « abonne-toi » en intro → rétention sabordée, nouveaux venus braqués.",
+      "Négliger le titre / le nom d'artiste → ton meilleur beat reste introuvable.",
+      "Sur-investir le montage avant que les vues décollent → tes vues doivent toujours dépasser ton niveau de production."
+    ],
+
+    chiffres: [
+      "2 raisons de regarder : apprendre / ressentir.",
+      "7 secondes : la fenêtre du hook (le drop direct).",
+      "2-3 vidéos/semaine × 6 mois → ~1000 abonnés (quasi infaillible).",
+      "Top 20 % : les beatmakers à surveiller chaque semaine.",
+      "5 dernières vidéos : base de la moyenne mobile pour repérer un outlier.",
+      "~50 000 abonnés : seuil où déléguer (miniatures) devient rationnel.",
+      "50-100 M de personnes atteignables : le réservoir pour viser 1M (producteurs du monde + doublage auto).",
+      "Monétisation (à revérifier sur YouTube) : ~500 abonnés + 3000 h/12 mois (ou 3M vues Shorts/90 j) pour les premières fonctions ; 1000 abonnés + 4000 h/12 mois (ou 10M vues Shorts/90 j) pour la pub. Ton vrai revenu de départ : BeatStars."
+    ]
+  },
+
+  /* ----------------------------------------------------------------------
      PROCESS REC SUR PROD (achetée / YouTube) — par genre
      Chaque genre a : channel REC (tracking), channel MIX (lead/ad-libs/backs)
      et des réglages de simulateur (autotune / reverb / delay).
