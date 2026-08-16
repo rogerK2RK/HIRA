@@ -296,7 +296,8 @@ views.dashboard = function(){
         {v:"shortcuts",  ic:"wrench",  l:"Raccourcis FL"},
         {v:"references", ic:"headphones",l:"Références d'écoute"},
         {v:"growth",     ic:"share",  l:"Plan de relance"},
-        {v:"million",    ic:"flag",   l:"Objectif 1M"}
+        {v:"million",    ic:"flag",   l:"Objectif 1M"},
+        {v:"outils",     ic:"laptop", l:"Outils YouTube"}
       ].map(c => `<button class="cta" onclick="navigate('${c.v}')">${icon(c.ic,26)}<span>${c.l}</span></button>`).join("")}
     </div>
     <h3 style="margin-bottom:14px;font-size:15px;color:var(--muted)">Projets récents</h3>
@@ -1093,6 +1094,32 @@ views.gear = function(){
 };
 
 /* ---- Plugins ---- */
+views.outils = function(){
+  const o = HIRA_DATA.outils;
+  const li = a => a.map(x=>`<li>${esc(x)}</li>`).join("");
+  const rows = a => a.map(x=>`
+    <div class="sc-row"><span class="sc-key" style="flex-basis:180px">${esc(x.nom)}</span><span class="sc-desc">${esc(x.role)}</span></div>`).join("");
+
+  content.innerHTML = `
+    <div class="page-head"><h1>${icon("laptop",22)} Outils YouTube</h1>
+      <p>${esc(o.intro)}</p></div>
+
+    <h3 style="margin:6px 0 12px;font-size:15px;color:var(--muted)">✅ Ce que tu as</h3>
+    <div class="card"><div class="sc-list">${rows(o.possede)}</div></div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">⚠️ À finir d'installer</h3>
+    <div class="card" style="border-left:3px solid var(--accent)"><div class="sc-list">${rows(o.aFinir)}</div></div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">🌐 Web (rien à installer)</h3>
+    <div class="card"><div class="sc-list">${rows(o.web)}</div></div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">📱 Tournage téléphone</h3>
+    <div class="card"><ul>${li(o.cameras)}</ul></div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">🔊 Router le son FL → OBS (pour les tutos)</h3>
+    <div class="card"><ul>${li(o.routageSon)}</ul></div>`;
+};
+
 views.million = function(){
   const m = HIRA_DATA.million;
   const li = a => a.map(x=>`<li>${esc(x)}</li>`).join("");
@@ -1590,7 +1617,7 @@ window.syncLogout = async function(){
 window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", shortcuts:"wrench", references:"headphones", growth:"share", million:"flag", sync:"cloud" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", shortcuts:"wrench", references:"headphones", growth:"share", million:"flag", outils:"laptop", sync:"cloud" };
 document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";

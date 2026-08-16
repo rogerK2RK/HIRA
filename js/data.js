@@ -1384,6 +1384,49 @@ const HIRA_DATA = {
   },
 
   /* ----------------------------------------------------------------------
+     OUTILS YOUTUBE — de quoi produire les vidéos (faceless, voix IA)
+     ---------------------------------------------------------------------- */
+  outils: {
+    intro: "Ton atelier pour produire les vidéos YouTube (montage, capture, miniatures, voix IA, tournage téléphone). Côté image tu es sur-équipé — le seul vrai enjeu est de capturer le SON de FL dans tes tutos.",
+
+    possede: [
+      { nom: "DaVinci Resolve", role: "Montage vidéo pro (gratuit) — tutos & cook-ups" },
+      { nom: "Figma", role: "Design des miniatures" },
+      { nom: "Google Chrome", role: "Voix IA (ElevenLabs) + Novation Components (Safari ne marche pas)" },
+      { nom: "iMovie", role: "Montage rapide de secours" },
+      { nom: "Keynote", role: "Graphiques / miniatures de dépannage" },
+      { nom: "Capture écran macOS (Cmd+Shift+5)", role: "Screen recording de base (dépannage)" },
+      { nom: "OBS Studio", role: "✅ INSTALLÉ — screen recorder principal : écran FL + son + cam mains, scènes" }
+    ],
+
+    aFinir: [
+      { nom: "BlackHole 2ch", role: "Driver audio virtuel — INDISPENSABLE pour capter le son de FL dans OBS/tuto. Téléchargé, à finir dans TON Terminal (demande ton mot de passe) :  brew install --cask blackhole-2ch" }
+    ],
+
+    web: [
+      { nom: "ElevenLabs (elevenlabs.io)", role: "Voix IA pour tes tutos — garde toujours la même voix" },
+      { nom: "BeatStars (beatstars.com)", role: "Vente de tes beats — lien en 1re ligne de chaque description" }
+    ],
+
+    cameras: [
+      "iPhone 17 Pro = caméra principale : plan en PLONGÉE sur tes mains (Launch Control / clavier) pour les cook-ups faceless, 4K, macro pour les pads. Aussi tes Reels verticaux et tes photos de miniatures.",
+      "iPhone 12 mini = 2e angle : fixe-le en overhead verrouillé pendant que le 17 Pro fait un plan détail. Deux angles = montage plus vivant, toujours sans visage.",
+      "L'écran de FL ne se filme PAS au téléphone → c'est OBS (capture directe, net). Le téléphone sert au physique (mains, pads, ambiance).",
+      "Seul achat image utile : un bras/support overhead pour téléphone (~15-30 €) pour filmer les mains d'en haut, stable.",
+      "Garde iOS à jour sur les deux (Réglages → Général → Mise à jour)."
+    ],
+
+    routageSon: [
+      "But : entendre FL dans ton Volt ET l'enregistrer dans OBS en même temps.",
+      "1. Ouvre « Configuration audio et MIDI » (Audio MIDI Setup).",
+      "2. Crée un « Périphérique avec sorties multiples » (Multi-Output) combinant ton UAD Volt 276 + BlackHole 2ch.",
+      "3. Dans FL Studio : Options → Audio settings → Device = ce périphérique multi-sorties (tu continues d'entendre via le Volt).",
+      "4. Dans OBS : ajoute une source « Capture d'entrée audio » → BlackHole 2ch. Le son de FL arrive dans OBS.",
+      "5. Teste 20 s et vérifie que le VU-mètre d'OBS bouge. À affiner à la première utilisation."
+    ]
+  },
+
+  /* ----------------------------------------------------------------------
      PROCESS REC SUR PROD (achetée / YouTube) — par genre
      Chaque genre a : channel REC (tracking), channel MIX (lead/ad-libs/backs)
      et des réglages de simulateur (autotune / reverb / delay).
