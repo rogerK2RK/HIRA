@@ -1226,7 +1226,21 @@ window.refreshYtSubs = async function(){
   try{
     const r = await fetch("https://api.socialcounts.org/youtube-live-subscriber-count/"+encodeURIComponent(cid));
     const j = await r.json();
-    const n = (j && (j.est_sub ?? j.api_sub ?? j.subscriberCount ?? (j.data && (j.data.est_sub ?? j.data.subscriberCount))));
+    // Recherche en profondeur : 1er champ numérique dont la clé contient "sub" (préférence "est")
+    let best = null, bestEst = null;
+    (function walk(o){
+      if(!o || typeof o !== "object") return;
+      for(const k in o){
+        const v = o[k];
+        if(v && typeof v === "object"){ walk(v); continue; }
+        const num = (typeof v === "number") ? v : ((typeof v === "string" && /^\d+$/.test(v)) ? parseInt(v,10) : null);
+        if(num !== null && /sub/i.test(k)){
+          if(/est/i.test(k) && bestEst === null) bestEst = num;
+          if(best === null) best = num;
+        }
+      }
+    })(j);
+    const n = (bestEst !== null) ? bestEst : best;
     if(typeof n === "number" && n >= 0){
       el.textContent = n.toLocaleString("fr-FR");
       const bar = document.getElementById("yt-bar"); if(bar) bar.style.width = Math.min(100, Math.round(n/1000*100)) + "%";
