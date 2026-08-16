@@ -172,6 +172,29 @@ function signalPhase(phId){
   if(phId === "concept" || phId === "prod") return "concept";
   return "mix"; // rec, edit, mix…
 }
+/* Couleur d'étape d'un projet (sa phase courante) */
+function projSignal(p){
+  const phases = phasesFor(p.type);
+  for(const ph of phases){
+    const c = (p.checks && p.checks[ph.id]) || [];
+    if(!ph.checklist.every((_,k)=>c[k])) return signalPhase(ph.id);
+  }
+  return "master";
+}
+/* Rattache une cible dB/LUFS à une étape du process */
+function phaseOfTarget(etape){
+  if(/master/i.test(etape)) return "master";
+  if(/enregistr|gain/i.test(etape)) return "concept";
+  return "mix";
+}
+/* Rend une liste de plugins en "signal chain" (nœuds reliés dans l'ordre) */
+function sigChainHTML(arr){
+  if(!arr || !arr.length) return "";
+  return `<div class="sigchain">` + arr.map((p,i)=>
+    (i ? `<span class="a">→</span>` : "") +
+    `<span class="n${i===0?" first":""}">${esc(typeof p==="string"?p:(p.nom||""))}</span>`
+  ).join("") + `</div>`;
+}
 /* Le projet à reprendre : le plus récemment modifié encore en cours + sa prochaine action */
 function resumeInfo(){
   const inProg = loadProjects().filter(p => projectProgress(p) < 100)
@@ -292,7 +315,7 @@ views.dashboard = function(){
   let recent = "";
   if(projects.length){
     recent = projects.slice().sort((a,b)=>b.updated-a.updated).slice(0,3).map(p => `
-      <div class="card proj-card" onclick="navigate('project','${p.id}')">
+      <div class="card proj-card" data-phase="${projSignal(p)}" onclick="navigate('project','${p.id}')">
         <div>
           <h3>${esc(p.name)}</h3>
           <div class="proj-meta"><span>${currentPhaseLabel(p)}</span></div>
@@ -367,7 +390,7 @@ views.projects = function(){
       <button class="btn" style="margin-top:16px" onclick="navigate('newproject')">Créer un projet</button></div>`;
   } else {
     body = `<div class="grid">` + projects.map(p => `
-      <div class="card proj-card" data-name="${esc(p.name.toLowerCase())}" onclick="navigate('project','${p.id}')">
+      <div class="card proj-card" data-phase="${projSignal(p)}" data-name="${esc(p.name.toLowerCase())}" onclick="navigate('project','${p.id}')">
         <div style="flex:1">
           <h3>${esc(p.name)}</h3>
           <div class="proj-meta">
@@ -674,6 +697,14 @@ views.project = function(id){
       <p style="font-size:11px;color:var(--muted);margin-top:8px">→ détail dans l'onglet « Mes plugins »</p>`:""}
     </details>` : "";
 
+  const sig = signalPhase(ph.id);
+  const phTargets = HIRA_DATA.targets.filter(t => phaseOfTarget(t.etape) === sig);
+  const ctxBlock = (ph.plugins.length || phTargets.length) ? `
+    <div class="ctx-block">
+      ${ph.plugins.length ? `<div><span class="ctx-h">Chaîne — ordre du signal</span>${sigChainHTML(ph.plugins)}</div>` : ""}
+      ${phTargets.length ? `<div><span class="ctx-h">Cibles de l'étape</span>${phTargets.map(t=>`<div class="mini-tgt"><b>${esc(t.etape)}</b><span class="v">${esc(t.cible)}</span></div>`).join("")}</div>` : ""}
+    </div>` : "";
+
   const nav = `
     <div class="wnav proj-nav">
       ${!isFirst ? `<button class="btn secondary" onclick="projPhase(${projPhaseIdx-1})">${icon("arrow",15)} Précédent</button>` : `<span></span>`}
@@ -683,6 +714,7 @@ views.project = function(id){
     </div>`;
 
   content.innerHTML = `
+    <div class="proj-view" data-phase="${signalPhase(ph.id)}">
     <button class="back" onclick="navigate('projects')">${icon("arrow",14)} Mes projets</button>
     <div class="page-head" style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
       <div>
@@ -709,6 +741,7 @@ views.project = function(id){
         <span class="phase-mini">${doneCount}/${ph.checklist.length}${allDone?" "+icon("check",14):""}</span>
       </div>
       <div class="checklist">${checklist}</div>
+      ${ctxBlock}
       ${tips}
     </div>
     ${nav}
@@ -745,6 +778,7 @@ views.project = function(id){
       <button class="btn secondary small" onclick="duplicateProject('${proj.id}')">${icon("copy",15)} Dupliquer</button>
       <button class="btn secondary small" onclick="exportProject('${proj.id}')">${icon("download",15)} Exporter</button>
       <button class="btn danger small" onclick="confirmDelete('${proj.id}')">Supprimer</button>
+    </div>
     </div>`;
 
   // Étapes dans la barre du haut (mobile) : même stepper, cliquable
@@ -780,19 +814,22 @@ window.projPhase = function(i){
 
 /* ---- Cibles dB/LUFS ---- */
 views.targets = function(){
-  const cards = HIRA_DATA.targets.map(t => `
-    <div class="card target-card">
-      <div class="t-top">
-        <strong>${esc(t.etape)}</strong>
-        <span class="cible">${esc(t.cible)}</span>
-      </div>
-      <p>${esc(t.note)}</p>
-    </div>`).join("");
+  const rows = HIRA_DATA.targets.map(t => {
+    const ph = phaseOfTarget(t.etape);
+    return `
+    <div class="tgt-row" data-phase="${ph}">
+      <span class="et"><span class="d"></span>${esc(t.etape)}</span>
+      <span class="cib">${esc(t.cible)}</span>
+      <span class="nt">${esc(t.note)}</span>
+    </div>`;
+  }).join("");
   content.innerHTML = `
     <div class="page-head"><h1>${icon("target",22)} Cibles dB / LUFS</h1>
-      <p>L'aide-mémoire à garder sous les yeux. Respecte ces niveaux pour un son propre,
-      sans clip, et un master au niveau commercial.</p></div>
-    <div class="grid">${cards}</div>
+      <p>L'aide-mémoire à garder sous les yeux, coloré par étape du process
+      (<span style="color:var(--concept)">Concept</span> ·
+       <span style="color:var(--mix)">Mix</span> ·
+       <span style="color:var(--master)">Master</span>).</p></div>
+    <div class="tgt">${rows}</div>
     <div class="card" style="margin-top:18px">
       <h3>${icon("lightbulb")} À retenir</h3>
       <p><strong>dBFS</strong> = niveau numérique (0 = clip, à ne jamais toucher).
@@ -814,7 +851,7 @@ views.chains = function(){
       </div>
       <div class="phase-body">
         <ol class="bus-steps">${c.etapes.map(e=>`<li>${esc(e)}</li>`).join("")}</ol>
-        ${c.vst?`<div class="plug-tags">${c.vst.map(vstTag).join("")}</div>`:""}
+        ${c.vst?sigChainHTML(c.vst):""}
         ${c.cible?`<div class="bus-cible">${icon("target",13)} ${esc(c.cible)}</div>`:""}
       </div>
     </div>`).join("");
