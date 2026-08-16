@@ -166,6 +166,31 @@ function widgetSummary(){
   };
 }
 
+/* Signal Path : mappe une phase du process vers une des 3 couleurs */
+function signalPhase(phId){
+  if(phId === "master" || phId === "export") return "master";
+  if(phId === "concept" || phId === "prod") return "concept";
+  return "mix"; // rec, edit, mix…
+}
+/* Le projet à reprendre : le plus récemment modifié encore en cours + sa prochaine action */
+function resumeInfo(){
+  const inProg = loadProjects().filter(p => projectProgress(p) < 100)
+                               .sort((a,b) => (b.updated||0) - (a.updated||0));
+  const proj = inProg[0];
+  if(!proj) return null;
+  const phases = phasesFor(proj.type);
+  let cur = null, next = null;
+  for(const ph of phases){
+    const done = (proj.checks && proj.checks[ph.id]) || [];
+    for(let i = 0; i < ph.checklist.length; i++){
+      if(!done[i]){ cur = ph; next = ph.checklist[i]; break; }
+    }
+    if(cur) break;
+  }
+  if(!cur) cur = phases[phases.length-1] || { id:"mix", nom:"—", icon:"link", checklist:[] };
+  return { proj, phase:cur, next, sig:signalPhase(cur.id), pct:projectProgress(proj) };
+}
+
 function toast(msg){
   let t = document.querySelector(".toast");
   if(!t){ t = document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
@@ -225,6 +250,9 @@ function navigate(view, param){
   const actBtn = document.querySelector(".nav-btn.active");
   const actGrp = actBtn && actBtn.closest(".nav-group");
   if(actGrp) actGrp.classList.remove("collapsed");
+  // bottom-nav (mobile) : état actif
+  document.querySelectorAll(".bn-item").forEach(b =>
+    b.classList.toggle("active", b.dataset.view === view));
   content.scrollTo(0,0);
   window.scrollTo(0,0);
   (views[view] || views.dashboard)(param);
@@ -276,13 +304,29 @@ views.dashboard = function(){
       Aucun projet pour l'instant.<br>Crée ton premier projet pour suivre la trame.</div>`;
   }
 
+  const r = resumeInfo();
+  const hero = r ? `
+    <div class="resume-hero" data-phase="${r.sig}" role="button" tabindex="0"
+         onclick="navigate('project','${esc(r.proj.id)}')"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();navigate('project','${esc(r.proj.id)}')}">
+      <div class="rh-top">
+        <div><div class="rh-eyebrow">Reprendre</div><div class="rh-name">${esc(r.proj.name)}</div></div>
+        <span class="rh-chip">${icon(r.phase.icon,14)} ${esc(r.phase.nom)} · ${r.pct}%</span>
+      </div>
+      <div class="rh-bar"><i style="width:${r.pct}%"></i></div>
+      ${r.next
+        ? `<div class="rh-next"><div class="rh-next-txt"><small>Prochaine action</small><b>${esc(r.next.t)}</b></div><span class="rh-go">${icon("arrow",16)} Reprendre</span></div>`
+        : `<div class="rh-next"><div class="rh-next-txt"><b>Dernière ligne droite — plus qu'à finaliser.</b></div><span class="rh-go">${icon("arrow",16)} Ouvrir</span></div>`}
+    </div>` : "";
+
   content.innerHTML = `
     <div class="page-head">
-      <h1>Bienvenue dans HIRA</h1>
+      <h1>${r ? "Bon retour" : "Bienvenue dans HIRA"}</h1>
       <p>Ton copilote de création musicale. Suis une trame claire pour chaque projet —
       de l'idée jusqu'au master — avec les bons gestes, les cibles en dB/LUFS et les
       plugins adaptés à ton matériel (Volt 276, SM7B/NT1-A, FabFilter, Waves, UAD…).</p>
     </div>
+    ${hero}
     <div class="stat-row">
       <div class="stat"><div class="label">Projets</div><div class="val">${projects.length}</div></div>
       <div class="stat"><div class="label">En cours</div><div class="val">${active}</div></div>
@@ -1258,34 +1302,47 @@ window.saveYtChannel = function(){
   localStorage.setItem("hira_yt_channel", v); navigate("million");
 };
 window.resetYtChannel = function(){ localStorage.removeItem("hira_yt_channel"); navigate("million"); };
+// Cherche en profondeur le 1er champ numérique dont la clé contient "sub" (préf. "est")
+function _findSubs(j){
+  let best = null, bestEst = null;
+  (function walk(o){
+    if(!o || typeof o !== "object") return;
+    for(const k in o){
+      const v = o[k];
+      if(v && typeof v === "object"){ walk(v); continue; }
+      const num = (typeof v === "number") ? v : ((typeof v === "string" && /^\d+$/.test(v)) ? parseInt(v,10) : null);
+      if(num !== null && /sub/i.test(k)){
+        if(/est/i.test(k) && bestEst === null) bestEst = num;
+        if(best === null) best = num;
+      }
+    }
+  })(j);
+  return (bestEst !== null) ? bestEst : best;
+}
 window.refreshYtSubs = async function(){
   const el = document.getElementById("yt-subs-val"); if(!el) return;
   const cid = localStorage.getItem("hira_yt_channel"); if(!cid){ return; }
   el.textContent = "…";
-  try{
-    const r = await fetch("https://api.socialcounts.org/youtube-live-subscriber-count/"+encodeURIComponent(cid));
-    const j = await r.json();
-    // Recherche en profondeur : 1er champ numérique dont la clé contient "sub" (préférence "est")
-    let best = null, bestEst = null;
-    (function walk(o){
-      if(!o || typeof o !== "object") return;
-      for(const k in o){
-        const v = o[k];
-        if(v && typeof v === "object"){ walk(v); continue; }
-        const num = (typeof v === "number") ? v : ((typeof v === "string" && /^\d+$/.test(v)) ? parseInt(v,10) : null);
-        if(num !== null && /sub/i.test(k)){
-          if(/est/i.test(k) && bestEst === null) bestEst = num;
-          if(best === null) best = num;
-        }
+  // Deux services de comptage sans clé : on prend le premier qui répond
+  const endpoints = [
+    "https://api.socialcounts.org/youtube-live-subscriber-count/" + encodeURIComponent(cid),
+    "https://mixerno.space/api/youtube-channel-counter/user/" + encodeURIComponent(cid)
+  ];
+  for(const url of endpoints){
+    try{
+      const r = await fetch(url);
+      if(!r.ok) continue;
+      const n = _findSubs(await r.json());
+      if(typeof n === "number" && n >= 0){
+        el.textContent = n.toLocaleString("fr-FR");
+        const bar = document.getElementById("yt-bar"); if(bar) bar.style.width = Math.min(100, Math.round(n/1000*100)) + "%";
+        const up = document.getElementById("yt-updated"); if(up) up.textContent = "à jour — " + new Date().toLocaleString("fr-FR");
+        return;
       }
-    })(j);
-    const n = (bestEst !== null) ? bestEst : best;
-    if(typeof n === "number" && n >= 0){
-      el.textContent = n.toLocaleString("fr-FR");
-      const bar = document.getElementById("yt-bar"); if(bar) bar.style.width = Math.min(100, Math.round(n/1000*100)) + "%";
-      const up = document.getElementById("yt-updated"); if(up) up.textContent = "à jour — " + new Date().toLocaleString("fr-FR");
-    } else { el.textContent = "indispo"; }
-  }catch(e){ el.textContent = "indispo (service externe)"; }
+    }catch(e){ /* essaie le suivant */ }
+  }
+  el.textContent = "indispo";
+  const up = document.getElementById("yt-updated"); if(up) up.textContent = "services de comptage injoignables — réessaie plus tard";
 };
 
 views.shortcuts = function(){
@@ -1735,6 +1792,14 @@ const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targe
 const stripLeadEmoji = t => t.trim().replace(/^(?:[\u{2300}-\u{23FF}\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]\s*)+/u, "");
 document.querySelectorAll(".nav-btn").forEach(b => {
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(stripLeadEmoji(b.textContent)) + "</span>";
+});
+/* Bottom-nav (mobile) : injecte les icônes + câble les actions */
+document.querySelectorAll(".bn-item").forEach(b => {
+  b.insertAdjacentHTML("afterbegin", icon(b.dataset.ic || "grid", 21));
+  b.addEventListener("click", () => {
+    if(b.dataset.action === "menu") openDrawer();
+    else navigate(b.dataset.view);
+  });
 });
 /* Icônes des en-têtes de groupe */
 const NAV_GROUP_ICONS = { yt:"flag", prod:"sliders", ref:"book", acct:"cloud" };

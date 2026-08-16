@@ -21,7 +21,18 @@
   --blur:saturate(180%) blur(28px);
   --shadow:0 1px 2px rgba(0,0,0,.28), 0 14px 44px -16px rgba(0,0,0,.6);
   --shadow-sm:0 1px 2px rgba(0,0,0,.25), 0 6px 20px -10px rgba(0,0,0,.5);
+
+  /* Signal Path — couleur par étape du process */
+  --concept:#A78BFA; --mix:#6C8CFF; --master:#2FD6A6;
+  --concept-soft:rgba(167,139,250,.14);
+  --mix-soft:rgba(108,140,255,.14);
+  --master-soft:rgba(47,214,166,.14);
+  --phase:var(--mix); --phase-soft:var(--mix-soft); /* défaut */
 }
+/* Un élément porte data-phase → toute sa couleur suit var(--phase) */
+[data-phase="concept"]{--phase:var(--concept);--phase-soft:var(--concept-soft)}
+[data-phase="mix"]    {--phase:var(--mix);    --phase-soft:var(--mix-soft)}
+[data-phase="master"] {--phase:var(--master); --phase-soft:var(--master-soft)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{
@@ -84,6 +95,50 @@ body{
 .nav-group-items{display:flex;flex-direction:column;gap:2px;overflow:hidden;max-height:600px;transition:max-height .26s ease,opacity .2s ease;opacity:1}
 .nav-group.collapsed .nav-group-items{max-height:0;opacity:0}
 .sidebar-foot{display:flex;gap:8px;padding-top:14px;margin-top:8px;border-top:1px solid var(--line)}
+
+/* ===== Accueil "Reprendre" (Signal Path) ===== */
+.resume-hero{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius);
+  padding:20px 22px;margin-bottom:22px;cursor:pointer;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:14px;transition:transform .18s ease,border-color .18s ease;
+  box-shadow:var(--shadow-sm)}
+.resume-hero::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--phase)}
+.resume-hero:hover{transform:translateY(-2px);border-color:var(--phase)}
+.resume-hero:focus-visible{outline:2px solid var(--phase);outline-offset:2px}
+.rh-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rh-eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--phase);font-weight:700}
+.rh-name{font-size:20px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.rh-chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--txt);
+  background:var(--phase-soft);border:1px solid var(--line-2);border-radius:var(--radius-pill);padding:6px 12px;white-space:nowrap}
+.rh-chip .ic{color:var(--phase)}
+.rh-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.rh-bar>i{display:block;height:100%;border-radius:4px;background:var(--phase);transition:width .5s ease}
+.rh-next{display:flex;align-items:center;gap:14px;background:var(--phase-soft);
+  border:1px solid var(--line);border-radius:var(--radius-md);padding:14px 16px}
+.rh-next-txt small{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--phase);font-weight:700;margin-bottom:3px}
+.rh-next-txt b{font-weight:600;font-size:14.5px}
+.rh-go{margin-left:auto;display:inline-flex;align-items:center;gap:7px;background:var(--phase);color:#08090d;
+  font-weight:700;font-size:13px;padding:9px 15px;border-radius:var(--radius-pill);white-space:nowrap}
+.rh-go .ic{color:#08090d}
+
+/* Cartes cliquables : feedback au survol + focus clavier */
+.proj-card,.cta{transition:transform .16s ease,border-color .16s ease,background .16s ease}
+.proj-card:hover,.cta:hover{transform:translateY(-2px);border-color:var(--line2)}
+.proj-card:focus-visible,.cta:focus-visible,.nav-btn:focus-visible,.bn-item:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ===== Bottom-nav (mobile) ===== */
+.bottomnav{display:none}
+.bn-item{background:none;border:none;color:var(--muted);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;flex:1;
+  font-size:10px;letter-spacing:.02em;transition:color .15s ease}
+.bn-item .ic{opacity:.9}
+.bn-item.active{color:var(--accent)}
+.bn-item:active{transform:scale(.94)}
+@media (max-width:767px){
+  .bottomnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:75;
+    background:rgba(12,13,18,.88);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+    border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+  .content{padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}
+}
 
 /* Agenda "Ma semaine" — colonnes façon Google Agenda */
 .week-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
