@@ -1293,10 +1293,10 @@ const HIRA_DATA = {
   million: {
     intro: "Plan pour faire grossir la chaîne Rog One - Beats jusqu'à de très gros paliers d'abonnés — SANS montrer ton visage ni parler (voix IA quand il faut parler). Les chiffres sont ceux du guide et de l'écosystème YouTube 2026 : à revérifier sur les pages officielles.",
 
-    regleDor: "LA RÈGLE D'OR : tes TYPE BEATS te ramènent des VUES et des VENTES (les gens tapent « Victony type beat » et achètent sur BeatStars) — mais ils convertissent MAL en abonnés. Ce qui fait les ABONNÉS, c'est le contenu ÉDUCATIF (tuto : « valeur reçue → merci → je m'abonne »). Il te faut donc DEUX moteurs : type beats (recherche/ventes) + tutos beatmaking (abonnés). La plupart des beatmakers ne font que le premier et plafonnent.",
+    regleDor: "LA RÈGLE D'OR : tes TYPE BEATS te ramènent des VUES et des VENTES (les gens tapent « Victony type beat » et achètent sur BeatStars) — mais ils convertissent MAL en abonnés. Ton 2e moteur, c'est le COOK-UP RAPIDE : « comment je fais une prod / une mélodie / mes drums » (30 s à 2 min). Les vrais TUTOS sont saturés — le cook-up, lui, se regarde pour la VIBE, montre ton beat (donc il vend aussi) et fait revenir les gens. Deux moteurs : type beats (recherche/ventes) + cook-ups (abonnés + rétention). La plupart des beatmakers ne font que le premier et plafonnent.",
 
     principes: [
-      { t: "Deux raisons de te regarder", d: "On ouvre YouTube pour APPRENDRE ou pour RESSENTIR. Tes tutos = apprendre (moteur d'abonnés). Tes cook-ups / type beats = ressentir + résoudre un besoin. Chaque vidéo doit servir clairement l'une des deux." },
+      { t: "Deux raisons de te regarder", d: "On ouvre YouTube pour APPRENDRE ou pour RESSENTIR. Ton cook-up rapide fait les DEUX : on regarde pour la vibe ET on apprend en te regardant faire — sans le côté scolaire d'un tuto. Tes type beats, eux, résolvent un besoin (un artiste cherche un beat). Chaque vidéo sert clairement l'un des deux." },
       { t: "Le titre EST l'idée", d: "Pour un type beat, le titre est ton référencement : « [Artiste] Type Beat - \"Nom\" ». Le nom de l'artiste est le mot-clé que les gens tapent. Pas de nom cherchable = invisible." },
       { t: "La cadence déclenche la boule de neige", d: "2-3 vidéos/semaine à horaire fixe pendant 6 mois : c'est la recette quasi infaillible des 1000 premiers abonnés. Chaque upload agrandit l'audience que YouTube te trouve. Publier 1×/mois = repartir de zéro à chaque fois." },
       { t: "Marie-toi à la chaîne, pas à la vidéo", d: "Un beat qui floppe est une DONNÉE (ouvre la rétention : à quelle seconde ils décrochent ?), pas un échec. 10 flops analysés font un meilleur beatmaker." },
@@ -1306,7 +1306,7 @@ const HIRA_DATA = {
     paliers: [
       { palier: "0 → 1 000", titre: "Fondation", focus: "Éducatif + cadence", actions: [
         "Choisis TON angle (positionnement) : pas « encore un beatmaker » mais « le beatmaker afro qui t'apprend à faire des hits Victony/CKay/amapiano ».",
-        "Lance les 2 moteurs : 2 type beats/semaine + 1 tuto/semaine (voix IA sur screen FL).",
+        "Lance les 2 moteurs : 2 type beats/semaine + 1 cook-up rapide/semaine (mains sur les pads + screen FL, sans parler).",
         "Publie malgré l'imperfection. Stock de 6 beats d'avance (voir onglet Plan de relance).",
         "BeatStars en place AVANT de publier (lien en 1re ligne de chaque description)."
       ]},
@@ -1318,18 +1318,18 @@ const HIRA_DATA = {
         "Consistance ×3 : quantité + type (reste afro/RnB, ne pars pas en lofi/drill au hasard) + cadrage (même promesse)."
       ]},
       { palier: "10 000 → 100 000", titre: "Évoluer", focus: "Parcours + watch time", actions: [
-        "Parcours du spectateur : écran de fin → LA vidéo la plus cohérente (un tuto afro renvoie vers un autre tuto afro, pas vers un beat drill).",
-        "Joue le WATCH TIME et le temps de session : vidéos qui tiennent (cook-ups rythmés, tutos structurés), playlists.",
+        "Parcours du spectateur : écran de fin → LA vidéo la plus cohérente (un cook-up afro renvoie vers un autre cook-up afro, pas vers un beat drill).",
+        "Joue le WATCH TIME et le temps de session : vidéos qui tiennent (cook-ups rythmés, séries), playlists.",
         "Niches adjacentes : regarde les beatmakers trap/amapiano/afro-US pour piquer des FORMATS qui marchent ailleurs.",
-        "CTA d'abonnement APRÈS la valeur (après le meilleur moment du beat/tuto), JAMAIS en intro.",
+        "CTA d'abonnement APRÈS la valeur (après le meilleur moment du beat/cook-up), JAMAIS en intro.",
         "Vers 50k : délègue le maillon faible (miniatures d'abord, ~5-20 € ; montage ensuite)."
       ]},
       { palier: "100 000 → 1 000 000", titre: "Conquête", focus: "Positionnement + vecteurs", actions: [
-        "Positionnement chirurgical : occupe une case que personne n'occupe (« le tuto afrobeat le plus clair de YouTube », un style de beat signature).",
+        "Positionnement chirurgical : occupe une case que personne n'occupe (« le cook-up afrobeat le plus satisfaisant de YouTube », un style de beat signature).",
         "Matrice — 4 façons de gagner : PREMIER (un format neuf), MIEUX (qualité max), DIFFÉRENT (esthétique unique), PLUS (volume). Faceless → mise sur DIFFÉRENT + PLUS.",
         "TAM : viser 1M d'abonnés = pouvoir toucher 50-100M de personnes. Les producteurs/beatmakers du monde entier + le doublage auto YouTube (voix IA multilingue) élargissent énormément ton marché.",
         "Vecteurs viraux : « beat avec UNIQUEMENT les plugins stock », « j'ai fait un hit afro en 5 min », « 1$ vs 1000$ de samples ».",
-        "Présence à l'esprit : un nouvel artiste afro explose ? Sors un beat/tuto dans son style DANS LES 2 SEMAINES du pic — le timing est l'ingrédient actif."
+        "Présence à l'esprit : un nouvel artiste afro explose ? Sors un beat/cook-up dans son style DANS LES 2 SEMAINES du pic — le timing est l'ingrédient actif."
       ]},
       { palier: "1M → 10M", titre: "La folie douce", focus: "Mondialiser + rester humain", actions: [
         "Mondialise : doublage auto YouTube + voix IA en plusieurs langues, c'est ton levier n°1 quand le marché francophone sature.",
@@ -1339,14 +1339,17 @@ const HIRA_DATA = {
 
     formats: [
       { nom: "[Artiste] Type Beat", role: "Moteur de RECHERCHE + VENTES (BeatStars)", voix: "Aucune voix — 100 % faceless" },
-      { nom: "Tuto « Comment faire un beat type [Artiste] »", role: "Moteur d'ABONNÉS (le plus important)", voix: "Voix IA sur screen recording FL" },
+      { nom: "Cook-up « Comment je fais une prod »", role: "Moteur d'ABONNÉS + rétention — le beat entier se construit (accéléré / timelapse)", voix: "Sans voix : mains sur les pads + screen FL + texte à l'écran" },
+      { nom: "Cook-up « Comment je fais une mélodie »", role: "Court & focalisé — accroche vite, très partageable", voix: "Sans voix : screen + mains" },
+      { nom: "Cook-up « Comment je fais mes drums / 808 »", role: "Niche recherchée (finger drumming, groove afro)", voix: "Sans voix : mains sur le Launch Control" },
+      { nom: "Cook-up « Mélodie + drums »", role: "Le beat prend forme sous les yeux — format signature", voix: "Sans voix" },
       { nom: "Cook-up faceless", role: "Vibe / divertissement / fidélité", voix: "Aucune — caméra en plongée sur les mains + pads/Launch Control, ou timelapse" },
       { nom: "Défis à vecteur viral", role: "Portée / nouveaux spectateurs", voix: "Texte à l'écran + voix IA optionnelle" },
       { nom: "Réaction / tendance (présence à l'esprit)", role: "Capter une attention déjà chaude", voix: "Voix IA ou texte — beat dans le style d'un artiste qui buzz" }
     ],
 
     faceless: [
-      "Voix IA (type ElevenLabs) pour les tutos : c'est ce qui débloque le moteur d'abonnés sans que tu parles. Garde TOUJOURS la même voix/le même ton : c'est ton « personnage ».",
+      "Pas besoin de parler : le cook-up se porte tout seul — le beat joue, tes mains bougent sur les pads, un peu de texte à l'écran (« log drum », « je pose la 808 »). Garde ElevenLabs sous le coude pour un explainer ponctuel, mais le format ne l'exige pas.",
       "Le hook des 7 premières secondes SANS parler : mets le DROP direct (log drum, 808) + une phrase en texte à l'écran (« Afro type beat — Victony »). Jamais d'intro molle.",
       "Ta « sauce » sans visage = identité visuelle ultra-constante : mêmes couleurs, logo R1 au même coin, même typo de miniatures, même style de montage rythmé.",
       "Cook-up : filme tes mains sur le Launch Control / le clavier en plongée. C'est LE format faceless qui marche, et ton contrôleur devient un outil de contenu.",
@@ -1355,14 +1358,14 @@ const HIRA_DATA = {
 
     metriques: [
       { k: "CTR", d: "Taux de clic (miniature + titre). Vise à améliorer le packaging, pas juste le beat." },
-      { k: "AVD", d: "Durée moyenne de visionnage — le beat/tuto doit accrocher vite et tenir. Ouvre la courbe de rétention sur chaque flop." },
+      { k: "AVD", d: "Durée moyenne de visionnage — le beat/cook-up doit accrocher vite et tenir. Ouvre la courbe de rétention sur chaque flop." },
       { k: "AVPV", d: "Vidéos vues par spectateur = ta fidélité. Le vrai thermomètre du capital confiance." },
       { k: "Watch time", d: "Temps total de visionnage = indicateur avancé du succès, lié au temps de session que YouTube adore." },
       { k: "Abonnés", d: "Le trophée, pas le match. Le match se joue en heures de visionnage de qualité — les abonnés en sont le sous-produit." }
     ],
 
     erreurs: [
-      "Ne faire QUE des type beats (0 tuto) → beaucoup de vues, peu d'abonnés. C'est l'erreur n°1 du beatmaker.",
+      "Ne faire QUE des type beats (0 cook-up) → beaucoup de vues, peu d'abonnés. C'est l'erreur n°1 du beatmaker.",
       "Publier 1×/mois → YouTube ne cartographie jamais ton audience.",
       "Mélanger les genres au hasard (afro, drill, lofi, boom-bap…) → aucune cohérence, l'algorithme ne sait pas à qui te montrer.",
       "Copier à l'identique la vidéo d'un gros beatmaker → il gagne sur son terrain. Remixe avec un modificateur.",
@@ -1384,19 +1387,19 @@ const HIRA_DATA = {
 
     semaineAdaptee: [
       { jour: "Lundi", statut: "Bureau (boulot)", tache: "Léger — 20-30 min le soir : veille (repère 2-3 outliers de beatmakers afro) + note 3 idées de titres." },
-      { jour: "Mardi", statut: "Télétravail", tache: "PROD (souplesse) : 1 beat OU avance 1 tuto (screen FL + voix IA). Profite des pauses/midi/soir." },
+      { jour: "Mardi", statut: "Télétravail", tache: "PROD (souplesse) : 1 beat OU avance 1 cook-up (screen FL + mains sur les pads). Profite des pauses/midi/soir." },
       { jour: "Mercredi", statut: "Bureau", tache: "Léger — le soir : miniatures de la semaine + programme l'upload du type beat." },
-      { jour: "Jeudi", statut: "Télétravail", tache: "PROD : 1 beat OU enregistre 1 tuto dans OBS (BlackHole pour le son)." },
+      { jour: "Jeudi", statut: "Télétravail", tache: "PROD : 1 beat OU filme 1 cook-up dans OBS (BlackHole pour le son)." },
       { jour: "Vendredi", statut: "Bureau", tache: "Léger — le soir : 3 Reels Instagram + DM à 5-10 artistes afro émergents." },
-      { jour: "Samedi", statut: "Libre", tache: "GROS BLOC : cook-up faceless (mains sur le Launch Control) + tourne 1-2 tutos d'avance + montage DaVinci." },
+      { jour: "Samedi", statut: "Libre", tache: "GROS BLOC : cook-up faceless (mains sur le Launch Control) + tourne 1-2 cook-ups d'avance + montage DaVinci." },
       { jour: "Dimanche", statut: "Libre", tache: "GROS BLOC : finir les montages, programmer les uploads de la semaine, mettre à jour le tableau de veille. Puis repos." }
     ],
-    semaineCible: "Objectif/semaine : 2 type beats + 1 tuto (les 2 moteurs) + 3 Reels. Le gros du travail est concentré sur Mardi, Jeudi, Samedi, Dimanche — les jours bureau restent légers.",
+    semaineCible: "Objectif/semaine : 2 type beats + 1 cook-up (les 2 moteurs) + 3 Reels. Le gros du travail est concentré sur Mardi, Jeudi, Samedi, Dimanche — les jours bureau restent légers.",
 
     calendrier: [
       { mois: "Mois 1", objectif: "≥ 500 abonnés (relance)", focus: "Fondations & relance", taches: ["Finir BlackHole + acheter le bras overhead téléphone", "Ouvrir BeatStars + nouvelle photo de profil / bannière", "Produire un STOCK de 6 beats d'avance", "Relancer : 8 vidéos publiées (2/semaine)"] },
-      { mois: "Mois 2", objectif: "~600 abonnés", focus: "Tenir le rythme", taches: ["2 type beats + 1 tuto/semaine, sans exception", "Lire la courbe de rétention de chaque vidéo (à J+3)", "Ajuster les titres au format [Artiste] Type Beat"] },
-      { mois: "Mois 3", objectif: "~800 abonnés", focus: "Premiers signaux", taches: ["A/B testing des miniatures", "Doubler sur le format de tuto le plus vu", "Tableau de veille hebdo (top 20 % + outliers)"] },
+      { mois: "Mois 2", objectif: "~600 abonnés", focus: "Tenir le rythme", taches: ["2 type beats + 1 cook-up/semaine, sans exception", "Lire la courbe de rétention de chaque vidéo (à J+3)", "Ajuster les titres au format [Artiste] Type Beat"] },
+      { mois: "Mois 3", objectif: "~800 abonnés", focus: "Premiers signaux", taches: ["A/B testing des miniatures", "Doubler sur le format de cook-up le plus vu", "Tableau de veille hebdo (top 20 % + outliers)"] },
       { mois: "Mois 4", objectif: "~1 000 abonnés", focus: "Collaboration", taches: ["DM aux artistes émergents (Mavo, FOLA, Priesst…)", "Beats faits À LEUR INTENTION", "Réactions / ancrage sur un gros beatmaker"] },
       { mois: "Mois 5", objectif: "~1 500 abonnés", focus: "Consolidation", taches: ["Parcours du spectateur : écrans de fin vers LA bonne 2e vidéo", "Vise le watch time (vidéos qui tiennent)", "Capital confiance : suis ton AVPV"] },
       { mois: "Mois 6", objectif: "~2 000 abonnés", focus: "Palier 1000+ franchi", taches: ["Bilan 6 mois : qu'est-ce qui marche ?", "Affine ton positionnement (angle plus net)", "Vise la monétisation (4000 h de visionnage)"] },
@@ -1405,10 +1408,10 @@ const HIRA_DATA = {
     calendrierNote: "Les objectifs d'abonnés sont des REPÈRES pour suivre ton évolution, pas des garanties. Le vrai match se joue en heures de visionnage — les abonnés en sont le sous-produit. Ajuste au réel.",
 
     trimestres: [
-      { t: "T1 · mois 1-3", objectif: "~800 abonnés", focus: "Relance & rythme", cle: "Installer les 2 moteurs (type beats + tutos), stock d'avance, publier 2 beats + 1 tuto/semaine SANS EXCEPTION. Lire la rétention à chaque vidéo." },
+      { t: "T1 · mois 1-3", objectif: "~800 abonnés", focus: "Relance & rythme", cle: "Installer les 2 moteurs (type beats + cook-ups), stock d'avance, publier 2 beats + 1 cook-up/semaine SANS EXCEPTION. Lire la rétention à chaque vidéo." },
       { t: "T2 · mois 4-6", objectif: "~2 000 abonnés", focus: "Palier 1 000 franchi", cle: "Collaborations / DM artistes émergents, parcours du spectateur (écrans de fin), viser la monétisation (4000 h de visionnage)." },
       { t: "T3 · mois 7-9", objectif: "~5 000 abonnés", focus: "Optimisation", cle: "Doubler sur les formats gagnants, vecteurs viraux (« beat en 5 min », plugins stock…), explorer les niches adjacentes." },
-      { t: "T4 · mois 10-12", objectif: "~10 000 abonnés", focus: "Accélération", cle: "Présence à l'esprit (beat/tuto dans le style d'un artiste qui buzz, sous 2 semaines). Déléguer les miniatures. Bilan annuel." }
+      { t: "T4 · mois 10-12", objectif: "~10 000 abonnés", focus: "Accélération", cle: "Présence à l'esprit (beat/cook-up dans le style d'un artiste qui buzz, sous 2 semaines). Déléguer les miniatures. Bilan annuel." }
     ],
 
     annees: [
@@ -1422,10 +1425,10 @@ const HIRA_DATA = {
      OUTILS YOUTUBE — de quoi produire les vidéos (faceless, voix IA)
      ---------------------------------------------------------------------- */
   outils: {
-    intro: "Ton atelier pour produire les vidéos YouTube (montage, capture, miniatures, voix IA, tournage téléphone). Côté image tu es sur-équipé — le seul vrai enjeu est de capturer le SON de FL dans tes tutos.",
+    intro: "Ton atelier pour produire les vidéos YouTube (montage, capture, miniatures, tournage téléphone). Côté image tu es sur-équipé — le seul vrai enjeu est de capturer le SON de FL dans tes cook-ups.",
 
     possede: [
-      { nom: "DaVinci Resolve", role: "Montage vidéo pro (gratuit) — tutos & cook-ups" },
+      { nom: "DaVinci Resolve", role: "Montage vidéo pro (gratuit) — cook-ups & montage" },
       { nom: "Figma", role: "Design des miniatures" },
       { nom: "Google Chrome", role: "Voix IA (ElevenLabs) + Novation Components (Safari ne marche pas)" },
       { nom: "iMovie", role: "Montage rapide de secours" },
@@ -1435,11 +1438,11 @@ const HIRA_DATA = {
     ],
 
     aFinir: [
-      { nom: "BlackHole 2ch", role: "Driver audio virtuel — INDISPENSABLE pour capter le son de FL dans OBS/tuto. Téléchargé, à finir dans TON Terminal (demande ton mot de passe) :  brew install --cask blackhole-2ch" }
+      { nom: "BlackHole 2ch", role: "Driver audio virtuel — INDISPENSABLE pour capter le son de FL dans OBS/cook-up. Téléchargé, à finir dans TON Terminal (demande ton mot de passe) :  brew install --cask blackhole-2ch" }
     ],
 
     web: [
-      { nom: "ElevenLabs (elevenlabs.io)", role: "Voix IA pour tes tutos — garde toujours la même voix" },
+      { nom: "ElevenLabs (elevenlabs.io)", role: "Voix IA — OPTIONNELLE (pour un explainer ponctuel). Le cook-up marche sans parler ; si tu l'utilises, garde toujours la même voix" },
       { nom: "BeatStars (beatstars.com)", role: "Vente de tes beats — lien en 1re ligne de chaque description" }
     ],
 
