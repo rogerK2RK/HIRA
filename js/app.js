@@ -216,6 +216,10 @@ function navigate(view, param){
   currentParam = param;
   document.querySelectorAll(".nav-btn").forEach(b =>
     b.classList.toggle("active", b.dataset.view === view));
+  // ouvre automatiquement le groupe qui contient la page active
+  const actBtn = document.querySelector(".nav-btn.active");
+  const actGrp = actBtn && actBtn.closest(".nav-group");
+  if(actGrp) actGrp.classList.remove("collapsed");
   content.scrollTo(0,0);
   window.scrollTo(0,0);
   (views[view] || views.dashboard)(param);
@@ -1171,21 +1175,51 @@ views.million = function(){
       <p style="margin:0">${icon("lightbulb",16)} ${esc(m.regleDor)}</p>
     </div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">📅 Ma semaine (adaptée à mon emploi du temps)</h3>
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">📅 Ma semaine (façon agenda)</h3>
     <div class="card">
-      <div class="sc-list">${m.semaineAdaptee.map(s=>`
-        <div class="sc-row"><span class="sc-key" style="flex-basis:210px"><b>${esc(s.jour)}</b> · ${esc(s.statut)}</span><span class="sc-desc">${esc(s.tache)}</span></div>`).join("")}</div>
-      <p style="font-size:12px;color:var(--accent);margin-top:12px;font-weight:600">${esc(m.semaineCible)}</p>
+      <div class="week-scroll">
+        <div class="week-grid">
+          ${m.semaineAdaptee.map(s=>{
+            const cls = s.statut.indexOf("Bureau")>-1 ? "bureau" : (s.statut.indexOf("Télé")>-1 ? "tt" : "libre");
+            const col = cls==="tt" ? "is-prod" : (cls==="libre" ? "is-libre" : "");
+            return `<div class="week-col ${col}">
+              <h5>${esc(s.jour)}</h5>
+              <span class="week-badge ${cls}">${esc(s.statut)}</span>
+              <div class="week-task">${esc(s.tache)}</div>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--accent);margin-top:14px;font-weight:600">${esc(m.semaineCible)}</p>
     </div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">🎯 Calendrier — objectif par mois</h3>
+    <h3 style="margin:26px 0 6px;font-size:15px;color:var(--muted)">🎯 Plan d'action — par horizon</h3>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 16px">Jour → semaine (ci-dessus) → mois → trimestre → année. Suis ton avancée à chaque niveau jusqu'au million.</p>
+
+    <div style="font-size:13px;font-weight:700;margin:6px 0 10px;color:var(--txt)">▸ Par mois</div>
     <div class="grid grid-2">${m.calendrier.map(c=>`
       <div class="card">
         <h4>${esc(c.mois)} — ${esc(c.objectif)}</h4>
         <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(c.focus)}</div>
         <ul>${c.taches.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
       </div>`).join("")}</div>
-    <p style="font-size:12px;color:var(--muted);margin:12px 0 4px">${esc(m.calendrierNote)}</p>
+
+    <div style="font-size:13px;font-weight:700;margin:22px 0 10px;color:var(--txt)">▸ Par trimestre</div>
+    <div class="grid grid-2">${m.trimestres.map(t=>`
+      <div class="card">
+        <h4>${esc(t.t)} — ${esc(t.objectif)}</h4>
+        <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(t.focus)}</div>
+        <p style="font-size:13px;color:var(--muted);margin:0">${esc(t.cle)}</p>
+      </div>`).join("")}</div>
+
+    <div style="font-size:13px;font-weight:700;margin:22px 0 10px;color:var(--txt)">▸ Par année — jusqu'au million</div>
+    <div class="grid grid-2">${m.annees.map(a=>`
+      <div class="card" style="border-left:3px solid var(--accent)">
+        <h4>${esc(a.an)} — ${esc(a.objectif)}</h4>
+        <p style="font-size:13px;color:var(--muted);margin:0">${esc(a.jalon)}</p>
+      </div>`).join("")}</div>
+
+    <p style="font-size:12px;color:var(--muted);margin:16px 0 4px">${esc(m.calendrierNote)}</p>
 
     <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les principes</h3>
     <div class="grid grid-2">${principes}</div>
@@ -1697,6 +1731,21 @@ document.querySelectorAll(".nav-btn").forEach(b => {
   const label = b.textContent.trim().replace(/^\S+\s+/, "");
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";
 });
+/* Groupes de navigation repliables + persistance (défaut : seul YouTube ouvert) */
+(function(){
+  const defColl = { yt:false, prod:true, ref:true, acct:true };
+  document.querySelectorAll(".nav-group").forEach(group => {
+    const g = group.dataset.group, key = "hira_navgrp_" + g;
+    const saved = localStorage.getItem(key);
+    const collapsed = (saved === null) ? !!defColl[g] : (saved === "1");
+    if(collapsed) group.classList.add("collapsed");
+    const head = group.querySelector(".nav-group-head");
+    if(head) head.addEventListener("click", () => {
+      group.classList.toggle("collapsed");
+      localStorage.setItem(key, group.classList.contains("collapsed") ? "1" : "0");
+    });
+  });
+})();
 (function(){
   const set = (id, name) => {
     const el = document.getElementById(id);

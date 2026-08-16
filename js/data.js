@@ -1402,7 +1402,20 @@ const HIRA_DATA = {
       { mois: "Mois 6", objectif: "~2 000 abonnés", focus: "Palier 1000+ franchi", taches: ["Bilan 6 mois : qu'est-ce qui marche ?", "Affine ton positionnement (angle plus net)", "Vise la monétisation (4000 h de visionnage)"] },
       { mois: "Mois 7-12", objectif: "~10 000 abonnés (si le rythme tient)", focus: "Évoluer", taches: ["Niches adjacentes + vecteurs viraux (\"beat en 5 min\", plugins stock…)", "Présence à l'esprit : beat dans le style d'un artiste qui buzz sous 2 semaines", "Déléguer les miniatures vers 50k"] }
     ],
-    calendrierNote: "⚠️ Les objectifs d'abonnés sont des REPÈRES pour suivre ton évolution, pas des garanties. Le vrai match se joue en heures de visionnage — les abonnés en sont le sous-produit. Ajuste au réel."
+    calendrierNote: "⚠️ Les objectifs d'abonnés sont des REPÈRES pour suivre ton évolution, pas des garanties. Le vrai match se joue en heures de visionnage — les abonnés en sont le sous-produit. Ajuste au réel.",
+
+    trimestres: [
+      { t: "T1 · mois 1-3", objectif: "~800 abonnés", focus: "Relance & rythme", cle: "Installer les 2 moteurs (type beats + tutos), stock d'avance, publier 2 beats + 1 tuto/semaine SANS EXCEPTION. Lire la rétention à chaque vidéo." },
+      { t: "T2 · mois 4-6", objectif: "~2 000 abonnés", focus: "Palier 1 000 franchi", cle: "Collaborations / DM artistes émergents, parcours du spectateur (écrans de fin), viser la monétisation (4000 h de visionnage)." },
+      { t: "T3 · mois 7-9", objectif: "~5 000 abonnés", focus: "Optimisation", cle: "Doubler sur les formats gagnants, vecteurs viraux (« beat en 5 min », plugins stock…), explorer les niches adjacentes." },
+      { t: "T4 · mois 10-12", objectif: "~10 000 abonnés", focus: "Accélération", cle: "Présence à l'esprit (beat/tuto dans le style d'un artiste qui buzz, sous 2 semaines). Déléguer les miniatures. Bilan annuel." }
+    ],
+
+    annees: [
+      { an: "Année 1", objectif: "10 000 abonnés", jalon: "Chaîne consolidée, 2 moteurs rodés, premiers revenus (BeatStars + pub YouTube). Positionnement qui se précise." },
+      { an: "Année 2", objectif: "100 000 abonnés", jalon: "Positionnement signature clair, 1er recrutement (miniatures puis montage), formats viraux maîtrisés, parcours du spectateur optimisé." },
+      { an: "Année 3-5", objectif: "1 000 000 abonnés", jalon: "Marché élargi (doublage auto multilingue via voix IA), équipe/stratège, marque forte. Rappel : le million ≈ 100 M d'heures de visionnage cumulées — on accumule des heures de qualité, les abonnés suivent." }
+    ]
   },
 
   /* ----------------------------------------------------------------------
