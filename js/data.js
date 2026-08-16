@@ -1380,7 +1380,29 @@ const HIRA_DATA = {
       "~50 000 abonnés : seuil où déléguer (miniatures) devient rationnel.",
       "50-100 M de personnes atteignables : le réservoir pour viser 1M (producteurs du monde + doublage auto).",
       "Monétisation (à revérifier sur YouTube) : ~500 abonnés + 3000 h/12 mois (ou 3M vues Shorts/90 j) pour les premières fonctions ; 1000 abonnés + 4000 h/12 mois (ou 10M vues Shorts/90 j) pour la pub. Ton vrai revenu de départ : BeatStars."
-    ]
+    ],
+
+    semaineAdaptee: [
+      { jour: "Lundi", statut: "🏢 Bureau (monkitsolaire)", tache: "Léger — 20-30 min le soir : veille (repère 2-3 outliers de beatmakers afro) + note 3 idées de titres." },
+      { jour: "Mardi", statut: "🏠 Télétravail", tache: "PROD (souplesse) : 1 beat OU avance 1 tuto (screen FL + voix IA). Profite des pauses/midi/soir." },
+      { jour: "Mercredi", statut: "🏢 Bureau", tache: "Léger — le soir : miniatures de la semaine + programme l'upload du type beat." },
+      { jour: "Jeudi", statut: "🏠 Télétravail", tache: "PROD : 1 beat OU enregistre 1 tuto dans OBS (BlackHole pour le son)." },
+      { jour: "Vendredi", statut: "🏢 Bureau", tache: "Léger — le soir : 3 Reels Instagram + DM à 5-10 artistes afro émergents." },
+      { jour: "Samedi", statut: "🟢 Libre", tache: "GROS BLOC : cook-up faceless (mains sur le Launch Control) + tourne 1-2 tutos d'avance + montage DaVinci." },
+      { jour: "Dimanche", statut: "🟢 Libre", tache: "GROS BLOC : finir les montages, programmer les uploads de la semaine, mettre à jour le tableau de veille. Puis repos." }
+    ],
+    semaineCible: "Objectif/semaine : 2 type beats + 1 tuto (les 2 moteurs) + 3 Reels. Le gros du travail est concentré sur Mardi, Jeudi, Samedi, Dimanche — les jours bureau restent légers.",
+
+    calendrier: [
+      { mois: "Mois 1", objectif: "≥ 500 abonnés (relance)", focus: "Fondations & relance", taches: ["Finir BlackHole + acheter le bras overhead téléphone", "Ouvrir BeatStars + nouvelle photo de profil / bannière", "Produire un STOCK de 6 beats d'avance", "Relancer : 8 vidéos publiées (2/semaine)"] },
+      { mois: "Mois 2", objectif: "~600 abonnés", focus: "Tenir le rythme", taches: ["2 type beats + 1 tuto/semaine, sans exception", "Lire la courbe de rétention de chaque vidéo (à J+3)", "Ajuster les titres au format [Artiste] Type Beat"] },
+      { mois: "Mois 3", objectif: "~800 abonnés", focus: "Premiers signaux", taches: ["A/B testing des miniatures", "Doubler sur le format de tuto le plus vu", "Tableau de veille hebdo (top 20 % + outliers)"] },
+      { mois: "Mois 4", objectif: "~1 000 abonnés", focus: "Collaboration", taches: ["DM aux artistes émergents (Mavo, FOLA, Priesst…)", "Beats faits À LEUR INTENTION", "Réactions / ancrage sur un gros beatmaker"] },
+      { mois: "Mois 5", objectif: "~1 500 abonnés", focus: "Consolidation", taches: ["Parcours du spectateur : écrans de fin vers LA bonne 2e vidéo", "Vise le watch time (vidéos qui tiennent)", "Capital confiance : suis ton AVPV"] },
+      { mois: "Mois 6", objectif: "~2 000 abonnés", focus: "Palier 1000+ franchi", taches: ["Bilan 6 mois : qu'est-ce qui marche ?", "Affine ton positionnement (angle plus net)", "Vise la monétisation (4000 h de visionnage)"] },
+      { mois: "Mois 7-12", objectif: "~10 000 abonnés (si le rythme tient)", focus: "Évoluer", taches: ["Niches adjacentes + vecteurs viraux (\"beat en 5 min\", plugins stock…)", "Présence à l'esprit : beat dans le style d'un artiste qui buzz sous 2 semaines", "Déléguer les miniatures vers 50k"] }
+    ],
+    calendrierNote: "⚠️ Les objectifs d'abonnés sont des REPÈRES pour suivre ton évolution, pas des garanties. Le vrai match se joue en heures de visionnage — les abonnés en sont le sous-produit. Ajuste au réel."
   },
 
   /* ----------------------------------------------------------------------

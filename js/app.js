@@ -1144,13 +1144,48 @@ views.million = function(){
   const metriques = m.metriques.map(x=>`
     <div class="sc-row"><span class="sc-key">${esc(x.k)}</span><span class="sc-desc">${esc(x.d)}</span></div>`).join("");
 
+  const cid = (typeof localStorage!=='undefined') ? localStorage.getItem("hira_yt_channel") : null;
+  const tracker = cid ? `
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <h4>${icon("flag",16)} Abonnés en direct — Rog One Beats</h4>
+      <div style="font-size:36px;font-weight:800;letter-spacing:-.02em"><span id="yt-subs-val">…</span> <span style="font-size:14px;color:var(--muted);font-weight:500">abonnés</span></div>
+      <div class="progress" style="margin-top:10px"><div id="yt-bar" style="height:100%;width:0;background:var(--accent);transition:width .5s"></div></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">Palier 1 : 1 000 abonnés · <span id="yt-updated">chargement…</span></div>
+      <button class="cta" style="margin-top:10px;font-size:12px;padding:6px 12px" onclick="resetYtChannel()">Changer d'ID</button>
+    </div>` : `
+    <div class="card">
+      <h4>${icon("flag",16)} Connecter ta chaîne (abonnés en direct)</h4>
+      <p style="font-size:13px;color:var(--muted)">Colle l'ID de ta chaîne (format <b>UC…</b>) pour suivre tes abonnés en temps réel. Tu le trouves sur <b>youtube.com/account_advanced</b> (ou YouTube Studio → Paramètres → Chaîne → Paramètres avancés).</p>
+      <input id="yt-cid-input" placeholder="UC…" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:inherit;margin:8px 0;font-size:14px">
+      <button class="cta" onclick="saveYtChannel()">Connecter</button>
+      <p style="font-size:11px;color:var(--muted);margin-top:8px">Note : compteur fourni par un service tiers gratuit (approximatif). Ton ID reste stocké dans ton navigateur.</p>
+    </div>`;
+
   content.innerHTML = `
     <div class="page-head"><h1>${icon("flag",22)} Objectif 1 million d'abonnés</h1>
       <p>${esc(m.intro)}</p></div>
 
-    <div class="card" style="border-left:3px solid var(--accent)">
+    ${tracker}
+
+    <div class="card" style="border-left:3px solid var(--accent);margin-top:18px">
       <p style="margin:0">${icon("lightbulb",16)} ${esc(m.regleDor)}</p>
     </div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">📅 Ma semaine (adaptée à mon emploi du temps)</h3>
+    <div class="card">
+      <div class="sc-list">${m.semaineAdaptee.map(s=>`
+        <div class="sc-row"><span class="sc-key" style="flex-basis:210px"><b>${esc(s.jour)}</b> · ${esc(s.statut)}</span><span class="sc-desc">${esc(s.tache)}</span></div>`).join("")}</div>
+      <p style="font-size:12px;color:var(--accent);margin-top:12px;font-weight:600">${esc(m.semaineCible)}</p>
+    </div>
+
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">🎯 Calendrier — objectif par mois</h3>
+    <div class="grid grid-2">${m.calendrier.map(c=>`
+      <div class="card">
+        <h4>${esc(c.mois)} — ${esc(c.objectif)}</h4>
+        <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(c.focus)}</div>
+        <ul>${c.taches.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
+      </div>`).join("")}</div>
+    <p style="font-size:12px;color:var(--muted);margin:12px 0 4px">${esc(m.calendrierNote)}</p>
 
     <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les principes</h3>
     <div class="grid grid-2">${principes}</div>
@@ -1172,6 +1207,32 @@ views.million = function(){
 
     <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Chiffres à connaître par cœur</h3>
     <div class="card"><ul>${li(m.chiffres)}</ul></div>`;
+
+  if(cid) setTimeout(()=>{ try{ window.refreshYtSubs && window.refreshYtSubs(); }catch(e){} }, 0);
+};
+
+/* ---- Suivi abonnés YouTube (service tiers sans clé, best-effort) ---- */
+window.saveYtChannel = function(){
+  const inp = document.getElementById("yt-cid-input"); if(!inp) return;
+  const v = (inp.value||"").trim();
+  if(!/^UC[\w-]{22}$/.test(v)){ toast("ID invalide — format attendu : UC… (24 caractères)"); return; }
+  localStorage.setItem("hira_yt_channel", v); navigate("million");
+};
+window.resetYtChannel = function(){ localStorage.removeItem("hira_yt_channel"); navigate("million"); };
+window.refreshYtSubs = async function(){
+  const el = document.getElementById("yt-subs-val"); if(!el) return;
+  const cid = localStorage.getItem("hira_yt_channel"); if(!cid){ return; }
+  el.textContent = "…";
+  try{
+    const r = await fetch("https://api.socialcounts.org/youtube-live-subscriber-count/"+encodeURIComponent(cid));
+    const j = await r.json();
+    const n = (j && (j.est_sub ?? j.api_sub ?? j.subscriberCount ?? (j.data && (j.data.est_sub ?? j.data.subscriberCount))));
+    if(typeof n === "number" && n >= 0){
+      el.textContent = n.toLocaleString("fr-FR");
+      const bar = document.getElementById("yt-bar"); if(bar) bar.style.width = Math.min(100, Math.round(n/1000*100)) + "%";
+      const up = document.getElementById("yt-updated"); if(up) up.textContent = "à jour — " + new Date().toLocaleString("fr-FR");
+    } else { el.textContent = "indispo"; }
+  }catch(e){ el.textContent = "indispo (service externe)"; }
 };
 
 views.shortcuts = function(){
