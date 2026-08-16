@@ -73,7 +73,12 @@ const ICONS = {
   bell:'<path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>',
   refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>',
   clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
-  building:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01M12 6h.01M12 10h.01M12 14h.01"/>'
+  building:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01M12 6h.01M12 10h.01M12 14h.01"/>',
+  calendar:'<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+  phone:'<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>',
+  globe:'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+  alert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  rocket:'<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>'
 };
 function icon(name, size){
   const s = size || 18;
@@ -1108,19 +1113,19 @@ views.outils = function(){
     <div class="page-head"><h1>${icon("laptop",22)} Outils YouTube</h1>
       <p>${esc(o.intro)}</p></div>
 
-    <h3 style="margin:6px 0 12px;font-size:15px;color:var(--muted)">✅ Ce que tu as</h3>
+    <h3 style="margin:6px 0 12px;font-size:15px;color:var(--muted)">${icon("check",16)} Ce que tu as</h3>
     <div class="card"><div class="sc-list">${rows(o.possede)}</div></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">⚠️ À finir d'installer</h3>
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("alert",16)} À finir d'installer</h3>
     <div class="card" style="border-left:3px solid var(--accent)"><div class="sc-list">${rows(o.aFinir)}</div></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">🌐 Web (rien à installer)</h3>
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("globe",16)} Web (rien à installer)</h3>
     <div class="card"><div class="sc-list">${rows(o.web)}</div></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">📱 Tournage téléphone</h3>
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("phone",16)} Tournage téléphone</h3>
     <div class="card"><ul>${li(o.cameras)}</ul></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">🔊 Router le son FL → OBS (pour les tutos)</h3>
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("wave",16)} Router le son FL → OBS (pour les tutos)</h3>
     <div class="card"><ul>${li(o.routageSon)}</ul></div>`;
 };
 
@@ -1175,7 +1180,7 @@ views.million = function(){
       <p style="margin:0">${icon("lightbulb",16)} ${esc(m.regleDor)}</p>
     </div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">📅 Ma semaine (façon agenda)</h3>
+    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("calendar",16)} Ma semaine (façon agenda)</h3>
     <div class="card">
       <div class="week-scroll">
         <div class="week-grid">
@@ -1193,10 +1198,10 @@ views.million = function(){
       <p style="font-size:12px;color:var(--accent);margin-top:14px;font-weight:600">${esc(m.semaineCible)}</p>
     </div>
 
-    <h3 style="margin:26px 0 6px;font-size:15px;color:var(--muted)">🎯 Plan d'action — par horizon</h3>
+    <h3 style="margin:26px 0 6px;font-size:15px;color:var(--muted)">${icon("target",16)} Plan d'action — par horizon</h3>
     <p style="font-size:13px;color:var(--muted);margin:0 0 16px">Jour → semaine (ci-dessus) → mois → trimestre → année. Suis ton avancée à chaque niveau jusqu'au million.</p>
 
-    <div style="font-size:13px;font-weight:700;margin:6px 0 10px;color:var(--txt)">▸ Par mois</div>
+    <div style="font-size:13px;font-weight:700;margin:6px 0 10px;color:var(--txt)">Par mois</div>
     <div class="grid grid-2">${m.calendrier.map(c=>`
       <div class="card">
         <h4>${esc(c.mois)} — ${esc(c.objectif)}</h4>
@@ -1204,7 +1209,7 @@ views.million = function(){
         <ul>${c.taches.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
       </div>`).join("")}</div>
 
-    <div style="font-size:13px;font-weight:700;margin:22px 0 10px;color:var(--txt)">▸ Par trimestre</div>
+    <div style="font-size:13px;font-weight:700;margin:22px 0 10px;color:var(--txt)">Par trimestre</div>
     <div class="grid grid-2">${m.trimestres.map(t=>`
       <div class="card">
         <h4>${esc(t.t)} — ${esc(t.objectif)}</h4>
@@ -1212,7 +1217,7 @@ views.million = function(){
         <p style="font-size:13px;color:var(--muted);margin:0">${esc(t.cle)}</p>
       </div>`).join("")}</div>
 
-    <div style="font-size:13px;font-weight:700;margin:22px 0 10px;color:var(--txt)">▸ Par année — jusqu'au million</div>
+    <div style="font-size:13px;font-weight:700;margin:22px 0 10px;color:var(--txt)">Par année — jusqu'au million</div>
     <div class="grid grid-2">${m.annees.map(a=>`
       <div class="card" style="border-left:3px solid var(--accent)">
         <h4>${esc(a.an)} — ${esc(a.objectif)}</h4>
@@ -1414,8 +1419,8 @@ window.toggleCheck = function(projId, phaseId, idx, val){
     const c = proj.checks[phaseId] || [];
     if(ph && ph.checklist.every((_, k) => c[k])){
       toast(projectProgress(proj) >= 100
-        ? "🎉 Projet terminé — bravo !"
-        : "✓ Phase « " + ph.nom + " » terminée 🎉");
+        ? "Projet terminé — bravo !"
+        : "✓ Phase « " + ph.nom + " » terminée");
     }
   }
 
@@ -1466,7 +1471,7 @@ window.clearReminder = function(projId){
 window.testNotif = async function(){
   const ok = await enablePush();
   if(!ok) return;
-  fireNotif("HIRA — Test", "Les notifications fonctionnent ✅", null);
+  fireNotif("HIRA — Test", "Les notifications fonctionnent", null);
   toast("Notification envoyée");
 };
 window.duplicateProject = function(projId){
@@ -1727,9 +1732,16 @@ window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
 const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", shortcuts:"wrench", references:"headphones", growth:"share", million:"flag", outils:"laptop", sync:"cloud" };
+const stripLeadEmoji = t => t.trim().replace(/^(?:[\u{2300}-\u{23FF}\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]\s*)+/u, "");
 document.querySelectorAll(".nav-btn").forEach(b => {
-  const label = b.textContent.trim().replace(/^\S+\s+/, "");
-  b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(label) + "</span>";
+  b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(stripLeadEmoji(b.textContent)) + "</span>";
+});
+/* Icônes des en-têtes de groupe */
+const NAV_GROUP_ICONS = { yt:"flag", prod:"sliders", ref:"book", acct:"cloud" };
+document.querySelectorAll(".nav-group-head").forEach(h => {
+  const g = h.closest(".nav-group");
+  const name = g && NAV_GROUP_ICONS[g.dataset.group];
+  h.innerHTML = icon(name || "grid", 15) + "<span>" + esc(stripLeadEmoji(h.textContent)) + "</span>";
 });
 /* Groupes de navigation repliables + persistance (défaut : seul YouTube ouvert) */
 (function(){

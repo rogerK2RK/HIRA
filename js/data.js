@@ -41,14 +41,14 @@ const HIRA_DATA = {
     {
       cat: "Logiciels",
       items: [
-        { nom: "FL Studio 2026", detail: "Production / Beatmaking", note: "Là où tu construis l'instru. Exporte tes stems/pistes en WAV 24 bits pour les rapatrier dans Luna. ⚠️ Sur Mac, tes Packs, Templates et presets mixeur sont stockés DANS l'app (/Applications/FL Studio 2026.app) : une mise à jour majeure remplace l'app et efface tout ce que tu y as ajouté. Sauvegarde-les ailleurs (voir la note Packs)." },
+        { nom: "FL Studio 2026", detail: "Production / Beatmaking", note: "Là où tu construis l'instru. Exporte tes stems/pistes en WAV 24 bits pour les rapatrier dans Luna. Sur Mac, tes Packs, Templates et presets mixeur sont stockés DANS l'app (/Applications/FL Studio 2026.app) : une mise à jour majeure remplace l'app et efface tout ce que tu y as ajouté. Sauvegarde-les ailleurs (voir la note Packs)." },
         { nom: "UAD LUNA", detail: "Enregistrement / Mix / Master", note: "Ta DAW principale pour rec, mix, master. Bonne nouvelle confirmée : la version GRATUITE offre les MÊMES fonctions que LUNA Pro, à une exception près — les Hardware Inserts (insérer du matériel analo/outboard dans le mixer, réservé au Pro). Surtout : LUNA free charge bien tes plugins tiers AU/VST3 (FabFilter, Waves, Valhalla, Kilohearts…) directement — pas besoin de tout faire dans FL. Profite aussi du moteur Neve Summing et des plugins UAD natifs inclus. (LUNA n'accepte que l'AU et le VST3, pas le VST2.)" }
       ]
     },
     {
       cat: "Contrôleur",
       items: [
-        { nom: "Novation Launch Control XL 3", detail: "8 faders + 24 encodeurs + 16 boutons + écran OLED", note: "Surface de contrôle (PAS de clavier). Pour mixer et naviguer DANS FL Studio, ta priorité. SETUP FL : Options → MIDI settings → Refresh device list → sélectionne-le en Input ET Output → Controller type « Novation Launch Control XL 3 » (si absent : bouton « Update MIDI scripts »). Deux modes sur le boîtier : DAW Mixer (mixette) et DAW Control (Channel Rack). ⚠️ Mets à jour le firmware AVANT usage via l'app Components — dans CHROME, pas Safari (Safari ne gère pas le Web MIDI). Faders NON motorisés → mode « pickup » : tu dois rattraper la valeur en changeant de piste. Ne pilote PAS LUNA (il parle HUI, LUNA ne comprend que MCU)." }
+        { nom: "Novation Launch Control XL 3", detail: "8 faders + 24 encodeurs + 16 boutons + écran OLED", note: "Surface de contrôle (PAS de clavier). Pour mixer et naviguer DANS FL Studio, ta priorité. SETUP FL : Options → MIDI settings → Refresh device list → sélectionne-le en Input ET Output → Controller type « Novation Launch Control XL 3 » (si absent : bouton « Update MIDI scripts »). Deux modes sur le boîtier : DAW Mixer (mixette) et DAW Control (Channel Rack). Mets à jour le firmware AVANT usage via l'app Components — dans CHROME, pas Safari (Safari ne gère pas le Web MIDI). Faders NON motorisés → mode « pickup » : tu dois rattraper la valeur en changeant de piste. Ne pilote PAS LUNA (il parle HUI, LUNA ne comprend que MCU)." }
       ]
     }
   ],
@@ -271,7 +271,7 @@ const HIRA_DATA = {
       "ÉGALISE le volume perçu (ta prod ≈ la ref) — sinon 'plus fort' passe pour 'meilleur', c'est un piège.",
       "Compare UNE chose à la fois : le bas, la voix, la largeur stéréo, l'air (aigus).",
       "Compare un MIX à un mix : bypasse ton limiteur/master avant l'A/B.",
-      "⚠️ Spotify/YouTube/Apple normalisent ≈ -14 LUFS : ne juge pas le loudness au volume brut du fichier — vise l'équilibre tonal et la punch (voir onglet Cibles dB/LUFS)."
+      "Spotify/YouTube/Apple normalisent ≈ -14 LUFS : ne juge pas le loudness au volume brut du fichier — vise l'équilibre tonal et la punch (voir onglet Cibles dB/LUFS)."
     ],
     genres: [
       { genre: "Afrobeats / Afropop", tracks: [
@@ -311,7 +311,7 @@ const HIRA_DATA = {
         { t: "Billie Eilish – bad guy", ecoute: "Référence de SUB — teste tes basses dessus" },
         { t: "Daft Punk – Get Lucky", ecoute: "Master DYNAMIQUE, pas sur-limité : ça respire" }
       ]},
-      { genre: "🏆 Grammy Best Engineered Album (mix/master) — par année", tracks: [
+      { genre: "Grammy Best Engineered Album (mix/master) — par année", tracks: [
         { t: "2026 · Pino Palladino & Blake Mills – That Wasn't A Dream", ecoute: "Prise analo, basse organique (Pino Palladino !), dynamique préservée — masterclass de son naturel. Master : Patricia Sullivan" },
         { t: "2025 · Peter Gabriel – i/o", ecoute: "Mix Tchad Blake : art-pop d'une profondeur et d'un détail immenses, placement 3D des éléments" },
         { t: "2024 · Victoria Monét – JAGUAR II ★ (ta veine)", ecoute: "RnB/funk moderne : voix, groove et low-end impeccables. LA référence à disséquer pour ton style. Master : Colin Leonard" },
@@ -328,7 +328,7 @@ const HIRA_DATA = {
      Règle d'or Mac : dans tout tuto Windows, Ctrl → ⌘ Cmd, Alt → ⌥ Opt.
      ---------------------------------------------------------------------- */
   shortcuts: {
-    regle: "RÈGLE D'OR sur Mac : dans n'importe quel tuto Windows, remplace Ctrl par ⌘ (Cmd) et Alt par ⌥ (Opt). ⚠️ ⌘Q peut être capté par macOS (Quitter) : si un raccourci ⌘ ne répond pas, passe par le menu Outils du Piano roll (l'icône clé à molette en haut à gauche).",
+    regle: "RÈGLE D'OR sur Mac : dans n'importe quel tuto Windows, remplace Ctrl par ⌘ (Cmd) et Alt par ⌥ (Opt). ⌘Q peut être capté par macOS (Quitter) : si un raccourci ⌘ ne répond pas, passe par le menu Outils du Piano roll (l'icône clé à molette en haut à gauche).",
     groups: [
       { cat: "Générer / créer une mélodie", items: [
         { k: "⌥E", d: "Riff Machine — génère une mélodie ou une variation (scale, rythme, longueur réglables)" },
@@ -649,7 +649,7 @@ const HIRA_DATA = {
       cible: "Pitch calé sur la gamme · effet selon le Retune Speed"
     },
     {
-      nom: "🎤 RAP DUR — Voix lead (SM7B)",
+      nom: "RAP DUR — Voix lead (SM7B)",
       contexte: "Drill / trap dur / boom bap moderne. SM7B + FetHead + Volt (mode Vintage). Voix proche, agressive, qui claque DEVANT l'instru. Prise serrée, sans repisse.",
       etapes: [
         "Option couleur à l'entrée : UA 610 (préampli tube) pour épaissir/driver la voix dès le départ",
@@ -667,7 +667,7 @@ const HIRA_DATA = {
       cible: "Voix sèche, frontale et qui mord · -18 dBFS avant plugins"
     },
     {
-      nom: "🥁 AFROBEAT — Chant lead (NT1-A)",
+      nom: "AFROBEAT — Chant lead (NT1-A)",
       contexte: "Afrobeats / afropop. NT1-A en pièce calme (ou SM7B si pièce vive). Voix douce, chaude, légèrement tunée, qui flotte SUR le groove sans l'écraser. Beaucoup d'espace/réverb.",
       etapes: [
         "Coupe-bas ~75-90 Hz (Pro-Q 4)",
@@ -684,7 +684,7 @@ const HIRA_DATA = {
       cible: "Voix chaude et aérée qui flotte sur le groove · sends généreux"
     },
     {
-      nom: "🛰️ VICTONY — Lead falsetto + blocs choraux",
+      nom: "VICTONY — Lead falsetto + blocs choraux",
       contexte: "Afrobeats mélodique façon Victony (Soweto, Stubborn). Signature = CONTRASTE : lead centré, étroit et plutôt SEC, contre des empilements choraux très larges et noyés de réverb. L'autotune est assumé et audible (outil de phrasé, pas correction). SM7B si ta pièce est vive, NT1-A si elle est traitée. NB : caractérisation à l'oreille — Victony ne publie pas sa chaîne.",
       etapes: [
         "Coupe-bas 80-100 Hz (Pro-Q 4) — le falsetto n'a rien sous 100 Hz, laisse la place à la 808",
@@ -701,7 +701,7 @@ const HIRA_DATA = {
       cible: "Lead sec et centré · chœurs larges et noyés — le contraste EST l'effet"
     },
     {
-      nom: "💔 CKAY — Emo-afrobeats intimiste",
+      nom: "CKAY — Emo-afrobeats intimiste",
       contexte: "« Emo-Afrobeats » (terme de CKay lui-même) : gammes mineures, synthés chauds et ambiants, écriture mélancolique. Voix DOUCE, proche du micro, quasi murmurée, peu de projection. Beaucoup plus de réverb que la moyenne afrobeats — c'est ça la couleur. Autotune discret (glacis, pas effet). NT1-A idéal, chant proche.",
       etapes: [
         "Coupe-bas DOUX 70-80 Hz seulement (Pro-Q 4) — garde la chaleur de proximité, c'est l'intimité du morceau",
@@ -719,7 +719,7 @@ const HIRA_DATA = {
       cible: "Voix intime et proche, noyée dans une réverb longue · mineur et mélancolie"
     },
     {
-      nom: "🌾 MAJEEED — Afropop / amapiano soulful",
+      nom: "MAJEEED — Afropop / amapiano soulful",
       contexte: "Voix la plus CHAUDE des trois : médium-grave charnu, léger voile rauque, phrasé posé et paresseux (typique amapiano). Ancien songwriter pour Seyi Shay — l'écriture prime sur la démonstration vocale. Autotune LÉGER : la texture naturelle de la voix est l'atout, ne la lisse pas. Voix souvent placée un peu EN ARRIÈRE, contrairement à l'afrobeats frontal. SM7B parfait.",
       etapes: [
         "Coupe-bas 70-85 Hz — préserve le corps du médium-grave, c'est sa signature",
@@ -737,8 +737,8 @@ const HIRA_DATA = {
       cible: "Voix chaude, texturée, légèrement en retrait · l'espace amapiano autour"
     },
     {
-      nom: "🇫🇷 RNBOI — R&B/rap FR autotuné (hors afro)",
-      contexte: "⚠️ RNBOI (Samy Schmitt Fahli) est FRANÇAIS, R&B/rap — PAS afrobeats. Premier artiste signé sur le label d'Aya Nakamura, Flamme du morceau R&B 2025. Esthétique : « rap autotuné moody + R&B mainstream ». À l'opposé des trois chaînes ci-dessus : mix DENSE et COMPRESSÉ, réverbs COURTES, très centré. Autotune marqué comme texture. SM7B.",
+      nom: "RNBOI — R&B/rap FR autotuné (hors afro)",
+      contexte: "RNBOI (Samy Schmitt Fahli) est FRANÇAIS, R&B/rap — PAS afrobeats. Premier artiste signé sur le label d'Aya Nakamura, Flamme du morceau R&B 2025. Esthétique : « rap autotuné moody + R&B mainstream ». À l'opposé des trois chaînes ci-dessus : mix DENSE et COMPRESSÉ, réverbs COURTES, très centré. Autotune marqué comme texture. SM7B.",
       etapes: [
         "Coupe-bas 85-100 Hz + creux 200-300 Hz : le mix est dense, il faut faire de la place",
         "Auto-Tune Artist : Retune RAPIDE (0-15 ms), Humanize 0-10 — texture assumée, dans la lignée R&B FR post-Aya",
@@ -756,7 +756,7 @@ const HIRA_DATA = {
       cible: "Voix dense, compressée, centrée et frontale · réverbs courtes"
     },
     {
-      nom: "💜 RnB — Lead (chant principal)",
+      nom: "RnB — Lead (chant principal)",
       contexte: "RnB moderne / smooth. NT1-A (chant doux) ou SM7B (voix proche, intime). Lead riche, soyeux, contrôlé. Auto-tune souvent présent mais musical. Dynamique maîtrisée pour les nuances.",
       etapes: [
         "Coupe-bas ~80 Hz (Pro-Q 4)",
@@ -773,7 +773,7 @@ const HIRA_DATA = {
       cible: "Lead soyeux, brillant et contrôlé · très en avant"
     },
     {
-      nom: "💜 RnB — Backs / harmonies (stack)",
+      nom: "RnB — Backs / harmonies (stack)",
       contexte: "Les empilements RnB (stacks d'harmonies, doubles, ad-libs chantés). Doivent ENROBER le lead façon nappe vocale, larges et fondus, JAMAIS devant le lead.",
       etapes: [
         "Génère ou renforce les harmonies avec Waves Harmony (jusqu'à 8 voix calées sur la tonalité) — ou chante-les toi-même",
@@ -791,7 +791,7 @@ const HIRA_DATA = {
       cible: "Nappe vocale large et fondue · -4 à -8 dB sous le lead"
     },
     {
-      nom: "🔥 DRILL MÉLODIQUE — Voix lead (SM7B)",
+      nom: "DRILL MÉLODIQUE — Voix lead (SM7B)",
       contexte: "Drill UK/NY mélodique (mélodie + flow). SM7B + FetHead. Auto-tune marqué mais musical, voix sombre et présente qui colle aux glides 808. Entre le rap dur et le chant.",
       etapes: [
         "Coupe-bas ~90 Hz (Pro-Q 4)",
@@ -806,7 +806,7 @@ const HIRA_DATA = {
       cible: "Voix sombre, tunée et présente · collée aux 808"
     },
     {
-      nom: "🎙️ POP — Voix lead (NT1-A)",
+      nom: "POP — Voix lead (NT1-A)",
       contexte: "Pop moderne / variété. NT1-A en pièce calme. Voix propre, brillante, parfaitement lisse et régulière, très en avant. Le moins de défauts possible.",
       etapes: [
         "Coupe-bas ~80 Hz (Pro-Q 4)",
@@ -822,7 +822,7 @@ const HIRA_DATA = {
       cible: "Voix lisse, brillante et très en avant · zéro défaut"
     },
     {
-      nom: "🌴 DANCEHALL / AFRO-DANCEHALL — Voix lead (SM7B)",
+      nom: "DANCEHALL / AFRO-DANCEHALL — Voix lead (SM7B)",
       contexte: "Dancehall / afro-dancehall. SM7B (voix proche, énergique) ou NT1-A. Voix punchy et rythmique, légèrement tunée, avec des effets délais/throws qui groovent. Énergie et présence.",
       etapes: [
         "Coupe-bas ~90 Hz (Pro-Q 4)",
@@ -1256,8 +1256,8 @@ const HIRA_DATA = {
       formule: "[Artiste] Type Beat - \"Nom\" | Afrobeat Instrumental 2026",
       note: "Le nom de l'artiste EST le mot-clé de recherche. C'est lui qui te rend trouvable.",
       cibles: [
-        "✅ VISE : Victony, CKay, Majeeed, Rema, Omah Lay, Joeboy — demande réelle, peu de concurrence francophone",
-        "❌ ÉVITE : Burna Boy, Wizkid, Davido — saturé, tu n'apparaîtras jamais dans les résultats",
+        "VISE : Victony, CKay, Majeeed, Rema, Omah Lay, Joeboy — demande réelle, peu de concurrence francophone",
+        "ÉVITE : Burna Boy, Wizkid, Davido — saturé, tu n'apparaîtras jamais dans les résultats",
         "Tu as déjà les chaînes vocales Victony / CKay / Majeeed dans l'onglet Chaînes types : produis les beats qui vont avec, tu gagnes du temps sur les deux tableaux"
       ]
     },
@@ -1383,13 +1383,13 @@ const HIRA_DATA = {
     ],
 
     semaineAdaptee: [
-      { jour: "Lundi", statut: "🏢 Bureau (monkitsolaire)", tache: "Léger — 20-30 min le soir : veille (repère 2-3 outliers de beatmakers afro) + note 3 idées de titres." },
-      { jour: "Mardi", statut: "🏠 Télétravail", tache: "PROD (souplesse) : 1 beat OU avance 1 tuto (screen FL + voix IA). Profite des pauses/midi/soir." },
-      { jour: "Mercredi", statut: "🏢 Bureau", tache: "Léger — le soir : miniatures de la semaine + programme l'upload du type beat." },
-      { jour: "Jeudi", statut: "🏠 Télétravail", tache: "PROD : 1 beat OU enregistre 1 tuto dans OBS (BlackHole pour le son)." },
-      { jour: "Vendredi", statut: "🏢 Bureau", tache: "Léger — le soir : 3 Reels Instagram + DM à 5-10 artistes afro émergents." },
-      { jour: "Samedi", statut: "🟢 Libre", tache: "GROS BLOC : cook-up faceless (mains sur le Launch Control) + tourne 1-2 tutos d'avance + montage DaVinci." },
-      { jour: "Dimanche", statut: "🟢 Libre", tache: "GROS BLOC : finir les montages, programmer les uploads de la semaine, mettre à jour le tableau de veille. Puis repos." }
+      { jour: "Lundi", statut: "Bureau (boulot)", tache: "Léger — 20-30 min le soir : veille (repère 2-3 outliers de beatmakers afro) + note 3 idées de titres." },
+      { jour: "Mardi", statut: "Télétravail", tache: "PROD (souplesse) : 1 beat OU avance 1 tuto (screen FL + voix IA). Profite des pauses/midi/soir." },
+      { jour: "Mercredi", statut: "Bureau", tache: "Léger — le soir : miniatures de la semaine + programme l'upload du type beat." },
+      { jour: "Jeudi", statut: "Télétravail", tache: "PROD : 1 beat OU enregistre 1 tuto dans OBS (BlackHole pour le son)." },
+      { jour: "Vendredi", statut: "Bureau", tache: "Léger — le soir : 3 Reels Instagram + DM à 5-10 artistes afro émergents." },
+      { jour: "Samedi", statut: "Libre", tache: "GROS BLOC : cook-up faceless (mains sur le Launch Control) + tourne 1-2 tutos d'avance + montage DaVinci." },
+      { jour: "Dimanche", statut: "Libre", tache: "GROS BLOC : finir les montages, programmer les uploads de la semaine, mettre à jour le tableau de veille. Puis repos." }
     ],
     semaineCible: "Objectif/semaine : 2 type beats + 1 tuto (les 2 moteurs) + 3 Reels. Le gros du travail est concentré sur Mardi, Jeudi, Samedi, Dimanche — les jours bureau restent légers.",
 
@@ -1402,7 +1402,7 @@ const HIRA_DATA = {
       { mois: "Mois 6", objectif: "~2 000 abonnés", focus: "Palier 1000+ franchi", taches: ["Bilan 6 mois : qu'est-ce qui marche ?", "Affine ton positionnement (angle plus net)", "Vise la monétisation (4000 h de visionnage)"] },
       { mois: "Mois 7-12", objectif: "~10 000 abonnés (si le rythme tient)", focus: "Évoluer", taches: ["Niches adjacentes + vecteurs viraux (\"beat en 5 min\", plugins stock…)", "Présence à l'esprit : beat dans le style d'un artiste qui buzz sous 2 semaines", "Déléguer les miniatures vers 50k"] }
     ],
-    calendrierNote: "⚠️ Les objectifs d'abonnés sont des REPÈRES pour suivre ton évolution, pas des garanties. Le vrai match se joue en heures de visionnage — les abonnés en sont le sous-produit. Ajuste au réel.",
+    calendrierNote: "Les objectifs d'abonnés sont des REPÈRES pour suivre ton évolution, pas des garanties. Le vrai match se joue en heures de visionnage — les abonnés en sont le sous-produit. Ajuste au réel.",
 
     trimestres: [
       { t: "T1 · mois 1-3", objectif: "~800 abonnés", focus: "Relance & rythme", cle: "Installer les 2 moteurs (type beats + tutos), stock d'avance, publier 2 beats + 1 tuto/semaine SANS EXCEPTION. Lire la rétention à chaque vidéo." },
@@ -1431,7 +1431,7 @@ const HIRA_DATA = {
       { nom: "iMovie", role: "Montage rapide de secours" },
       { nom: "Keynote", role: "Graphiques / miniatures de dépannage" },
       { nom: "Capture écran macOS (Cmd+Shift+5)", role: "Screen recording de base (dépannage)" },
-      { nom: "OBS Studio", role: "✅ INSTALLÉ — screen recorder principal : écran FL + son + cam mains, scènes" }
+      { nom: "OBS Studio", role: "INSTALLÉ — screen recorder principal : écran FL + son + cam mains, scènes" }
     ],
 
     aFinir: [
@@ -1488,7 +1488,7 @@ const HIRA_DATA = {
     recMonitorTip: "Avec ton Volt 276, LUNA tourne en Core Audio : pas d'ARM (réservé aux Apollo Thunderbolt). Pour t'entendre via ta chaîne FabFilter/Waves au tracking, baisse le buffer à 32-128 samples. Pour zéro latence absolue, utilise le monitoring direct du Volt (sans plugins).",
     genres: {
       rap: {
-        nom: "Rap", emoji: "🎤", mic: "SM7B (+ FetHead)",
+        nom: "Rap", emoji: "", mic: "SM7B (+ FetHead)",
         prod: "Prod souvent dense et rythmée : la voix doit passer DEVANT, sèche et frontale. Peu d'effets qui traînent.",
         recNote: "Monitoring SEC : peu ou pas de reverb, voix frontale. Autotune optionnel selon le flow.",
         lead: {
@@ -1525,7 +1525,7 @@ const HIRA_DATA = {
         }
       },
       afro: {
-        nom: "Afro", emoji: "🥁", mic: "NT1-A (ou SM7B)",
+        nom: "Afro", emoji: "", mic: "NT1-A (ou SM7B)",
         prod: "Prod groovy et aérée : la voix FLOTTE sur le groove, chaude et légèrement tunée. L'espace (reverb/delay) fait partie du genre.",
         recNote: "Ajoute un peu de reverb + autotune naturel en monitoring : ça aide à poser le chant et à viber.",
         lead: {
@@ -1561,7 +1561,7 @@ const HIRA_DATA = {
         }
       },
       rnb: {
-        nom: "RnB", emoji: "💜", mic: "NT1-A ou SM7B",
+        nom: "RnB", emoji: "", mic: "NT1-A ou SM7B",
         prod: "Prod smooth et spacieuse : lead soyeux et brillant TRÈS en avant, dynamique maîtrisée pour les nuances. Autotune musical.",
         recNote: "Autotune en monitoring (Topline natif) placé tôt : le chanteur cale ses mélodies. Reverb douce.",
         lead: {
@@ -1597,7 +1597,7 @@ const HIRA_DATA = {
         }
       },
       pop: {
-        nom: "Pop", emoji: "🎙️", mic: "NT1-A",
+        nom: "Pop", emoji: "", mic: "NT1-A",
         prod: "Prod propre et carrée : voix lisse, brillante, parfaitement régulière et TRÈS en avant. Le moins de défauts possible.",
         recNote: "Autotune propre + légère reverb en monitoring pour le confort et la justesse.",
         lead: {
