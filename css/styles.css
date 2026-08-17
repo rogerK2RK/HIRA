@@ -728,6 +728,71 @@ tr:last-child td{border-bottom:none}
   .sidebar{padding-left:env(safe-area-inset-left)}
 }
 
+/* ===== Tâche du jour, présentée comme une notification système ===== */
+.notif{
+  background:var(--panel);border:1px solid var(--line2);border-radius:var(--radius);
+  padding:var(--sp-7) var(--sp-8) var(--sp-8);margin-bottom:var(--sp-9);
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:var(--shadow);
+  position:relative;overflow:hidden;border-left:3px solid var(--accent);
+}
+/* la couleur suit le type de journée */
+.notif[data-statut="libre"]  {border-left-color:var(--master)}
+.notif[data-statut="tt"]     {border-left-color:var(--accent)}
+.notif[data-statut="bureau"] {border-left-color:var(--muted)}
+.notif-head{display:flex;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-6)}
+.notif-app{display:inline-flex;align-items:center;gap:var(--sp-3);font-size:var(--fs-2xs);
+  font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.notif-when{font-size:var(--fs-xs);color:var(--muted)}
+.notif-bell{margin-left:auto;background:var(--surface-2);border:1px solid var(--line);
+  color:var(--muted);width:34px;height:34px;border-radius:50%;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;transition:.18s;flex-shrink:0}
+.notif-bell:hover{color:var(--txt);border-color:var(--line2)}
+.notif-bell.on{color:var(--accent);border-color:var(--accent);background:rgba(108,140,255,.16);
+  box-shadow:0 0 0 3px rgba(108,140,255,.14)}
+/* la durée est l'information qu'on doit lire en premier */
+.notif-dur{display:flex;align-items:baseline;gap:var(--sp-5);margin-bottom:var(--sp-4)}
+.notif-dur .ic{color:var(--accent);align-self:center}
+.notif-dur b{font-size:var(--fs-2xl);font-weight:800;letter-spacing:-.02em;line-height:1}
+.notif-dur span{font-size:var(--fs-sm);color:var(--muted)}
+.notif-txt{font-size:var(--fs-md);line-height:1.55;color:var(--txt)}
+.notif-foot{display:flex;align-items:center;gap:var(--sp-4);flex-wrap:wrap;margin-top:var(--sp-7)}
+.notif-chip{font-size:var(--fs-2xs);font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);background:var(--surface-2);border:1px solid var(--line);
+  padding:5px var(--sp-5);border-radius:var(--radius-pill);white-space:nowrap}
+.notif-foot .btn{margin-left:0}
+
+/* ===== Spatialisation : scène stéréo ===== */
+/* 5 genres : colonnes fixes à 4 laisseraient un orphelin */
+.rec-genres.auto{grid-template-columns:repeat(auto-fit,minmax(148px,1fr))}
+.sp-stage{margin:var(--sp-8) 0 var(--sp-6);background:rgba(0,0,0,.22);
+  border:1px solid var(--line);border-radius:var(--radius-md);padding:var(--sp-5)}
+.sp-stage svg{display:block;width:100%;height:auto}
+.sp-node text{paint-order:stroke;stroke:rgba(6,7,10,.85);stroke-width:3.5px;stroke-linejoin:round}
+.sp-legend{display:flex;flex-wrap:wrap;gap:var(--sp-5) var(--sp-8);margin-bottom:var(--sp-4)}
+.sp-leg{display:inline-flex;align-items:center;gap:var(--sp-3);font-size:var(--fs-xs);color:var(--muted)}
+.sp-leg i{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.sp-axes{font-size:var(--fs-xs);color:var(--muted);line-height:1.5}
+.sp-refs{display:flex;flex-wrap:wrap;gap:var(--sp-3);margin:var(--sp-6) 0}
+.sp-table{width:100%;border-collapse:collapse;background:transparent;box-shadow:none;backdrop-filter:none}
+.sp-table th{font-size:var(--fs-2xs);text-transform:uppercase;letter-spacing:1px;color:var(--muted);
+  background:var(--surface-1);padding:var(--sp-5) var(--sp-6);text-align:left}
+.sp-table td{padding:var(--sp-5) var(--sp-6);border-bottom:1px solid var(--line);
+  font-size:var(--fs-sm);vertical-align:top}
+.sp-table tr:last-child td{border-bottom:none}
+.sp-table .sp-num{font-family:var(--mono);font-variant-numeric:tabular-nums;
+  color:var(--accent2);white-space:nowrap}
+.sp-table .sp-note{color:var(--muted);line-height:1.5}
+.sp-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:var(--sp-4);
+  vertical-align:baseline;flex-shrink:0}
+
+/* Téléphone : le schéma reste lisible en agrandissant les libellés */
+@media (max-width:600px){
+  .sp-stage{padding:var(--sp-3);margin-left:calc(var(--sp-5) * -1);margin-right:calc(var(--sp-5) * -1)}
+  .sp-node text{font-size:15px}
+  .notif-dur b{font-size:var(--fs-xl)}
+  .notif-foot .btn{flex:1 1 auto}
+}
+
 /* ===== États de chargement ===== */
 .skel{
   display:inline-block;min-width:4ch;border-radius:var(--radius-xs);color:transparent;

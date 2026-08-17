@@ -857,6 +857,188 @@ const HIRA_DATA = {
      TEMPLATES DE BUS / CANAUX — quoi mettre sur chaque élément
      "icon" = nom d'icône (voir liste plus haut). Garde court et actionnable.
      ---------------------------------------------------------------------- */
+  /* ===== Spatialisation : où poser chaque élément dans la scène stéréo =====
+     pan  : -100 (extrême gauche) → 0 (centre) → +100 (extrême droite)
+     prof : 0 (collé à l'auditeur, sec) → 100 (au fond, réverbéré)
+     r    : rôle, sert à la couleur du schéma (bas / rythme / voix / harmo / air) */
+  spatial: {
+    intro: "Un mix qui « sonne pro » est d'abord un mix où chaque élément a SA place — en largeur ET en profondeur. Le piège classique est de tout empiler au centre, puis d'essayer de rattraper à l'EQ. Place d'abord, corrige ensuite.",
+
+    methode: [
+      "Travaille la spatialisation EN MONO d'abord : si ça tient en mono, ça tiendra en stéréo. Repasse en stéréo seulement pour élargir.",
+      "Pose la largeur AVANT la réverbe. Le pan place l'élément, la réverbe le recule — deux gestes différents, dans cet ordre.",
+      "Ne panoramise jamais le grave. Tout ce qui vit sous ~120 Hz reste mono et centré (Pro-Q en M/S), sinon le master perd en punch et le vinyle/club décroche.",
+      "Un seul élément par « case » : deux sons au même pan ET à la même profondeur se masquent. Si tu dois en garder deux, écarte-les en profondeur.",
+      "Le centre est l'espace le plus précieux : réserve-le au kick, au sub et à la voix lead. Tout le reste négocie les côtés.",
+      "Vérifie en mono à la fin (bouton mono du master) : si un élément disparaît, c'est une annulation de phase — réduis sa largeur."
+    ],
+
+    /* Mode « mix référent » : comparer SA scène stéréo à celle d'une référence */
+    refMethode: [
+      "Importe la référence sur une piste de ta session et égalise le volume perçu — sinon « plus fort » passe pour « plus large ».",
+      "Écoute UNIQUEMENT la largeur : ferme les yeux et pointe du doigt d'où vient chaque son. Fais-le sur la ref, puis sur ta prod.",
+      "Compare le centre : sur la ref, qu'est-ce qui est vraiment au milieu ? En général bien moins de choses que dans ta prod.",
+      "Compare la profondeur : quel élément est le plus loin ? De combien recule-t-il quand le refrain arrive ?",
+      "Passe les deux en mono : la ref perd beaucoup moins d'énergie que ta prod si sa largeur est bien gérée.",
+      "Note UN écart, corrige-le, réécoute. Un seul geste par passe — sinon tu ne sais plus ce qui a marché."
+    ],
+
+    genres: [
+      {
+        genre: "Afrobeats / Afropop",
+        principe: "Le morceau respire par les côtés. Le centre reste dégagé — grave et voix seulement — et toute la percussion vit sur les flancs. C'est ce qui donne cette sensation d'espace qu'on entend sur Essence.",
+        ref: "Wizkid – Essence (ft. Tems)",
+        refBis: "Victony – SLICK ★",
+        refEcoute: "Écoute comme le centre est VIDE à part la voix et le grave. Les shakers, congas et guitares tournent autour de toi sans jamais empiéter sur le lead.",
+        elements: [
+          { n: "Kick",            pan: 0,   prof: 12, r: "bas",    note: "Centre absolu, sec." },
+          { n: "Basse / sub",     pan: 0,   prof: 16, r: "bas",    note: "Mono strict sous 120 Hz." },
+          { n: "Voix lead",       pan: 0,   prof: 8,  r: "voix",   note: "Devant tout, très peu de réverbe." },
+          { n: "Double L",        pan: -32, prof: 30, r: "voix",   note: "Doubles serrés : épaisseur, pas largeur." },
+          { n: "Double R",        pan: 32,  prof: 30, r: "voix" },
+          { n: "Backs / harmo",   pan: -68, prof: 52, r: "voix",   note: "Stack large, reculé derrière le lead." },
+          { n: "Backs / harmo",   pan: 68,  prof: 52, r: "voix" },
+          { n: "Hats",            pan: 22,  prof: 26, r: "rythme", note: "Légèrement décalé, jamais plein centre." },
+          { n: "Shaker",          pan: 58,  prof: 34, r: "rythme" },
+          { n: "Congas / perc",   pan: -62, prof: 38, r: "rythme", note: "Le contrepoids du shaker." },
+          { n: "Guitare highlife",pan: -44, prof: 40, r: "harmo" },
+          { n: "Nappe / pad",     pan: 80,  prof: 66, r: "harmo",  note: "Très large et très en arrière." },
+          { n: "Reverb (send)",   pan: 0,   prof: 92, r: "air",    note: "Le fond de scène." }
+        ],
+        regles: [
+          "Kick et basse au centre, jamais panoramisés — c'est la colonne vertébrale.",
+          "Chaque percussion à droite a son répondant à gauche : sinon le mix penche.",
+          "Doubles de voix serrés (±30), harmonies larges (±65). Ne confonds pas les deux : les doubles épaississent, les harmonies élargissent.",
+          "Garde une vraie zone vide entre la voix et les percus — c'est CET espace qui fait le son afro."
+        ],
+        piege: "Panoramiser les doubles à ±80 en croyant élargir : la voix se creuse au centre et perd sa puissance dès qu'on écoute en mono (donc en story Instagram, en enceinte Bluetooth…)."
+      },
+      {
+        genre: "Amapiano",
+        principe: "Le log drum et le sub tiennent un centre très bas et très en avant. Tout le reste est écarté au maximum : les shakers et percussions balaient la scène de gauche à droite, et les voix flottent loin derrière.",
+        ref: "Tyla – Water",
+        refBis: "Uncle Waffles – Tanzania",
+        refEcoute: "Le log drum est ÉNORME et parfaitement centré, mais le morceau paraît immense : toute la largeur vient des percussions et des nappes, jamais du grave.",
+        elements: [
+          { n: "Kick",            pan: 0,   prof: 14, r: "bas" },
+          { n: "Log drum",        pan: 0,   prof: 10, r: "bas",    note: "La signature du genre : centre, devant, énorme." },
+          { n: "Sub",             pan: 0,   prof: 20, r: "bas",    note: "Mono absolu." },
+          { n: "Voix lead",       pan: 0,   prof: 34, r: "voix",   note: "Plus en retrait qu'en afro : la voix flotte." },
+          { n: "Voix doublée",    pan: -40, prof: 48, r: "voix" },
+          { n: "Voix doublée",    pan: 40,  prof: 48, r: "voix" },
+          { n: "Shaker",          pan: -78, prof: 30, r: "rythme", note: "Très écarté, c'est le moteur de largeur." },
+          { n: "Shaker",          pan: 78,  prof: 30, r: "rythme" },
+          { n: "Rim / clap",      pan: 14,  prof: 24, r: "rythme" },
+          { n: "Perc roll",       pan: -55, prof: 40, r: "rythme", note: "Balaye L→R sur les transitions." },
+          { n: "Nappe / keys",    pan: 62,  prof: 70, r: "harmo" },
+          { n: "Nappe / keys",    pan: -62, prof: 70, r: "harmo" },
+          { n: "Reverb longue",   pan: 0,   prof: 96, r: "air",    note: "Profondeur assumée, très longue." }
+        ],
+        regles: [
+          "Le log drum ne se panoramise JAMAIS — il porte tout le morceau.",
+          "Écarte les shakers plus que partout ailleurs (±75 et plus) : c'est la marque du genre.",
+          "La voix accepte d'être loin. Ne la ramène pas devant comme en RnB, tu casserais l'ambiance.",
+          "Réverbes longues sur les percus légères, jamais sur le log drum."
+        ],
+        piege: "Mettre de la réverbe sur le log drum pour le « grossir » : il perd son attaque et le morceau perd son groove. Pour le grossir, c'est la saturation et le sub, pas l'espace."
+      },
+      {
+        genre: "RnB",
+        principe: "Intime. La voix est collée à l'auditeur, au centre et très en avant, comme si on chantait à ton oreille. Les stacks d'harmonies s'ouvrent largement derrière elle et créent un halo — c'est le contraste entre les deux qui fait tout.",
+        ref: "Daniel Caesar – Best Part (ft. H.E.R.) ★",
+        refBis: "SZA – Snooze",
+        refEcoute: "Sur Best Part, le mix est minimaliste : très peu d'éléments, mais chacun a une place évidente. Écoute la distance entre la voix (collée) et les harmonies (larges et en retrait).",
+        elements: [
+          { n: "Kick",            pan: 0,   prof: 18, r: "bas" },
+          { n: "Basse",           pan: 0,   prof: 22, r: "bas",    note: "Ronde et chaude, mono." },
+          { n: "Voix lead",       pan: 0,   prof: 4,  r: "voix",   note: "Le plus en avant de tous les genres. Presque sèche." },
+          { n: "Double lead",     pan: -22, prof: 22, r: "voix",   note: "Très serré : on doit l'entendre comme UNE voix." },
+          { n: "Double lead",     pan: 22,  prof: 22, r: "voix" },
+          { n: "Stack harmo",     pan: -76, prof: 58, r: "voix",   note: "Le halo. Large ET reculé." },
+          { n: "Stack harmo",     pan: 76,  prof: 58, r: "voix" },
+          { n: "Snare / clap",    pan: 0,   prof: 26, r: "rythme" },
+          { n: "Hats",            pan: 18,  prof: 30, r: "rythme", note: "Discrets, à peine décalés." },
+          { n: "Rhodes / keys",   pan: -48, prof: 46, r: "harmo" },
+          { n: "Guitare",         pan: 52,  prof: 44, r: "harmo" },
+          { n: "Nappe",           pan: 0,   prof: 78, r: "harmo",  note: "Large, tout au fond, presque subliminale." },
+          { n: "Reverb (plate)",  pan: 0,   prof: 88, r: "air",    note: "Longue mais discrète — de la profondeur, pas du brouillard." }
+        ],
+        regles: [
+          "La voix lead est l'élément le PLUS en avant du mix. Si quelque chose est plus proche qu'elle, tu as un problème.",
+          "Doubles très serrés (±20) : au-delà, la voix se dédouble à l'oreille au lieu de s'épaissir.",
+          "Les harmonies partent large ET en arrière — les deux à la fois, jamais large et devant.",
+          "Peu d'éléments. Le RnB moderne se mixe par soustraction : si un son ne sert pas l'émotion, il sort."
+        ],
+        piege: "Noyer la voix de réverbe pour faire « pro ». En RnB moderne la lead est presque sèche ; c'est le stack d'harmonies qui porte l'espace, pas le lead."
+      },
+      {
+        genre: "Rap / Trap",
+        principe: "Frontal et sec. La 808 et la voix occupent plein centre, très en avant, et rien ne leur dispute la place. La largeur vient uniquement des ad-libs et des rolls de hats — c'est un mix étroit qui claque, pas un mix spacieux.",
+        ref: "Drake – NOKIA ★",
+        refBis: "Kendrick Lamar – HUMBLE.",
+        refEcoute: "Sur NOKIA, écoute la CLARTÉ du bas malgré le volume. La scène est étroite mais chaque élément est net — l'inverse du réflexe « j'élargis pour faire gros ».",
+        elements: [
+          { n: "Kick",            pan: 0,   prof: 10, r: "bas" },
+          { n: "808",             pan: 0,   prof: 8,  r: "bas",    note: "Centre, devant, mono absolu." },
+          { n: "Voix lead",       pan: 0,   prof: 6,  r: "voix",   note: "Sèche et frontale. Très peu de réverbe." },
+          { n: "Ad-lib L",        pan: -72, prof: 34, r: "voix",   note: "C'est ICI que se joue la largeur du genre." },
+          { n: "Ad-lib R",        pan: 72,  prof: 34, r: "voix" },
+          { n: "Double lead",     pan: -18, prof: 20, r: "voix" },
+          { n: "Double lead",     pan: 18,  prof: 20, r: "voix" },
+          { n: "Snare / clap",    pan: 0,   prof: 16, r: "rythme" },
+          { n: "Hats",            pan: 10,  prof: 22, r: "rythme", note: "Quasi centrés." },
+          { n: "Hat roll",        pan: -46, prof: 30, r: "rythme", note: "Les rolls s'écartent, pas les hats de base." },
+          { n: "Mélodie / lead",  pan: -36, prof: 42, r: "harmo" },
+          { n: "Nappe sombre",    pan: 56,  prof: 62, r: "harmo" },
+          { n: "Reverb courte",   pan: 0,   prof: 74, r: "air",    note: "Courte. La trap ne recule presque rien." }
+        ],
+        regles: [
+          "808 et kick strictement mono et centrés — toute fuite stéréo dans le grave coûte du punch.",
+          "La voix reste sèche : en trap, la présence prime sur l'espace.",
+          "Toute la largeur passe par les ad-libs. Écarte-les franchement (±70), c'est la signature.",
+          "Hats de base quasi centrés, rolls écartés : c'est le mouvement qui crée la largeur, pas le pan statique."
+        ],
+        piege: "Élargir la 808 avec un imager pour la rendre « plus grosse » : elle perd son centre, le kick perd son impact et le master ne tient plus. Une 808 se grossit à la saturation, jamais à la largeur."
+      },
+      {
+        genre: "Drill",
+        principe: "Sombre et resserré. La 808 glissante tient le centre, la voix perce juste devant. Très peu de réverbe sur les voix : la profondeur vient des nappes, qui sont loin et larges, pendant que tout le reste reste près et sec.",
+        ref: "Central Cee – Sprinter",
+        refBis: "Pop Smoke – Dior",
+        refEcoute: "La voix perce le mix sans être forte : elle est SEULE dans sa zone. Écoute comme les nappes sont loin derrière alors que la rythmique est collée devant.",
+        elements: [
+          { n: "Kick",            pan: 0,   prof: 12, r: "bas" },
+          { n: "808 glissante",   pan: 0,   prof: 10, r: "bas",    note: "Mono. Les glissandos font le mouvement." },
+          { n: "Voix lead",       pan: 0,   prof: 8,  r: "voix",   note: "Devant, sèche, agressive." },
+          { n: "Double lead",     pan: -20, prof: 24, r: "voix" },
+          { n: "Double lead",     pan: 20,  prof: 24, r: "voix" },
+          { n: "Ad-lib",          pan: -66, prof: 38, r: "voix" },
+          { n: "Ad-lib",          pan: 66,  prof: 38, r: "voix" },
+          { n: "Snare / rim",     pan: 8,   prof: 18, r: "rythme" },
+          { n: "Hats",            pan: -14, prof: 24, r: "rythme" },
+          { n: "Perc / shaker",   pan: 44,  prof: 32, r: "rythme" },
+          { n: "Nappe sombre",    pan: -70, prof: 72, r: "harmo",  note: "Loin et large : c'est toute la profondeur du morceau." },
+          { n: "Nappe sombre",    pan: 70,  prof: 72, r: "harmo" },
+          { n: "Reverb (send)",   pan: 0,   prof: 84, r: "air",    note: "Réservée aux nappes, pas aux voix." }
+        ],
+        regles: [
+          "Voix sèche et devant : en drill, la réverbe sur le lead tue l'agressivité.",
+          "La 808 glissante reste mono — le glissando fait déjà tout le mouvement.",
+          "Nappes très larges et très loin : c'est le seul élément qui crée de l'espace.",
+          "Scène globalement étroite : ne cherche pas à remplir les côtés, le vide fait partie du genre."
+        ],
+        piege: "Traiter le drill comme de l'afro en écartant les percussions : le morceau perd son côté oppressant et sonne mou."
+      }
+    ],
+
+    monoCheck: [
+      "Passe le master en mono et compare le volume perçu : une chute nette = annulation de phase quelque part.",
+      "Élément par élément : coupe tout sauf un, écoute en mono. Celui qui s'efface est trop large.",
+      "Les coupables habituels : imager trop poussé sur le grave, doubles à ±80, plugin de largeur en insert sur le master.",
+      "Corrige en réduisant la largeur, pas en montant le volume."
+    ]
+  },
+
   buses: [
     {
       nom: "Basse / 808", icon: "wave",
@@ -1385,14 +1567,22 @@ const HIRA_DATA = {
       "Monétisation (à revérifier sur YouTube) : ~500 abonnés + 3000 h/12 mois (ou 3M vues Shorts/90 j) pour les premières fonctions ; 1000 abonnés + 4000 h/12 mois (ou 10M vues Shorts/90 j) pour la pub. Ton vrai revenu de départ : BeatStars."
     ],
 
+    /* duree = libellé affiché · min = durée en minutes (sert au tri et à la notification) */
     semaineAdaptee: [
-      { jour: "Lundi", statut: "Bureau (boulot)", tache: "Léger — 20-30 min le soir : veille (repère 2-3 outliers de beatmakers afro) + note 3 idées de titres." },
-      { jour: "Mardi", statut: "Télétravail", tache: "PROD (souplesse) : 1 beat OU avance 1 cook-up (screen FL + mains sur les pads). Profite des pauses/midi/soir." },
-      { jour: "Mercredi", statut: "Bureau", tache: "Léger — le soir : miniatures de la semaine + programme l'upload du type beat." },
-      { jour: "Jeudi", statut: "Télétravail", tache: "PROD : 1 beat OU filme 1 cook-up dans OBS (BlackHole pour le son)." },
-      { jour: "Vendredi", statut: "Bureau", tache: "Léger — le soir : 3 Reels Instagram + DM à 5-10 artistes afro émergents." },
-      { jour: "Samedi", statut: "Libre", tache: "GROS BLOC : cook-up faceless (mains sur le Launch Control) + tourne 1-2 cook-ups d'avance + montage DaVinci." },
-      { jour: "Dimanche", statut: "Libre", tache: "GROS BLOC : finir les montages, programmer les uploads de la semaine, mettre à jour le tableau de veille. Puis repos." }
+      { jour: "Lundi", statut: "Bureau (boulot)", duree: "20-30 min", min: 25, quand: "le soir",
+        tache: "Léger — veille (repère 2-3 outliers de beatmakers afro) + note 3 idées de titres." },
+      { jour: "Mardi", statut: "Télétravail", duree: "1 h 30 – 2 h", min: 105, quand: "pauses / midi / soir",
+        tache: "PROD (souplesse) : 1 beat OU avance 1 cook-up (screen FL + mains sur les pads)." },
+      { jour: "Mercredi", statut: "Bureau", duree: "30-45 min", min: 38, quand: "le soir",
+        tache: "Léger — miniatures de la semaine + programme l'upload du type beat." },
+      { jour: "Jeudi", statut: "Télétravail", duree: "1 h 30 – 2 h", min: 105, quand: "pauses / midi / soir",
+        tache: "PROD : 1 beat OU filme 1 cook-up dans OBS (BlackHole pour le son)." },
+      { jour: "Vendredi", statut: "Bureau", duree: "30-45 min", min: 38, quand: "le soir",
+        tache: "Léger — 3 Reels Instagram + DM à 5-10 artistes afro émergents." },
+      { jour: "Samedi", statut: "Libre", duree: "3-4 h", min: 210, quand: "gros bloc",
+        tache: "GROS BLOC : cook-up faceless (mains sur le Launch Control) + tourne 1-2 cook-ups d'avance + montage DaVinci." },
+      { jour: "Dimanche", statut: "Libre", duree: "2-3 h", min: 150, quand: "gros bloc",
+        tache: "GROS BLOC : finir les montages, programmer les uploads de la semaine, mettre à jour le tableau de veille. Puis repos." }
     ],
     semaineCible: "Objectif/semaine : 2 type beats + 1 cook-up (les 2 moteurs) + 3 Reels. Le gros du travail est concentré sur Mardi, Jeudi, Samedi, Dimanche — les jours bureau restent légers.",
 

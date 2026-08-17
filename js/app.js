@@ -251,6 +251,61 @@ function fireNotif(title, body, projectId){
   }).catch(()=>{});
 }
 
+/* ---------- Tâche du jour (plan « Objectif 1M ») ---------- */
+const JOURS_FR = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+
+// Renvoie l'entrée de semaineAdaptee correspondant à aujourd'hui.
+function todayTask(){
+  const sem = HIRA_DATA?.million?.semaineAdaptee;
+  if(!Array.isArray(sem)) return null;
+  const nom = JOURS_FR[new Date().getDay()];
+  return sem.find(d => d.jour === nom) || null;
+}
+
+// Clé du jour, pour n'envoyer la notification quotidienne qu'une seule fois.
+function todayKey(){
+  const d = new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+const DAILY_KEY = "hira_daily_notif";
+const DAILY_SENT = "hira_daily_sent";
+function dailyNotifOn(){ return localStorage.getItem(DAILY_KEY) === "1"; }
+
+window.toggleDailyNotif = async function(){
+  if(dailyNotifOn()){
+    localStorage.setItem(DAILY_KEY, "0");
+    toast("Notification quotidienne désactivée");
+  }else{
+    const ok = await ensureNotifPermission();
+    if(!ok) return;
+    localStorage.setItem(DAILY_KEY, "1");
+    localStorage.removeItem(DAILY_SENT);   // pour que celle du jour parte tout de suite
+    toast("Notification quotidienne activée");
+    maybeSendDailyNotif();
+  }
+  if(currentView === "dashboard") navigate("dashboard");
+};
+
+// Envoie la tâche du jour en notification système, au plus une fois par jour.
+function maybeSendDailyNotif(){
+  if(!dailyNotifOn()) return;
+  if(localStorage.getItem(DAILY_SENT) === todayKey()) return;
+  const t = todayTask();
+  if(!t) return;
+  fireNotif(`HIRA — ${t.jour} · ${t.duree}`, t.tache);
+  localStorage.setItem(DAILY_SENT, todayKey());
+}
+
+window.notifyTodayNow = async function(){
+  const t = todayTask();
+  if(!t){ toast("Pas de tâche pour aujourd'hui"); return; }
+  const ok = await ensureNotifPermission();
+  if(!ok) return;
+  fireNotif(`HIRA — ${t.jour} · ${t.duree}`, t.tache);
+  toast("Notification envoyée");
+};
+
 // Vérifie les rappels échus (tourne tant que l'app est ouverte). One-shot : on efface après.
 function checkReminders(){
   const now = Date.now();
@@ -400,6 +455,29 @@ views.dashboard = function(){
       Aucun projet pour l'instant.<br>Crée ton premier projet pour suivre la trame.</div>`;
   }
 
+  // Tâche du jour, présentée comme une notification système
+  const t = todayTask();
+  const dOn = dailyNotifOn();
+  const todayCard = t ? `
+    <div class="notif" data-statut="${esc(t.statut.toLowerCase().includes("libre") ? "libre" : t.statut.toLowerCase().includes("télétravail") ? "tt" : "bureau")}">
+      <div class="notif-head">
+        <span class="notif-app">${icon("bell",13)} HIRA</span>
+        <span class="notif-when">Aujourd'hui · ${esc(t.jour)}</span>
+        <button class="notif-bell${dOn ? " on" : ""}" onclick="toggleDailyNotif()"
+                aria-pressed="${dOn}"
+                title="${dOn ? "Désactiver la notification quotidienne" : "Recevoir cette tâche en notification chaque jour"}">
+          ${icon("bell",15)}
+        </button>
+      </div>
+      <div class="notif-dur">${icon("clock",20)}<b>${esc(t.duree)}</b><span>${esc(t.quand)}</span></div>
+      <p class="notif-txt">${esc(t.tache)}</p>
+      <div class="notif-foot">
+        <span class="notif-chip">${esc(t.statut)}</span>
+        <button class="btn small secondary" onclick="navigate('million')">Voir le plan de la semaine</button>
+        <button class="btn small secondary" onclick="notifyTodayNow()">${icon("bell",13)} Me l'envoyer</button>
+      </div>
+    </div>` : "";
+
   const r = resumeInfo();
   const hero = r ? `
     <div class="resume-hero" data-phase="${r.sig}" role="button" tabindex="0"
@@ -422,6 +500,7 @@ views.dashboard = function(){
       de l'idée jusqu'au master — avec les bons gestes, les cibles en dB/LUFS et les
       plugins adaptés à ton matériel (Volt 276, SM7B/NT1-A, FabFilter, Waves, UAD…).</p>
     </div>
+    ${todayCard}
     ${hero}
     <div class="stat-row">
       <div class="stat"><div class="label">Projets</div><div class="val">${projects.length}</div></div>
@@ -910,6 +989,179 @@ views.targets = function(){
       <strong>dBTP / True Peak</strong> = pic réel après conversion : garde-le ≤ -1 pour éviter
       la distorsion sur les MP3/AAC. Règle d'or : <strong>garde toujours du headroom</strong>
       à chaque étape, on rajoute du volume à la fin, jamais l'inverse.</p>
+    </div>`;
+};
+
+/* ---- Spatialisation : scène stéréo par genre ----
+   Le schéma est un SVG généré : X = panoramique (L↔R), Y = profondeur
+   (bas = collé à l'auditeur, haut = au fond). Une case = une place. */
+const SPAT_ROLES = {
+  bas:    { c:"var(--warn)",     r:13, l:"Grave" },
+  voix:   { c:"var(--master)",   r:12, l:"Voix" },
+  rythme: { c:"var(--mix)",      r:9,  l:"Rythmique" },
+  harmo:  { c:"var(--concept)",  r:9,  l:"Harmonie" },
+  air:    { c:"var(--muted)",    r:8,  l:"Espace / FX" }
+};
+
+function stereoStage(g){
+  const W = 820, H = 500, padX = 58, padT = 46, padB = 74;
+  const x = p => padX + ((p + 100) / 200) * (W - padX * 2);
+  const y = d => (H - padB) - (d / 100) * (H - padT - padB);
+
+  // Les libellés se chevauchent vite : on décale verticalement ceux qui
+  // tombent au même endroit, en traitant les éléments du fond vers l'avant.
+  // Le repère « TOI » occupe le coin bas-gauche : on l'inscrit d'emblée pour
+  // que les libellés l'évitent.
+  const placed = [{ x: padX + 16, y: H - 20 }];
+  const nodes = g.elements.map((e, i) => {
+    const role = SPAT_ROLES[e.r] || SPAT_ROLES.air;
+    const cx = x(e.pan), cy = y(e.prof);
+    let ly = cy + role.r + 13;
+    let guard = 0;
+    while(guard++ < 24 && placed.some(p => Math.abs(p.x - cx) < 76 && Math.abs(p.y - ly) < 13)){
+      ly += 13;
+    }
+    placed.push({ x: cx, y: ly });
+    return { e, role, cx, cy, ly, i };
+  });
+
+  const dots = nodes.map(({ e, role, cx, cy, ly }) => `
+    <g class="sp-node">
+      <circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${role.r}"
+              fill="${role.c}" fill-opacity=".22" stroke="${role.c}" stroke-width="2"/>
+      <circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3" fill="${role.c}"/>
+      <line x1="${cx.toFixed(1)}" y1="${(cy + role.r).toFixed(1)}" x2="${cx.toFixed(1)}" y2="${(ly - 9).toFixed(1)}"
+            stroke="${role.c}" stroke-opacity=".45" stroke-width="1"/>
+      <text x="${cx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle"
+            fill="var(--txt)" font-size="12.5" font-weight="600">${esc(e.n)}</text>
+    </g>`).join("");
+
+  // Bandes de profondeur (repères de lecture)
+  const bandes = [
+    { d: 88, l: "AU FOND" },
+    { d: 52, l: "MILIEU" },
+    { d: 16, l: "DEVANT" }
+  ].map(b => `
+    <line x1="${padX}" y1="${y(b.d).toFixed(1)}" x2="${W - padX}" y2="${y(b.d).toFixed(1)}"
+          stroke="var(--line)" stroke-dasharray="2 7"/>
+    <text x="${padX - 8}" y="${(y(b.d) + 4).toFixed(1)}" text-anchor="end"
+          fill="var(--muted)" font-size="9.5" letter-spacing="1.2">${b.l}</text>`).join("");
+
+  return `
+  <div class="sp-stage">
+    <svg viewBox="0 0 ${W} ${H}" role="img"
+         aria-label="Scène stéréo ${esc(g.genre)} : position de chaque élément en largeur et en profondeur">
+      <defs>
+        <linearGradient id="spfloor" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--accent)" stop-opacity=".10"/>
+          <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <rect x="${padX}" y="${padT}" width="${W - padX * 2}" height="${H - padT - padB}"
+            fill="url(#spfloor)" rx="10"/>
+      ${bandes}
+      <line x1="${x(0)}" y1="${padT}" x2="${x(0)}" y2="${H - padB}"
+            stroke="var(--line2)" stroke-dasharray="4 5"/>
+      <text x="${x(0)}" y="${padT - 16}" text-anchor="middle" fill="var(--muted)"
+            font-size="10" letter-spacing="1.6">CENTRE</text>
+      <text x="${padX}" y="${padT - 16}" text-anchor="start" fill="var(--muted)"
+            font-size="11" font-weight="700" letter-spacing="1.6">L</text>
+      <text x="${W - padX}" y="${padT - 16}" text-anchor="end" fill="var(--muted)"
+            font-size="11" font-weight="700" letter-spacing="1.6">R</text>
+      ${dots}
+      <g class="sp-listener">
+        <circle cx="${padX + 16}" cy="${H - 26}" r="5" fill="none" stroke="var(--muted)" stroke-width="2"/>
+        <path d="M${padX + 5} ${H - 16} a11 11 0 0 1 22 0" fill="none"
+              stroke="var(--muted)" stroke-width="2"/>
+        <text x="${padX + 34}" y="${H - 15}" fill="var(--muted)" font-size="10"
+              letter-spacing="1.2">TOI — point d'écoute</text>
+      </g>
+    </svg>
+  </div>`;
+}
+
+views.spatial = function(){
+  const S = HIRA_DATA.spatial;
+  const sel = window._spatGenre || S.genres[0].genre;
+  const g = S.genres.find(x => x.genre === sel) || S.genres[0];
+
+  const onglets = S.genres.map(x => `
+    <button class="rec-gbtn${x.genre === g.genre ? " active" : ""}"
+            onclick="window._spatGenre=${JSON.stringify(x.genre).replace(/"/g,"&quot;")};navigate('spatial')">
+      ${icon("expand",20)}<span>${esc(x.genre)}</span>
+    </button>`).join("");
+
+  const legende = Object.entries(SPAT_ROLES).map(([k, v]) => `
+    <span class="sp-leg"><i style="background:${v.c}"></i>${v.l}</span>`).join("");
+
+  // Tableau des valeurs : le schéma montre, le tableau chiffre.
+  const lignes = g.elements.map(e => {
+    const role = SPAT_ROLES[e.r] || SPAT_ROLES.air;
+    const pan = e.pan === 0 ? "centre"
+      : (e.pan < 0 ? "G " : "D ") + Math.abs(e.pan);
+    return `<tr>
+      <td><span class="sp-dot" style="background:${role.c}"></span>${esc(e.n)}</td>
+      <td class="sp-num">${pan}</td>
+      <td class="sp-num">${e.prof}</td>
+      <td class="sp-note">${e.note ? esc(e.note) : ""}</td>
+    </tr>`;
+  }).join("");
+
+  content.innerHTML = `
+    <div class="page-head">
+      <h1>${icon("expand",22)} Spatialisation</h1>
+      <p>${esc(S.intro)}</p>
+    </div>
+
+    <div class="rec-genres auto">${onglets}</div>
+
+    <div class="card">
+      <h3>${icon("target",16)} ${esc(g.genre)}</h3>
+      <p>${esc(g.principe)}</p>
+      ${stereoStage(g)}
+      <div class="sp-legend">${legende}</div>
+      <p class="sp-axes">Largeur : gauche ↔ droite · Profondeur : le bas est collé à toi, le haut est au fond du mix.</p>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>${icon("headphones",16)} Mix référent — ${esc(g.ref)}</h3>
+      <p>${esc(g.refEcoute)}</p>
+      <div class="sp-refs">
+        <span class="tag">${icon("music",12)} ${esc(g.ref)}</span>
+        <span class="tag">${icon("music",12)} ${esc(g.refBis)}</span>
+      </div>
+      <ol class="bus-steps">${S.refMethode.map(m => `<li>${esc(m)}</li>`).join("")}</ol>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>${icon("sliders",16)} Valeurs de placement</h3>
+      <div class="tbl-scroll">
+        <table class="sp-table">
+          <thead><tr><th>Élément</th><th>Pan</th><th>Profondeur</th><th>Note</th></tr></thead>
+          <tbody>${lignes}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:16px">
+      <div class="card">
+        <h3>${icon("check",16)} Les règles du genre</h3>
+        <ul class="guide-list">${g.regles.map(r => `<li>${esc(r)}</li>`).join("")}</ul>
+      </div>
+      <div class="card">
+        <h3>${icon("alert",16)} Le piège classique</h3>
+        <div class="rec-tip">${icon("alert",16)}<div>${esc(g.piege)}</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>${icon("wrench",16)} Méthode générale</h3>
+      <ul class="guide-list">${S.methode.map(m => `<li>${esc(m)}</li>`).join("")}</ul>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>${icon("alert",16)} Contrôle mono (à faire avant d'exporter)</h3>
+      <ul class="guide-list">${S.monoCheck.map(m => `<li>${esc(m)}</li>`).join("")}</ul>
     </div>`;
 };
 
@@ -1905,7 +2157,7 @@ window.syncLogout = async function(){
 window.syncNow = function(){ pullMergePush(); };
 
 /* ---- Icônes de la sidebar (injectées au démarrage) ---- */
-const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", shortcuts:"wrench", references:"headphones", growth:"share", million:"flag", outils:"laptop", sync:"cloud" };
+const NAV_ICONS = { dashboard:"home", projects:"music", newproject:"plus", targets:"target", chains:"link", spatial:"expand", buses:"wave", recprocess:"mic", guide:"book", calc:"clock", gear:"sliders", plugins:"grid", studio:"building", shortcuts:"wrench", references:"headphones", growth:"share", million:"flag", outils:"laptop", sync:"cloud" };
 const stripLeadEmoji = t => t.trim().replace(/^(?:[\u{2300}-\u{23FF}\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]\s*)+/u, "");
 document.querySelectorAll(".nav-btn").forEach(b => {
   b.innerHTML = icon(NAV_ICONS[b.dataset.view] || "plus", 17) + "<span>" + esc(stripLeadEmoji(b.textContent)) + "</span>";
@@ -1991,6 +2243,11 @@ if("serviceWorker" in navigator){
 /* ---- Rappels (tant que l'app est ouverte) ---- */
 checkReminders();
 setInterval(checkReminders, 60000);
+
+/* ---- Tâche du jour en notification (une fois par jour, si activé) ---- */
+maybeSendDailyNotif();
+// l'app reste ouverte plusieurs jours d'affilée sur mobile : on repasse à minuit
+setInterval(maybeSendDailyNotif, 15 * 60 * 1000);
 
 /* ---- Démarrage ---- */
 (function(){
