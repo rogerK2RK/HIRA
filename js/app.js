@@ -216,7 +216,13 @@ function resumeInfo(){
 
 function toast(msg){
   let t = document.querySelector(".toast");
-  if(!t){ t = document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
+  if(!t){
+    t = document.createElement("div"); t.className="toast";
+    // annoncé aux lecteurs d'écran : le toast est parfois le seul retour d'une action
+    t.setAttribute("role", "status");
+    t.setAttribute("aria-live", "polite");
+    document.body.appendChild(t);
+  }
   t.textContent = msg; t.classList.add("show");
   setTimeout(()=>t.classList.remove("show"), 2200);
 }
@@ -267,17 +273,27 @@ let currentParam = null;
 function navigate(view, param){
   currentView = view;
   currentParam = param;
-  document.querySelectorAll(".nav-btn").forEach(b =>
-    b.classList.toggle("active", b.dataset.view === view));
+  document.querySelectorAll(".nav-btn").forEach(b => {
+    const on = b.dataset.view === view;
+    b.classList.toggle("active", on);
+    // l'état actif doit exister aussi hors du visuel (lecteurs d'écran)
+    if(on) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+  });
   // ouvre automatiquement le groupe qui contient la page active + le marque
   const actBtn = document.querySelector(".nav-btn.active");
   const actGrp = actBtn && actBtn.closest(".nav-group");
   document.querySelectorAll(".nav-group").forEach(g =>
     g.classList.toggle("has-active", g === actGrp));
-  if(actGrp) actGrp.classList.remove("collapsed");
+  if(actGrp){
+    actGrp.classList.remove("collapsed");
+    actGrp.querySelector(".nav-group-head")?.setAttribute("aria-expanded", "true");
+  }
   // bottom-nav (mobile) : état actif
-  document.querySelectorAll(".bn-item").forEach(b =>
-    b.classList.toggle("active", b.dataset.view === view));
+  document.querySelectorAll(".bn-item").forEach(b => {
+    const on = b.dataset.view === view;
+    b.classList.toggle("active", on);
+    if(on) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+  });
   content.scrollTo(0,0);
   window.scrollTo(0,0);
   (views[view] || views.dashboard)(param);
@@ -291,15 +307,70 @@ function navigate(view, param){
   }
 }
 
-/* ---- Tiroir de navigation (mobile) ---- */
+/* ---- Tiroir de navigation (mobile) ----
+   Tiroir modal : au clavier le focus doit rester dedans tant qu'il est ouvert,
+   sinon on tabule sur le contenu masqué derrière le voile. */
+let drawerReturnFocus = null;
+/* La sidebar n'est un tiroir modal QUE sous 760px. Au-delà c'est la navigation
+   principale, toujours visible : lui poser aria-hidden la masquerait aux
+   lecteurs d'écran sur desktop. */
+const mqDrawer = window.matchMedia("(max-width:760px)");
+
+function syncDrawerA11y(){
+  const sb = document.querySelector(".sidebar");
+  if(!sb) return;
+  if(mqDrawer.matches){
+    sb.setAttribute("role", "dialog");
+    sb.setAttribute("aria-modal", "true");
+    sb.setAttribute("aria-label", "Navigation");
+    sb.setAttribute("aria-hidden", sb.classList.contains("open") ? "false" : "true");
+  }else{
+    sb.removeAttribute("role");
+    sb.removeAttribute("aria-modal");
+    sb.removeAttribute("aria-hidden");
+  }
+}
+mqDrawer.addEventListener("change", syncDrawerA11y);
+syncDrawerA11y();
+
+function drawerFocusables(sb){
+  return [...sb.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')]
+    .filter(el => !el.disabled && el.offsetParent !== null);
+}
+
 function openDrawer(){
-  document.querySelector(".sidebar")?.classList.add("open");
+  const sb = document.querySelector(".sidebar");
+  if(!sb) return;
+  drawerReturnFocus = document.activeElement;
+  sb.classList.add("open");
   document.getElementById("backdrop")?.classList.add("show");
+  syncDrawerA11y();
+  drawerFocusables(sb)[0]?.focus();
 }
+
 function closeDrawer(){
-  document.querySelector(".sidebar")?.classList.remove("open");
+  const sb = document.querySelector(".sidebar");
+  const wasOpen = sb?.classList.contains("open");
+  sb?.classList.remove("open");
   document.getElementById("backdrop")?.classList.remove("show");
+  syncDrawerA11y();
+  // ne récupère le focus que si le tiroir était bien ouvert (closeDrawer est
+  // appelé à chaque navigate(), y compris sur desktop)
+  if(wasOpen && drawerReturnFocus?.isConnected) drawerReturnFocus.focus();
+  drawerReturnFocus = null;
 }
+
+document.addEventListener("keydown", e => {
+  const sb = document.querySelector(".sidebar");
+  if(!sb?.classList.contains("open")) return;
+  if(e.key === "Escape"){ closeDrawer(); return; }
+  if(e.key !== "Tab") return;
+  const f = drawerFocusables(sb);
+  if(!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+});
 
 document.querySelectorAll(".nav-btn").forEach(btn =>
   btn.addEventListener("click", () => navigate(btn.dataset.view)));
@@ -357,7 +428,7 @@ views.dashboard = function(){
       <div class="stat"><div class="label">En cours</div><div class="val">${active}</div></div>
       <div class="stat"><div class="label">Terminés</div><div class="val">${done}</div></div>
     </div>
-    <h3 style="margin:4px 0 12px;font-size:15px;color:var(--muted)">Accès rapide</h3>
+    <h3 style="margin:4px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Accès rapide</h3>
     <div class="cta-grid">
       ${[
         {v:"newproject", ic:"plus",   l:"Nouveau projet"},
@@ -378,7 +449,7 @@ views.dashboard = function(){
         {v:"outils",     ic:"laptop", l:"Outils YouTube"}
       ].map(c => `<button class="cta" onclick="navigate('${c.v}')">${icon(c.ic,26)}<span>${c.l}</span></button>`).join("")}
     </div>
-    <h3 style="margin-bottom:14px;font-size:15px;color:var(--muted)">Projets récents</h3>
+    <h3 style="margin-bottom:14px;font-size:var(--fs-lg);color:var(--muted)">Projets récents</h3>
     <div class="grid">${recent}</div>
   `;
 };
@@ -696,7 +767,7 @@ views.project = function(id){
       <summary>${icon("lightbulb",14)} Conseils${ph.plugins.length?" & plugins":""}</summary>
       <ul class="tips">${ph.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
       ${ph.plugins.length?`<div class="plug-tags">${ph.plugins.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}</div>
-      <p style="font-size:11px;color:var(--muted);margin-top:8px">→ détail dans l'onglet « Mes plugins »</p>`:""}
+      <p style="font-size:var(--fs-2xs);color:var(--muted);margin-top:8px">→ détail dans l'onglet « Mes plugins »</p>`:""}
     </details>` : "";
 
   const sig = signalPhase(ph.id);
@@ -729,7 +800,7 @@ views.project = function(id){
         </div>
       </div>
       <div style="text-align:right">
-        <div class="pct" style="font-size:30px">${pct}%</div>
+        <div class="pct" style="font-size:var(--fs-3xl)">${pct}%</div>
         <div class="progress" style="width:120px"><span style="width:${pct}%"></span></div>
       </div>
     </div>
@@ -751,8 +822,8 @@ views.project = function(id){
     <div class="card" style="margin:18px 0 0">
       <h3>${icon("bell")} Rappel</h3>
       ${proj.reminder
-        ? `<p style="color:var(--accent2);font-size:13px;margin-bottom:10px">Programmé : ${fmtReminder(proj.reminder)}</p>`
-        : `<p style="color:var(--muted);font-size:13px;margin-bottom:10px">Programme un rappel pour ne pas oublier ce projet.</p>`}
+        ? `<p style="color:var(--accent2);font-size:var(--fs-sm);margin-bottom:10px">Programmé : ${fmtReminder(proj.reminder)}</p>`
+        : `<p style="color:var(--muted);font-size:var(--fs-sm);margin-bottom:10px">Programme un rappel pour ne pas oublier ce projet.</p>`}
       <div class="form-row" style="margin-bottom:0;max-width:280px">
         <label>Date & heure</label>
         <input type="datetime-local" id="proj-reminder" value="${proj.reminder?toLocalInput(proj.reminder):""}">
@@ -763,7 +834,7 @@ views.project = function(id){
         <button class="btn secondary small" onclick="testNotif()">Tester une notif</button>
       </div>
       ${notifSupported() && Notification.permission!=="granted"
-        ? `<p style="font-size:12px;color:var(--warn);margin-top:10px">Notifications non activées — touche « Définir » ou « Tester » pour autoriser.</p>` : ""}
+        ? `<p style="font-size:var(--fs-xs);color:var(--warn);margin-top:10px">Notifications non activées — touche « Définir » ou « Tester » pour autoriser.</p>` : ""}
     </div>
 
     <div class="card" style="margin:18px 0">
@@ -771,7 +842,7 @@ views.project = function(id){
       <textarea id="proj-notes" placeholder="Idées, réglages clés, LUFS atteint…">${esc(proj.notes)}</textarea>
       <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
         <button class="btn small" onclick="saveNotes('${proj.id}')">Enregistrer les notes</button>
-        <span id="notes-status" style="font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:5px">${icon("check",13)} Sauvegarde auto</span>
+        <span id="notes-status" style="font-size:var(--fs-xs);color:var(--muted);display:inline-flex;align-items:center;gap:5px">${icon("check",13)} Sauvegarde auto</span>
       </div>
     </div>
 
@@ -1146,8 +1217,8 @@ function buildCalc(bpm){
   }).join("");
 
   return table
-    + `<h3 style="margin:18px 0 10px;font-size:15px">${icon("link",16)} Reverb par source</h3>${rev}`
-    + `<h3 style="margin:18px 0 10px;font-size:15px">${icon("sliders",16)} Compression par source</h3>${comp}`;
+    + `<h3 style="margin:18px 0 10px;font-size:var(--fs-lg)">${icon("link",16)} Reverb par source</h3>${rev}`
+    + `<h3 style="margin:18px 0 10px;font-size:var(--fs-lg)">${icon("sliders",16)} Compression par source</h3>${comp}`;
 }
 
 views.calc = function(){
@@ -1155,7 +1226,7 @@ views.calc = function(){
     <div class="page-head"><h1>${icon("clock",22)} Calculateur</h1>
       <p>Entre le BPM : temps de delay/reverb + réglages reverb et compression par source.</p></div>
     <div class="card" style="max-width:280px;margin-bottom:16px">
-      <label style="display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px">BPM</label>
+      <label style="display:block;font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px">BPM</label>
       <input type="number" id="calc-bpm" value="${calcBpm}" min="40" max="300" inputmode="numeric" oninput="setCalcBpm(this.value)">
     </div>
     <div id="calc-results">${buildCalc(calcBpm)}</div>`;
@@ -1175,7 +1246,7 @@ views.gear = function(){
       ${g.items.map(it => `
         <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">
           <strong>${esc(it.nom)}</strong>
-          <div style="font-size:12px;color:var(--accent2);margin:2px 0">${esc(it.detail)}</div>
+          <div style="font-size:var(--fs-xs);color:var(--accent2);margin:2px 0">${esc(it.detail)}</div>
           <p>${esc(it.note)}</p>
         </div>`).join("")}
     </div>`).join("");
@@ -1196,19 +1267,19 @@ views.outils = function(){
     <div class="page-head"><h1>${icon("laptop",22)} Outils YouTube</h1>
       <p>${esc(o.intro)}</p></div>
 
-    <h3 style="margin:6px 0 12px;font-size:15px;color:var(--muted)">${icon("check",16)} Ce que tu as</h3>
+    <h3 style="margin:6px 0 12px;font-size:var(--fs-lg);color:var(--muted)">${icon("check",16)} Ce que tu as</h3>
     <div class="card"><div class="sc-list">${rows(o.possede)}</div></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("alert",16)} À finir d'installer</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">${icon("alert",16)} À finir d'installer</h3>
     <div class="card" style="border-left:3px solid var(--accent)"><div class="sc-list">${rows(o.aFinir)}</div></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("globe",16)} Web (rien à installer)</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">${icon("globe",16)} Web (rien à installer)</h3>
     <div class="card"><div class="sc-list">${rows(o.web)}</div></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("phone",16)} Tournage téléphone</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">${icon("phone",16)} Tournage téléphone</h3>
     <div class="card"><ul>${li(o.cameras)}</ul></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("wave",16)} Router le son FL → OBS (pour les tutos)</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">${icon("wave",16)} Router le son FL → OBS (pour les tutos)</h3>
     <div class="card"><ul>${li(o.routageSon)}</ul></div>`;
 };
 
@@ -1217,20 +1288,20 @@ views.million = function(){
   const li = a => a.map(x=>`<li>${esc(x)}</li>`).join("");
 
   const principes = m.principes.map(p=>`
-    <div class="card"><h4>${esc(p.t)}</h4><p style="font-size:13px;color:var(--muted)">${esc(p.d)}</p></div>`).join("");
+    <div class="card"><h4>${esc(p.t)}</h4><p style="font-size:var(--fs-sm);color:var(--muted)">${esc(p.d)}</p></div>`).join("");
 
   const paliers = m.paliers.map(p=>`
     <div class="card">
       <h4>${esc(p.palier)} — ${esc(p.titre)}</h4>
-      <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(p.focus)}</div>
+      <div style="font-size:var(--fs-xs);color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(p.focus)}</div>
       <ul>${li(p.actions)}</ul>
     </div>`).join("");
 
   const formats = m.formats.map(f=>`
     <div class="card">
       <h4>${esc(f.nom)}</h4>
-      <div style="font-size:12px;color:var(--muted);margin:4px 0"><b>Rôle :</b> ${esc(f.role)}</div>
-      <div style="font-size:12px;color:var(--muted)"><b>Voix :</b> ${esc(f.voix)}</div>
+      <div style="font-size:var(--fs-xs);color:var(--muted);margin:4px 0"><b>Rôle :</b> ${esc(f.role)}</div>
+      <div style="font-size:var(--fs-xs);color:var(--muted)"><b>Voix :</b> ${esc(f.voix)}</div>
     </div>`).join("");
 
   const metriques = m.metriques.map(x=>`
@@ -1240,17 +1311,17 @@ views.million = function(){
   const tracker = cid ? `
     <div class="card" style="border-left:3px solid var(--accent)">
       <h4>${icon("flag",16)} Abonnés en direct — Rog One Beats</h4>
-      <div style="font-size:36px;font-weight:800;letter-spacing:-.02em"><span id="yt-subs-val">…</span> <span style="font-size:14px;color:var(--muted);font-weight:500">abonnés</span></div>
+      <div style="font-size:var(--fs-4xl);font-weight:800;letter-spacing:-.02em"><span id="yt-subs-val">…</span> <span style="font-size:var(--fs-md);color:var(--muted);font-weight:500">abonnés</span></div>
       <div class="progress" style="margin-top:10px"><div id="yt-bar" style="height:100%;width:0;background:var(--accent);transition:width .5s"></div></div>
-      <div style="font-size:12px;color:var(--muted);margin-top:6px">Palier 1 : 1 000 abonnés · <span id="yt-updated">chargement…</span></div>
-      <button class="cta" style="margin-top:10px;font-size:12px;padding:6px 12px" onclick="resetYtChannel()">Changer d'ID</button>
+      <div style="font-size:var(--fs-xs);color:var(--muted);margin-top:6px">Palier 1 : 1 000 abonnés · <span id="yt-updated">chargement…</span></div>
+      <button class="cta" style="margin-top:10px;font-size:var(--fs-xs);padding:6px 12px" onclick="resetYtChannel()">Changer d'ID</button>
     </div>` : `
     <div class="card">
       <h4>${icon("flag",16)} Connecter ta chaîne (abonnés en direct)</h4>
-      <p style="font-size:13px;color:var(--muted)">Colle l'ID de ta chaîne (format <b>UC…</b>) pour suivre tes abonnés en temps réel. Tu le trouves sur <b>youtube.com/account_advanced</b> (ou YouTube Studio → Paramètres → Chaîne → Paramètres avancés).</p>
-      <input id="yt-cid-input" placeholder="UC…" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:inherit;margin:8px 0;font-size:14px">
+      <p style="font-size:var(--fs-sm);color:var(--muted)">Colle l'ID de ta chaîne (format <b>UC…</b>) pour suivre tes abonnés en temps réel. Tu le trouves sur <b>youtube.com/account_advanced</b> (ou YouTube Studio → Paramètres → Chaîne → Paramètres avancés).</p>
+      <input id="yt-cid-input" placeholder="UC…" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:inherit;margin:8px 0;font-size:var(--fs-md)">
       <button class="cta" onclick="saveYtChannel()">Connecter</button>
-      <p style="font-size:11px;color:var(--muted);margin-top:8px">Note : compteur fourni par un service tiers gratuit (approximatif). Ton ID reste stocké dans ton navigateur.</p>
+      <p style="font-size:var(--fs-2xs);color:var(--muted);margin-top:8px">Note : compteur fourni par un service tiers gratuit (approximatif). Ton ID reste stocké dans ton navigateur.</p>
     </div>`;
 
   content.innerHTML = `
@@ -1263,7 +1334,7 @@ views.million = function(){
       <p style="margin:0">${icon("lightbulb",16)} ${esc(m.regleDor)}</p>
     </div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">${icon("calendar",16)} Ma semaine (façon agenda)</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">${icon("calendar",16)} Ma semaine (façon agenda)</h3>
     <div class="card">
       <div class="week-scroll">
         <div class="week-grid">
@@ -1278,56 +1349,56 @@ views.million = function(){
           }).join("")}
         </div>
       </div>
-      <p style="font-size:12px;color:var(--accent);margin-top:14px;font-weight:600">${esc(m.semaineCible)}</p>
+      <p style="font-size:var(--fs-xs);color:var(--accent);margin-top:14px;font-weight:600">${esc(m.semaineCible)}</p>
     </div>
 
-    <h3 style="margin:26px 0 6px;font-size:15px;color:var(--muted)">${icon("target",16)} Plan d'action — par horizon</h3>
-    <p style="font-size:13px;color:var(--muted);margin:0 0 16px">Jour → semaine (ci-dessus) → mois → trimestre → année. Suis ton avancée à chaque niveau jusqu'au million.</p>
+    <h3 style="margin:26px 0 6px;font-size:var(--fs-lg);color:var(--muted)">${icon("target",16)} Plan d'action — par horizon</h3>
+    <p style="font-size:var(--fs-sm);color:var(--muted);margin:0 0 16px">Jour → semaine (ci-dessus) → mois → trimestre → année. Suis ton avancée à chaque niveau jusqu'au million.</p>
 
-    <div style="font-size:13px;font-weight:700;margin:6px 0 10px;color:var(--txt)">Par mois</div>
+    <div style="font-size:var(--fs-sm);font-weight:700;margin:6px 0 10px;color:var(--txt)">Par mois</div>
     <div class="grid grid-2">${m.calendrier.map(c=>`
       <div class="card">
         <h4>${esc(c.mois)} — ${esc(c.objectif)}</h4>
-        <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(c.focus)}</div>
+        <div style="font-size:var(--fs-xs);color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(c.focus)}</div>
         <ul>${c.taches.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
       </div>`).join("")}</div>
 
-    <div style="font-size:13px;font-weight:700;margin:22px 0 10px;color:var(--txt)">Par trimestre</div>
+    <div style="font-size:var(--fs-sm);font-weight:700;margin:22px 0 10px;color:var(--txt)">Par trimestre</div>
     <div class="grid grid-2">${m.trimestres.map(t=>`
       <div class="card">
         <h4>${esc(t.t)} — ${esc(t.objectif)}</h4>
-        <div style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(t.focus)}</div>
-        <p style="font-size:13px;color:var(--muted);margin:0">${esc(t.cle)}</p>
+        <div style="font-size:var(--fs-xs);color:var(--accent);font-weight:700;margin-bottom:8px">FOCUS : ${esc(t.focus)}</div>
+        <p style="font-size:var(--fs-sm);color:var(--muted);margin:0">${esc(t.cle)}</p>
       </div>`).join("")}</div>
 
-    <div style="font-size:13px;font-weight:700;margin:22px 0 10px;color:var(--txt)">Par année — jusqu'au million</div>
+    <div style="font-size:var(--fs-sm);font-weight:700;margin:22px 0 10px;color:var(--txt)">Par année — jusqu'au million</div>
     <div class="grid grid-2">${m.annees.map(a=>`
       <div class="card" style="border-left:3px solid var(--accent)">
         <h4>${esc(a.an)} — ${esc(a.objectif)}</h4>
-        <p style="font-size:13px;color:var(--muted);margin:0">${esc(a.jalon)}</p>
+        <p style="font-size:var(--fs-sm);color:var(--muted);margin:0">${esc(a.jalon)}</p>
       </div>`).join("")}</div>
 
-    <p style="font-size:12px;color:var(--muted);margin:16px 0 4px">${esc(m.calendrierNote)}</p>
+    <p style="font-size:var(--fs-xs);color:var(--muted);margin:16px 0 4px">${esc(m.calendrierNote)}</p>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les principes</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Les principes</h3>
     <div class="grid grid-2">${principes}</div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Le plan, palier par palier</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Le plan, palier par palier</h3>
     <div class="grid grid-2">${paliers}</div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Tes formats de contenu (faceless)</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Tes formats de contenu (faceless)</h3>
     <div class="grid grid-2">${formats}</div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Rester sans visage / sans voix</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Rester sans visage / sans voix</h3>
     <div class="card"><ul>${li(m.faceless)}</ul></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les métriques à suivre</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Les métriques à suivre</h3>
     <div class="card"><div class="sc-list">${metriques}</div></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les erreurs qui tuent une chaîne de beats</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Les erreurs qui tuent une chaîne de beats</h3>
     <div class="card"><ul>${li(m.erreurs)}</ul></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Chiffres à connaître par cœur</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Chiffres à connaître par cœur</h3>
     <div class="card"><ul>${li(m.chiffres)}</ul></div>`;
 
   if(cid) setTimeout(()=>{ try{ window.refreshYtSubs && window.refreshYtSubs(); }catch(e){} }, 0);
@@ -1361,7 +1432,12 @@ function _findSubs(j){
 window.refreshYtSubs = async function(){
   const el = document.getElementById("yt-subs-val"); if(!el) return;
   const cid = localStorage.getItem("hira_yt_channel"); if(!cid){ return; }
-  el.textContent = "…";
+  const up0 = document.getElementById("yt-updated");
+  // état de chargement explicite : squelette + libellé, plutôt qu'un "…" muet
+  el.className = "skel"; el.textContent = "000 000";
+  el.setAttribute("aria-busy", "true");
+  if(up0) up0.textContent = "récupération du compteur…";
+  const done = (cls) => { el.className = cls; el.removeAttribute("aria-busy"); };
   // Deux services de comptage sans clé : on prend le premier qui répond
   const endpoints = [
     "https://api.socialcounts.org/youtube-live-subscriber-count/" + encodeURIComponent(cid),
@@ -1373,6 +1449,7 @@ window.refreshYtSubs = async function(){
       if(!r.ok) continue;
       const n = _findSubs(await r.json());
       if(typeof n === "number" && n >= 0){
+        done("");
         el.textContent = n.toLocaleString("fr-FR");
         const bar = document.getElementById("yt-bar"); if(bar) bar.style.width = Math.min(100, Math.round(n/1000*100)) + "%";
         const up = document.getElementById("yt-updated"); if(up) up.textContent = "à jour — " + new Date().toLocaleString("fr-FR");
@@ -1380,6 +1457,7 @@ window.refreshYtSubs = async function(){
       }
     }catch(e){ /* essaie le suivant */ }
   }
+  done("is-error");
   el.textContent = "indispo";
   const up = document.getElementById("yt-updated"); if(up) up.textContent = "services de comptage injoignables — réessaie plus tard";
 };
@@ -1415,7 +1493,7 @@ views.references = function(){
       <ul style="list-style:none;padding:0">${g.tracks.map(tr=>`
         <li style="margin-bottom:10px">
           <div style="font-weight:600">${esc(tr.t)}</div>
-          <div style="font-size:12px;color:var(--muted)">→ ${esc(tr.ecoute)}</div>
+          <div style="font-size:var(--fs-xs);color:var(--muted)">→ ${esc(tr.ecoute)}</div>
         </li>`).join("")}</ul>
     </div>`).join("");
 
@@ -1436,7 +1514,7 @@ views.growth = function(){
   const li = a => a.map(x=>`<li>${esc(x)}</li>`).join("");
 
   const principes = g.principes.map(p=>`
-    <div class="card"><h4>${esc(p.t)}</h4><p style="font-size:13px;color:var(--muted)">${esc(p.d)}</p></div>`).join("");
+    <div class="card"><h4>${esc(p.t)}</h4><p style="font-size:var(--fs-sm);color:var(--muted)">${esc(p.d)}</p></div>`).join("");
 
   const planning = g.planning.map(p=>`
     <div class="card">
@@ -1456,31 +1534,31 @@ views.growth = function(){
       <ul>${li(g.monetisation)}</ul>
     </div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les principes</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Les principes</h3>
     <div class="grid grid-2">${principes}</div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Identité visuelle</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Identité visuelle</h3>
     <div class="grid grid-2">
       <div class="card"><h4>Photo de profil (sans visage)</h4><ul>${li(g.identite.pfp)}</ul></div>
       <div class="card"><h4>Bannière</h4><ul>${li(g.identite.banniere)}</ul></div>
       <div class="card"><h4>Miniatures</h4><ul>${li(g.identite.miniatures)}</ul></div>
     </div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Titres — 80 % du jeu</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Titres — 80 % du jeu</h3>
     <div class="card">
-      <p style="font-family:monospace;font-size:13px;background:rgba(255,255,255,.05);padding:10px;border-radius:6px">${esc(g.titres.formule)}</p>
-      <p style="font-size:13px;color:var(--muted);margin:10px 0">${esc(g.titres.note)}</p>
+      <p style="font-family:monospace;font-size:var(--fs-sm);background:rgba(255,255,255,.05);padding:10px;border-radius:6px">${esc(g.titres.formule)}</p>
+      <p style="font-size:var(--fs-sm);color:var(--muted);margin:10px 0">${esc(g.titres.note)}</p>
       <ul>${li(g.titres.cibles)}</ul>
     </div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Instagram</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Instagram</h3>
     <div class="card"><ul>${li(g.instagram)}</ul></div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Les 8 prochaines semaines</h3>
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Les 8 prochaines semaines</h3>
     <div class="grid grid-2">${planning}</div>
 
-    <h3 style="margin:22px 0 12px;font-size:15px;color:var(--muted)">Semaine type</h3>
-    <div class="card"><table style="width:100%;border-collapse:collapse;font-size:13px">${semaine}</table></div>`;
+    <h3 style="margin:22px 0 12px;font-size:var(--fs-lg);color:var(--muted)">Semaine type</h3>
+    <div class="card"><table style="width:100%;border-collapse:collapse;font-size:var(--fs-sm)">${semaine}</table></div>`;
 };
 
 views.plugins = function(){
@@ -1856,10 +1934,15 @@ document.querySelectorAll(".nav-group-head").forEach(h => {
     const collapsed = (saved === null) ? !!defColl[g] : (saved === "1");
     if(collapsed) group.classList.add("collapsed");
     const head = group.querySelector(".nav-group-head");
-    if(head) head.addEventListener("click", () => {
-      group.classList.toggle("collapsed");
-      localStorage.setItem(key, group.classList.contains("collapsed") ? "1" : "0");
-    });
+    if(head){
+      head.setAttribute("aria-expanded", String(!collapsed));
+      head.addEventListener("click", () => {
+        group.classList.toggle("collapsed");
+        const isColl = group.classList.contains("collapsed");
+        head.setAttribute("aria-expanded", String(!isColl));
+        localStorage.setItem(key, isColl ? "1" : "0");
+      });
+    }
   });
 })();
 (function(){
@@ -1873,8 +1956,7 @@ document.querySelectorAll(".nav-group-head").forEach(h => {
   set("importData", "upload");
 })();
 (function(){
-  const mb = document.getElementById("menuBtn");
-  if(mb){ mb.innerHTML = icon("menu",24); mb.addEventListener("click", openDrawer); }
+  // Un seul point d'entrée vers le tiroir : l'onglet "Menu" de la bottom-nav.
   document.getElementById("backdrop")?.addEventListener("click", closeDrawer);
   const fab = document.getElementById("fab");
   if(fab){ fab.innerHTML = icon("plus",26); fab.addEventListener("click", () => navigate("newproject")); }
