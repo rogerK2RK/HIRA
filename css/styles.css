@@ -1,6 +1,6 @@
 /* ===== HIRA — styles (Apple glass) ===== */
 :root{
-  --bg:#0a0b0f;
+  --bg:#06070a;
   --bg2:rgba(255,255,255,.045);
   --panel:rgba(255,255,255,.055);
   --panel2:rgba(255,255,255,.09);
@@ -39,9 +39,9 @@ html,body{height:100%;overflow:hidden;touch-action:manipulation;-webkit-text-siz
 body{
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   background:
-    radial-gradient(1000px 680px at 8% -10%, rgba(124,92,255,.22), transparent 58%),
-    radial-gradient(880px 640px at 104% 4%, rgba(55,215,178,.13), transparent 55%),
-    radial-gradient(820px 760px at 50% 128%, rgba(76,120,255,.16), transparent 60%),
+    radial-gradient(1000px 680px at 8% -10%, rgba(124,92,255,.16), transparent 58%),
+    radial-gradient(880px 640px at 104% 4%, rgba(55,215,178,.09), transparent 55%),
+    radial-gradient(820px 760px at 50% 128%, rgba(76,120,255,.11), transparent 60%),
     var(--bg);
   color:var(--txt);
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
@@ -58,7 +58,7 @@ body{
 /* Sidebar */
 .sidebar{
   width:248px;flex-shrink:0;
-  background:rgba(18,19,26,.6);
+  background:rgba(12,13,19,.62);
   backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
   border-right:1px solid var(--line);
   display:flex;flex-direction:column;padding:22px 14px;position:sticky;top:0;height:100vh;
@@ -72,13 +72,19 @@ body{
 .nav{display:flex;flex-direction:column;gap:2px;flex:1}
 .nav-sep{font-size:10px;text-transform:uppercase;letter-spacing:1.6px;color:var(--muted);margin:18px 10px 6px;opacity:.8}
 .nav-btn{
+  position:relative;
   text-align:left;background:transparent;border:none;color:var(--muted);
   padding:10px 12px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;
-  transition:background .18s, color .18s;
+  transition:background .18s, color .18s, box-shadow .18s;
 }
 .nav-btn:hover{background:rgba(255,255,255,.06);color:var(--txt)}
-.nav-btn.active{background:rgba(108,140,255,.18);color:#fff;font-weight:600;
-  box-shadow:inset 0 0 0 1px rgba(108,140,255,.28)}
+.nav-btn.active{
+  background:linear-gradient(90deg, rgba(108,140,255,.28), rgba(108,140,255,.10));
+  color:#fff;font-weight:600;
+  box-shadow:inset 0 0 0 1px rgba(108,140,255,.36), 0 3px 14px -6px rgba(108,140,255,.55);
+}
+.nav-btn.active:hover{background:linear-gradient(90deg, rgba(108,140,255,.34), rgba(108,140,255,.14))}
+.nav-btn.active .ic{color:var(--accent);opacity:1}
 /* Groupes de navigation repliables (accordéon) */
 .nav-group{display:flex;flex-direction:column}
 .nav-group-head{
@@ -93,8 +99,31 @@ body{
 .nav-group-head span{flex:1}
 .nav-group-head::after{content:"▾";font-size:11px;opacity:.6;margin-left:auto;transition:transform .22s}
 .nav-group.collapsed .nav-group-head::after{transform:rotate(-90deg)}
-.nav-group-items{display:flex;flex-direction:column;gap:2px;overflow:hidden;max-height:600px;transition:max-height .26s ease,opacity .2s ease;opacity:1}
+
+/* Groupe contenant la page active : état persistant (pas seulement au hover) */
+.nav-group.has-active > .nav-group-head{color:var(--txt)}
+.nav-group.has-active > .nav-group-head .ic{color:var(--accent);opacity:1}
+/* replié : pastille pour retrouver où se trouve la page active */
+.nav-group.collapsed.has-active > .nav-group-head{background:rgba(108,140,255,.10)}
+.nav-group.collapsed.has-active > .nav-group-head::before{
+  content:"";width:6px;height:6px;border-radius:50%;flex-shrink:0;
+  background:var(--accent);box-shadow:0 0 8px rgba(108,140,255,.7);
+}
+
+/* Enfants : indentés + rail vertical pour marquer la hiérarchie */
+.nav-group-items{
+  display:flex;flex-direction:column;gap:2px;overflow:hidden;
+  max-height:600px;transition:max-height .26s ease,opacity .2s ease;opacity:1;
+  margin-left:13px;padding-left:12px;border-left:1px solid var(--line);
+}
 .nav-group.collapsed .nav-group-items{max-height:0;opacity:0}
+.nav-group-items .nav-btn{font-size:13.5px}
+/* curseur sur le rail = page active, visible en permanence */
+.nav-group-items .nav-btn.active::before{
+  content:"";position:absolute;left:-13px;top:50%;transform:translateY(-50%);
+  width:2px;height:20px;border-radius:var(--radius-pill);
+  background:var(--accent);box-shadow:0 0 8px rgba(108,140,255,.65);
+}
 .sidebar-foot{display:flex;gap:8px;padding-top:14px;margin-top:8px;border-top:1px solid var(--line)}
 
 /* ===== Accueil "Reprendre" (Signal Path) ===== */
@@ -188,12 +217,17 @@ body{
   .sidebar .nav-group-head::after,.sidebar .sidebar-foot{display:none}
   .sidebar .logo{font-size:17px;letter-spacing:1px}
   .sidebar .nav-btn,.sidebar .nav-group-head{justify-content:center;padding:11px 0}
+  /* rail replié : pas d'indentation, sinon les icônes ne sont plus centrées */
+  .sidebar .nav-group-items{margin-left:0;padding-left:0;border-left:none}
+  .sidebar .nav-group-items .nav-btn.active::before{display:none}
   .sidebar:hover{width:250px;padding:20px 14px;box-shadow:var(--shadow)}
   .sidebar:hover .tagline,.sidebar:hover .nav-btn span,
   .sidebar:hover .nav-group-head span,.sidebar:hover .nav-group-head::after{display:inline}
   .sidebar:hover .sidebar-foot{display:flex}
   .sidebar:hover .logo{font-size:29px;letter-spacing:5px}
   .sidebar:hover .nav-btn,.sidebar:hover .nav-group-head{justify-content:flex-start;padding:10px 12px}
+  .sidebar:hover .nav-group-items{margin-left:13px;padding-left:12px;border-left:1px solid var(--line)}
+  .sidebar:hover .nav-group-items .nav-btn.active::before{display:block}
 }
 
 /* Agenda "Ma semaine" — colonnes façon Google Agenda */

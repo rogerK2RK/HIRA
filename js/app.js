@@ -269,9 +269,11 @@ function navigate(view, param){
   currentParam = param;
   document.querySelectorAll(".nav-btn").forEach(b =>
     b.classList.toggle("active", b.dataset.view === view));
-  // ouvre automatiquement le groupe qui contient la page active
+  // ouvre automatiquement le groupe qui contient la page active + le marque
   const actBtn = document.querySelector(".nav-btn.active");
   const actGrp = actBtn && actBtn.closest(".nav-group");
+  document.querySelectorAll(".nav-group").forEach(g =>
+    g.classList.toggle("has-active", g === actGrp));
   if(actGrp) actGrp.classList.remove("collapsed");
   // bottom-nav (mobile) : état actif
   document.querySelectorAll(".bn-item").forEach(b =>
